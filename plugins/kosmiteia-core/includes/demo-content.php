@@ -148,9 +148,21 @@ function kosm_post( $post_type, $slug, $args ) {
 	);
 
 	if ( $existing ) {
-		$data['ID'] = $existing[0]->ID;
+		$post_id = (int) $existing[0]->ID;
+
+		// Κρατάμε αποτύπωμα (hash) αυτού που γράψαμε εμείς. Αν το τρέχον
+		// περιεχόμενο δεν ταιριάζει - είτε γιατί το επεξεργάστηκε κάποιος,
+		// είτε γιατί το άρθρο δεν το έφτιαξε το seed - δεν το ακουμπάμε.
+		$seeded = get_post_meta( $post_id, '_kosmiteia_seeded_hash', true );
+
+		if ( ! $seeded || md5( (string) $existing[0]->post_content ) !== $seeded ) {
+			kosmiteia_demo_log( sprintf( '    Το «%s» υπάρχει και έχει δικό του περιεχόμενο - παραλείπεται.', $slug ) );
+
+			return $post_id;
+		}
+
+		$data['ID'] = $post_id;
 		wp_update_post( $data );
-		$post_id = $existing[0]->ID;
 	} else {
 		$post_id = wp_insert_post( $data, true );
 	}
@@ -160,7 +172,13 @@ function kosm_post( $post_type, $slug, $args ) {
 		return 0;
 	}
 
-	return (int) $post_id;
+	$post_id = (int) $post_id;
+
+	if ( isset( $data['post_content'] ) ) {
+		update_post_meta( $post_id, '_kosmiteia_seeded_hash', md5( (string) $data['post_content'] ) );
+	}
+
+	return $post_id;
 }
 
 /**
@@ -240,6 +258,14 @@ function kosm_navigation( $slug, $title, $links ) {
 			'numberposts' => 1,
 		)
 	);
+
+	// Τα μενού σχεδόν πάντα προσαρμόζονται (υπομενού, σειρά, νέοι σύνδεσμοι).
+	// Αν υπάρχει ήδη μενού με αυτό το slug, το αφήνουμε ως έχει.
+	if ( $existing ) {
+		kosmiteia_demo_log( sprintf( '    Το μενού «%s» υπάρχει - παραλείπεται.', $slug ) );
+
+		return (int) $existing[0]->ID;
+	}
 
 	$data = array(
 		'post_type'    => 'wp_navigation',
@@ -585,7 +611,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 
 		$school_ids[ $school['slug'] ] = $post_id;
 
-		if ( $school['image'] ) {
+		if ( $school['image'] && ! has_post_thumbnail( $post_id ) ) {
 			set_post_thumbnail( $post_id, $school['image'] );
 		}
 
@@ -698,7 +724,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 
 		++$announcement_count;
 
-		if ( $item['image'] ) {
+		if ( $item['image'] && ! has_post_thumbnail( $post_id ) ) {
 			set_post_thumbnail( $post_id, $item['image'] );
 		}
 
@@ -816,7 +842,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 
 		++$program_count;
 
-		if ( $program['image'] ) {
+		if ( $program['image'] && ! has_post_thumbnail( $post_id ) ) {
 			set_post_thumbnail( $post_id, $program['image'] );
 		}
 
@@ -983,7 +1009,9 @@ function kosmiteia_install_demo_content( $force = false ) {
 		$contact_id => $images['school1'],
 	) as $page_id => $image_id ) {
 		if ( $page_id && $image_id ) {
-			set_post_thumbnail( $page_id, $image_id );
+			if ( ! has_post_thumbnail( $page_id ) ) {
+				set_post_thumbnail( $page_id, $image_id );
+			}
 		}
 	}
 

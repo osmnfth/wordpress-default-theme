@@ -2,21 +2,26 @@
 
 <!-- wp:group {"tagName":"main","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"constrained"}} -->
 <main class="wp-block-group">
-  <!-- wp:group {"align":"full","backgroundColor":"accent-4","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
+  <!-- wp:cover {"useFeaturedImage":true,"dimRatio":60,"overlayColor":"contrast","isUserOverlayColor":true,"textColor":"base","className":"kosmiteia-page-hero","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","right":"var:preset|spacing|50","bottom":"var:preset|spacing|70","left":"var:preset|spacing|50"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
   <div
-    class="wp-block-group alignfull has-accent-4-background-color has-background"
+    class="wp-block-cover alignfull kosmiteia-page-hero has-base-color has-text-color"
     style="
-      padding-top: var(--wp--preset--spacing--60);
-      padding-bottom: var(--wp--preset--spacing--60);
+      padding-top: var(--wp--preset--spacing--70);
+      padding-right: var(--wp--preset--spacing--50);
+      padding-bottom: var(--wp--preset--spacing--70);
+      padding-left: var(--wp--preset--spacing--50);
     "
   >
-    <!-- wp:kosmiteia/breadcrumbs {"fontSize":"small"} /-->
+    <span aria-hidden="true" class="wp-block-cover__background has-contrast-background-color has-background-dim-60 has-background-dim"></span>
+    <div class="wp-block-cover__inner-container">
+      <!-- wp:kosmiteia/breadcrumbs {"fontSize":"small"} /-->
 
-    <!-- wp:post-title {"level":1,"fontSize":"xx-large"} /-->
+      <!-- wp:post-title {"level":1,"fontSize":"xx-large"} /-->
 
-    <!-- wp:post-excerpt {"fontSize":"large"} /-->
+      <!-- wp:post-excerpt {"fontSize":"large"} /-->
+    </div>
   </div>
-  <!-- /wp:group -->
+  <!-- /wp:cover -->
 
   <!-- wp:post-content {"align":"wide","style":{"spacing":{"margin":{"bottom":"var:preset|spacing|70"}}},"layout":{"type":"constrained"}} /-->
 
