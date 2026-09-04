@@ -482,8 +482,16 @@ function kosmiteia_install_demo_content( $force = false ) {
 		'logo'     => kosm_image( 'logo.png', 'Λογότυπο Κοσμητείας', 'Λογότυπο Κοσμητείας Σχολών' ),
 	);
 
-	if ( $images['logo'] ) {
+	// Το λογότυπο μπαίνει ΜΟΝΟ αν δεν έχει ήδη οριστεί: το δείγμα δεν πρέπει
+	// ποτέ να αντικαταστήσει το πραγματικό λογότυπο του ιδρύματος - ούτε καν
+	// με --force, που αφορά το δοκιμαστικό περιεχόμενο και όχι την ταυτότητα.
+	$current_logo = (int) get_theme_mod( 'custom_logo' );
+
+	if ( $images['logo'] && ( ! $current_logo || ! wp_attachment_is_image( $current_logo ) ) ) {
 		set_theme_mod( 'custom_logo', $images['logo'] );
+		update_option( 'site_logo', $images['logo'] );
+	} elseif ( $current_logo ) {
+		kosmiteia_demo_log( '  Λογότυπο: διατηρήθηκε το υπάρχον (δεν αντικαταστάθηκε).' );
 	}
 
 	kosmiteia_demo_log( '  Εικόνες: ' . count( array_filter( $images ) ) );
