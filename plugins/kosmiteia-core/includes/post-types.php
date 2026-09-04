@@ -6,7 +6,7 @@
  * Μεταπτυχιακά) προέρχεται από εδώ - τίποτα δεν είναι γραμμένο στατικά
  * μέσα στα templates.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -92,6 +92,10 @@ function kosmiteia_register_post_types() {
 			'rest_base'     => 'announcements',
 			'menu_icon'     => 'dashicons-megaphone',
 			'menu_position' => 21,
+			// Ξεχωριστά δικαιώματα: επιτρέπουν τον ρόλο «Συντάκτης Ανακοινώσεων»
+			// που δημοσιεύει μόνο ανακοινώσεις (δείτε includes/roles.php).
+			'capability_type' => array( 'kosm_announcement', 'kosm_announcements' ),
+			'map_meta_cap'    => true,
 			'supports'      => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'custom-fields', 'comments' ),
 			'taxonomies'    => array( 'kosm_ann_category', 'kosm_faculty' ),
 			'rewrite'       => array(
@@ -159,6 +163,12 @@ function kosmiteia_register_taxonomies() {
 				'add_new_item'  => __( 'Προσθήκη Σχολής', 'kosmiteia' ),
 			),
 			'description'       => __( 'Συνδέει Ανακοινώσεις και Μεταπτυχιακά με μια Σχολή.', 'kosmiteia' ),
+			'capabilities'      => array(
+				'manage_terms' => 'manage_categories',
+				'edit_terms'   => 'manage_categories',
+				'delete_terms' => 'manage_categories',
+				'assign_terms' => 'edit_kosm_announcements',
+			),
 			'public'            => true,
 			'hierarchical'      => true,
 			'show_in_rest'      => true,
@@ -180,6 +190,12 @@ function kosmiteia_register_taxonomies() {
 				'singular_name' => __( 'Κατηγορία Ανακοίνωσης', 'kosmiteia' ),
 				'menu_name'     => __( 'Κατηγορίες', 'kosmiteia' ),
 				'add_new_item'  => __( 'Προσθήκη κατηγορίας', 'kosmiteia' ),
+			),
+			'capabilities'      => array(
+				'manage_terms' => 'manage_categories',
+				'edit_terms'   => 'manage_categories',
+				'delete_terms' => 'manage_categories',
+				'assign_terms' => 'edit_kosm_announcements',
 			),
 			'public'            => true,
 			'hierarchical'      => true,
@@ -255,8 +271,12 @@ function kosmiteia_register_meta() {
 					'default'           => '',
 					'show_in_rest'      => true,
 					'sanitize_callback' => 'sanitize_text_field',
-					'auth_callback'     => function () {
-						return current_user_can( 'edit_posts' );
+					'auth_callback'     => function ( $allowed, $meta_key, $object_id ) {
+						if ( $object_id ) {
+							return current_user_can( 'edit_post', $object_id );
+						}
+
+						return current_user_can( 'edit_posts' ) || current_user_can( 'edit_kosm_announcements' );
 					},
 				)
 			);
@@ -327,12 +347,11 @@ add_filter( 'query_loop_block_query_vars', 'kosmiteia_related_to_school_query' )
  * αμέσως τα permalinks των custom post types.
  */
 function kosmiteia_flush_rewrites() {
-	if ( get_option( 'kosmiteia_rewrites_version' ) === KOSMITEIA_VERSION ) {
+	if ( get_option( 'kosmiteia_rewrites_version' ) === KOSMITEIA_CORE_VERSION ) {
 		return;
 	}
 
 	flush_rewrite_rules();
-	update_option( 'kosmiteia_rewrites_version', KOSMITEIA_VERSION );
+	update_option( 'kosmiteia_rewrites_version', KOSMITEIA_CORE_VERSION );
 }
-add_action( 'after_switch_theme', 'kosmiteia_flush_rewrites' );
 add_action( 'init', 'kosmiteia_flush_rewrites', 99 );

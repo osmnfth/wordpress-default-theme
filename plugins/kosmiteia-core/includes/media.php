@@ -13,7 +13,7 @@
  *   add_filter( 'kosmiteia_convert_uploads_to_webp', '__return_false' );
  *   add_filter( 'kosmiteia_require_webm_video', '__return_false' );
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;

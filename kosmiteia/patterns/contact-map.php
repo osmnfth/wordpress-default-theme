@@ -24,15 +24,20 @@
 			<p><?php esc_html_e( 'Η Γραμματεία της Κοσμητείας στεγάζεται στο Κτίριο Διοίκησης της Πανεπιστημιούπολης. Η είσοδος είναι προσβάσιμη σε άτομα με αναπηρία.', 'kosmiteia' ); ?></p>
 			<!-- /wp:paragraph -->
 
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_address"}}}}} -->
+			<p><?php esc_html_e( 'Διεύθυνση', 'kosmiteia' ); ?></p>
+			<!-- /wp:paragraph -->
+
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_hours_label"}}}}} -->
+			<p><?php esc_html_e( 'Ωράριο', 'kosmiteia' ); ?></p>
+			<!-- /wp:paragraph -->
+
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_phone_label"}}}}} -->
+			<p><?php esc_html_e( 'Τηλέφωνο', 'kosmiteia' ); ?></p>
+			<!-- /wp:paragraph -->
+
 			<!-- wp:list -->
 			<ul class="wp-block-list">
-				<!-- wp:list-item -->
-				<li><?php esc_html_e( 'Διεύθυνση: Πανεπιστημιούπολη, Κτίριο Διοίκησης', 'kosmiteia' ); ?></li>
-				<!-- /wp:list-item -->
-
-				<!-- wp:list-item -->
-				<li><?php esc_html_e( 'Ωράριο: Δευτέρα έως Παρασκευή, 09:00-14:00', 'kosmiteia' ); ?></li>
-				<!-- /wp:list-item -->
 
 				<!-- wp:list-item -->
 				<li><?php esc_html_e( 'Μέσα μεταφοράς: αστικές γραμμές και στάση μετρό στην είσοδο της Πανεπιστημιούπολης', 'kosmiteia' ); ?></li>
@@ -44,7 +49,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:kosmiteia/map {"lat":37.9682,"lng":23.783,"zoom":16,"height":420,"markerTitle":"<?php echo esc_attr__( 'Κοσμητεία Σχολών', 'kosmiteia' ); ?>","markerAddress":"<?php echo esc_attr__( 'Πανεπιστημιούπολη, Κτίριο Διοίκησης', 'kosmiteia' ); ?>"} /-->
+			<!-- wp:kosmiteia/map {"lat":<?php echo (float) ( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'map_lat', 41.1226 ) : 41.1226 ); ?>,"lng":<?php echo (float) ( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'map_lng', 25.4064 ) : 25.4064 ); ?>,"zoom":<?php echo (int) ( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'map_zoom', 16 ) : 16 ); ?>,"height":420,"markerTitle":"<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>","markerAddress":"<?php echo esc_attr( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'contact_address' ) : '' ); ?>"} /-->
 		</div>
 		<!-- /wp:column -->
 	</div>

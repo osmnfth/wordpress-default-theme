@@ -6,7 +6,7 @@
  * kosmiteia/breadcrumbs (ορατή διαδρομή) και το JSON-LD του inc/seo.php,
  * ώστε τα δύο να μη διαφωνούν ποτέ.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;

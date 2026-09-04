@@ -22,6 +22,28 @@ import glob
 TEXTDOMAIN = 'kosmiteia'
 HERE = os.path.dirname(os.path.abspath(__file__))
 
+# Οι μεταφράσιμες συμβολοσειρές ζουν πλέον σε δύο σημεία: στο theme (patterns,
+# templates helpers) και στο πρόσθετο «Κοσμητεία Core» (τύποι περιεχομένου,
+# μπλοκ, ρυθμίσεις). Και τα δύο χρησιμοποιούν το ίδιο textdomain, οπότε
+# παράγουμε ένα κοινό κατάλογο και τον γράφουμε και στους δύο φακέλους.
+PLUGIN = os.path.join(os.path.dirname(HERE), 'plugins', 'kosmiteia-core')
+
+SOURCES = (
+    (HERE, ('*.php', 'inc/*.php', 'patterns/*.php')),
+    (PLUGIN, ('*.php', 'includes/*.php', 'blocks/*/*.js')),
+)
+
+
+def source_files():
+    """Όλα τα αρχεία που περιέχουν μεταφράσιμα strings."""
+    files = []
+    for base, patterns in SOURCES:
+        if not os.path.isdir(base):
+            continue
+        for pattern in patterns:
+            files.extend(sorted(glob.glob(os.path.join(base, pattern))))
+    return files
+
 # Ελληνικό πρωτότυπο -> Αγγλική μετάφραση.
 EN = {
     u'Εμφάνιση': u'Display',
@@ -372,6 +394,148 @@ EN = {
     u'Άνοιγμα φωτογραφίας σε μεγέθυνση: %s': u'Open larger photo: %s',
     u'Άνοιγμα φωτογραφίας σε μεγέθυνση': u'Open larger photo',
     u'Προβολή φωτογραφίας': u'Photo viewer',
+    u"Κοσμητεία:": u"Deanery:",
+    u"το θέμα χρειάζεται το πρόσθετο «Κοσμητεία Core» για τους τύπους περιεχομένου και τα μπλοκ του.": u"this theme needs the “Kosmiteia Core” plugin for its content types and blocks.",
+    u"Ενεργοποίηση από τα Πρόσθετα": u"Activate it from Plugins",
+    u"Ωράριο": u"Opening hours",
+    u"Ρυθμίσεις": u"Settings",
+    u"Εργαλεία": u"Tools",
+    u"Εργαλεία Κοσμητείας": u"Deanery tools",
+    u"Αποτέλεσμα": u"Result",
+    u"Αρχικό περιεχόμενο": u"Starter content",
+    u"Δημιουργεί Τμήματα, Ανακοινώσεις, Μεταπτυχιακά, σελίδες, μενού (EL/EN) και τα template parts της αρχικής, αντλώντας τα patterns από το ενεργό θέμα. Δεν αγγίζει ό,τι έχετε ήδη επεξεργαστεί.": u"Creates Departments, Announcements, Postgraduate programmes, pages, menus (EL/EN) and the home page template parts from the active theme's patterns. Anything you have already edited is left untouched.",
+    u"Ξαναδημιουργία ακόμη κι αν υπάρχει ήδη": u"Rebuild even if it already exists",
+    u"Δημιουργία αρχικού περιεχομένου": u"Create starter content",
+    u"Εισαγωγή ανακοινώσεων από παλιό ιστότοπο": u"Import announcements from the old website",
+    u"Διαβάζει το RSS feed του παλιού ιστότοπου και δημιουργεί Ανακοινώσεις με τις αρχικές ημερομηνίες, τις κατηγορίες τους και τα συνημμένα PDF. Ξανατρέξιμο δεν δημιουργεί διπλότυπα.": u"Reads the old website's RSS feed and creates Announcements with their original dates, categories and attached PDFs. Running it again does not create duplicates.",
+    u"RSS feed": u"RSS feed",
+    u"Σελίδες feed": u"Feed pages",
+    u"10 ανακοινώσεις ανά σελίδα. Για πλήρη εισαγωγή προτιμήστε τη γραμμή εντολών: wp kosmiteia import-announcements": u"10 announcements per page. For a full import prefer the command line: wp kosmiteia import-announcements",
+    u"Όριο ανακοινώσεων": u"Announcement limit",
+    u"— καμία —": u"— none —",
+    u"Κατάσταση": u"Status",
+    u"Δημοσιευμένες": u"Published",
+    u"Πρόχειρα": u"Drafts",
+    u"Επιλογές": u"Options",
+    u"Λήψη συνημμένων (PDF, εικόνες) στη Βιβλιοθήκη": u"Download attachments (PDFs, images) to the Media Library",
+    u"Δοκιμή χωρίς εγγραφή στη βάση": u"Dry run, without writing to the database",
+    u"Έναρξη εισαγωγής": u"Start import",
+    u"© %1$s %2$s": u"© %1$s %2$s",
+    u"Τηλ. %s": u"Phone %s",
+    u"Email: %s": u"Email: %s",
+    u"Ωράριο: %s": u"Hours: %s",
+    u"Ρυθμίσεις Κοσμητείας": u"Deanery settings",
+    u"Το αρχικό περιεχόμενο υπάρχει ήδη - δεν έγινε καμία αλλαγή.": u"Starter content already exists - nothing was changed.",
+    u"ΔΟΚΙΜΗ (dry run): δεν γράφεται τίποτα στη βάση.": u"DRY RUN: nothing is written to the database.",
+    u"Δεν βρέθηκαν ανακοινώσεις στο feed.": u"No announcements were found in the feed.",
+    u"Εκδηλώσεις": u"Events",
+    u"Εκδήλωση": u"Event",
+    u"Προσθήκη νέας Εκδήλωσης": u"Add new Event",
+    u"Επεξεργασία Εκδήλωσης": u"Edit Event",
+    u"Νέα Εκδήλωση": u"New Event",
+    u"Προβολή Εκδήλωσης": u"View Event",
+    u"Προβολή Εκδηλώσεων": u"View Events",
+    u"Αναζήτηση Εκδηλώσεων": u"Search Events",
+    u"Δεν βρέθηκαν Εκδηλώσεις": u"No Events found",
+    u"Δεν βρέθηκαν Εκδηλώσεις στον κάδο": u"No Events found in Trash",
+    u"Όλες οι Εκδηλώσεις": u"All Events",
+    u"Ημερολόγιο Εκδηλώσεων": u"Events calendar",
+    u"Ημερίδες, συνέδρια, ορκωμοσίες και άλλες εκδηλώσεις.": u"Workshops, conferences, graduation ceremonies and other events.",
+    u"events": u"events",
+    u"Σύντομη περιγραφή της εκδήλωσης...": u"Short description of the event...",
+    u"Προσωπικό": u"Staff",
+    u"Μέλος": u"Member",
+    u"Προσθήκη νέου μέλους": u"Add new member",
+    u"Επεξεργασία μέλους": u"Edit member",
+    u"Νέο μέλος": u"New member",
+    u"Προβολή μέλους": u"View member",
+    u"Προβολή μελών": u"View members",
+    u"Αναζήτηση μελών": u"Search members",
+    u"Δεν βρέθηκαν μέλη": u"No members found",
+    u"Δεν βρέθηκαν μέλη στον κάδο": u"No members found in Trash",
+    u"Όλα τα μέλη": u"All members",
+    u"Κατάλογος προσωπικού": u"Staff directory",
+    u"Φωτογραφία μέλους": u"Member photo",
+    u"Ορισμός φωτογραφίας": u"Set photo",
+    u"Μέλη Δ.Ε.Π., Ε.ΔΙ.Π., Ε.Τ.Ε.Π., διοικητικό προσωπικό και συλλογικά όργανα.": u"Faculty, teaching and laboratory staff, administrative staff and collective bodies.",
+    u"people": u"people",
+    u"Έγγραφα": u"Documents",
+    u"Έγγραφο": u"Document",
+    u"Προσθήκη νέου Εγγράφου": u"Add new Document",
+    u"Επεξεργασία Εγγράφου": u"Edit Document",
+    u"Νέο Έγγραφο": u"New Document",
+    u"Προβολή Εγγράφου": u"View Document",
+    u"Προβολή Εγγράφων": u"View Documents",
+    u"Αναζήτηση Εγγράφων": u"Search Documents",
+    u"Δεν βρέθηκαν Έγγραφα": u"No Documents found",
+    u"Δεν βρέθηκαν Έγγραφα στον κάδο": u"No Documents found in Trash",
+    u"Όλα τα Έγγραφα": u"All Documents",
+    u"Αρχείο Εγγράφων": u"Document archive",
+    u"Κανονισμοί, έντυπα, αποφάσεις και οδηγοί σπουδών προς λήψη.": u"Regulations, forms, decisions and study guides available for download.",
+    u"documents": u"documents",
+    u"Είδη εκδηλώσεων": u"Event types",
+    u"Είδος εκδήλωσης": u"Event type",
+    u"Είδη": u"Types",
+    u"Προσθήκη είδους": u"Add type",
+    u"event-type": u"event-type",
+    u"Κατηγορίες προσωπικού": u"Staff categories",
+    u"Κατηγορία προσωπικού": u"Staff category",
+    u"staff-group": u"staff-group",
+    u"Είδη εγγράφων": u"Document types",
+    u"Είδος εγγράφου": u"Document type",
+    u"document-type": u"document-type",
+    u"Έναρξη (ΕΕΕΕ-ΜΜ-ΗΗ ΩΩ:ΛΛ)": u"Start (YYYY-MM-DD HH:MM)",
+    u"Λήξη (ΕΕΕΕ-ΜΜ-ΗΗ ΩΩ:ΛΛ)": u"End (YYYY-MM-DD HH:MM)",
+    u"Τόπος διεξαγωγής": u"Venue",
+    u"Σύνδεσμος δήλωσης συμμετοχής": u"Registration link",
+    u"Διαδικτυακή εκδήλωση (ναι/όχι)": u"Online event (yes/no)",
+    u"Ιδιότητα / βαθμίδα": u"Position / rank",
+    u"Γραφείο": u"Office",
+    u"Σύνδεσμος βιογραφικού": u"CV link",
+    u"ORCID": u"ORCID",
+    u"Αρχείο (URL)": u"File (URL)",
+    u"Αριθμός πρωτοκόλλου / ΑΔΑ": u"Protocol number / ADA",
+    u"Ημερομηνία εγγράφου": u"Document date",
+    u"Ημερομηνία": u"Date",
+    u"Ιδιότητα": u"Position",
+    u"Αρχείο": u"File",
+    u"Ταυτότητα": u"Identity",
+    u"Ίδρυμα": u"Institution",
+    u"Δημοκρίτειο Πανεπιστήμιο Θράκης": u"Democritus University of Thrace",
+    u"Εμφανίζεται στο υποσέλιδο και στα structured data.": u"Shown in the footer and in structured data.",
+    u"Ιδιότητα Κοσμήτορα": u"Dean's title",
+    u"Καθηγητής": u"Professor",
+    u"Μότο υποσέλιδου": u"Footer tagline",
+    u"Κείμενο copyright": u"Copyright text",
+    u"Αν μείνει κενό συντίθεται αυτόματα: «© έτος - όνομα ιστότοπου».": u"If left empty it is composed automatically: “© year - site name”.",
+    u"Fax": u"Fax",
+    u"Ωράριο εξυπηρέτησης": u"Office hours",
+    u"Δευτέρα έως Παρασκευή, 09:00-14:00": u"Monday to Friday, 09:00-14:00",
+    u"Σημείωση πρόσβασης": u"Access note",
+    u"Π.χ. οδηγίες πρόσβασης ή προσβασιμότητα κτηρίου.": u"E.g. directions or building accessibility.",
+    u"Χάρτης": u"Map",
+    u"Γεωγραφικό πλάτος": u"Latitude",
+    u"Γεωγραφικό μήκος": u"Longitude",
+    u"Zoom": u"Zoom",
+    u"Κοινωνικά δίκτυα": u"Social networks",
+    u"Facebook": u"Facebook",
+    u"Instagram": u"Instagram",
+    u"YouTube": u"YouTube",
+    u"LinkedIn": u"LinkedIn",
+    u"X / Twitter": u"X / Twitter",
+    u"Περιεχόμενο": u"Content",
+    u"Ανακοινώσεις ανά σελίδα": u"Announcements per page",
+    u"Ισχύει στο αρχείο Ανακοινώσεων και στα φίλτρα του.": u"Applies to the Announcements archive and its filters.",
+    u"Εκδηλώσεις ανά σελίδα": u"Events per page",
+    u"Λέξεις περίληψης": u"Excerpt words",
+    u"Απόκρυψη περασμένων εκδηλώσεων": u"Hide past events",
+    u"Στο αρχείο Εκδηλώσεων εμφανίζονται μόνο οι επόμενες.": u"Only upcoming events are listed in the Events archive.",
+    u"Γλώσσες": u"Languages",
+    u"Αγγλική έκδοση": u"English version",
+    u"Ενεργοποιεί τον επιλογέα γλώσσας και τα αγγλικά template parts (?lang=en).": u"Enables the language switcher and the English template parts (?lang=en).",
+    u"Ναι": u"Yes",
+    u"Τα στοιχεία αυτά τροφοδοτούν το υποσέλιδο, τη σελίδα επικοινωνίας, τον χάρτη και τα δομημένα δεδομένα. Δεν χρειάζεται επέμβαση σε templates.": u"These details feed the footer, the contact page, the map and the structured data. No template editing needed.",
+    u"Συντάκτης Ανακοινώσεων": u"Announcements editor",
     u'Προηγούμενη φωτογραφία': u'Previous photo',
     u'Επόμενη φωτογραφία': u'Next photo',
     u'Κλείσιμο': u'Close',
@@ -383,9 +547,7 @@ STRING_PATTERN = re.compile(r"(?:esc_html_e|esc_attr_e|esc_html__|esc_attr__|_e|
 
 def collect_strings():
     """Μαζεύει τα μεταφράσιμα strings από PHP και JS."""
-    files = []
-    for pattern in ('*.php', 'inc/*.php', 'patterns/*.php', 'blocks/*/*.js'):
-        files.extend(sorted(glob.glob(os.path.join(HERE, pattern))))
+    files = source_files()
 
     found = []
     for path in files:
@@ -402,9 +564,7 @@ PLURAL_PATTERN = re.compile(r"_n\(\s*'([^']*)'\s*,\s*'([^']*)'")
 
 def collect_plurals():
     """Μαζεύει τα ζεύγη ενικού/πληθυντικού από τις κλήσεις _n()."""
-    files = []
-    for pattern in ('*.php', 'inc/*.php', 'patterns/*.php', 'blocks/*/*.js'):
-        files.extend(sorted(glob.glob(os.path.join(HERE, pattern))))
+    files = source_files()
 
     found = []
     for path in files:
@@ -520,6 +680,21 @@ def main():
 
     write_po(os.path.join(languages_dir, 'en_US.po'), entries, en_header, plural_entries)
     write_mo(os.path.join(languages_dir, 'en_US.mo'), catalog)
+
+    # Το ίδιο κατάλογο και στο πρόσθετο, ώστε να μεταφράζονται και τα δικά του
+    # strings όταν το WordPress φορτώσει το textdomain του.
+    plugin_languages = os.path.join(PLUGIN, 'languages')
+    if os.path.isdir(PLUGIN):
+        if not os.path.isdir(plugin_languages):
+            os.makedirs(plugin_languages)
+        write_po(os.path.join(plugin_languages, '%s.pot' % TEXTDOMAIN),
+                 [(s, u'') for s in strings], pot_header,
+                 [(single, plural, u'', u'') for single, plural in plurals])
+        # Τα plugins ονομάζουν τα αρχεία «<textdomain>-<locale>.mo»· τα themes
+        # μόνο «<locale>.mo». Χωρίς τη σωστή ονομασία το WordPress δεν φορτώνει
+        # τις μεταφράσεις του προσθέτου.
+        write_po(os.path.join(plugin_languages, '%s-en_US.po' % TEXTDOMAIN), entries, en_header, plural_entries)
+        write_mo(os.path.join(plugin_languages, '%s-en_US.mo' % TEXTDOMAIN), catalog)
 
     summary = {
         'strings': len(strings) + len(plurals),

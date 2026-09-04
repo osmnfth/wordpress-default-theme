@@ -6,7 +6,7 @@
  * (Yoast, Rank Math, SEOPress, AIOSEO) το theme κάνει στην άκρη και δεν
  * τυπώνει διπλά meta tags.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -162,6 +162,47 @@ function kosmiteia_json_ld() {
 		$organization['logo'] = $logo;
 	}
 
+	// Στοιχεία επικοινωνίας από τις Ρυθμίσεις Κοσμητείας.
+	$address = kosmiteia_option( 'contact_address' );
+	$phone   = kosmiteia_option( 'contact_phone' );
+	$email   = kosmiteia_option( 'contact_email' );
+
+	if ( $address ) {
+		$organization['address'] = array(
+			'@type'         => 'PostalAddress',
+			'streetAddress' => $address,
+		);
+	}
+
+	if ( $phone ) {
+		$organization['telephone'] = $phone;
+	}
+
+	if ( $email ) {
+		$organization['email'] = $email;
+	}
+
+	if ( kosmiteia_option( 'institution' ) ) {
+		$organization['parentOrganization'] = array(
+			'@type' => 'CollegeOrUniversity',
+			'name'  => kosmiteia_option( 'institution' ),
+		);
+	}
+
+	$social = array_filter(
+		array(
+			kosmiteia_option( 'social_facebook' ),
+			kosmiteia_option( 'social_instagram' ),
+			kosmiteia_option( 'social_youtube' ),
+			kosmiteia_option( 'social_linkedin' ),
+			kosmiteia_option( 'social_x' ),
+		)
+	);
+
+	if ( $social ) {
+		$organization['sameAs'] = array_values( $social );
+	}
+
 	$graph[] = $organization;
 
 	// Το website + εσωτερική αναζήτηση.
@@ -229,6 +270,43 @@ function kosmiteia_json_ld() {
 				}
 
 				$node['hasCourseInstance'] = array( array_filter( $instance ) );
+			}
+		} elseif ( 'kosm_event' === $type ) {
+			$node['@type']     = 'Event';
+			$node['organizer'] = array( '@id' => $home . '#organization' );
+
+			$start    = get_post_meta( $post_id, 'kosm_event_start', true );
+			$end      = get_post_meta( $post_id, 'kosm_event_end', true );
+			$location = get_post_meta( $post_id, 'kosm_event_location', true );
+
+			if ( $start ) {
+				$node['startDate'] = $start;
+			}
+			if ( $end ) {
+				$node['endDate'] = $end;
+			}
+			if ( $location ) {
+				$node['location'] = array(
+					'@type'   => 'Place',
+					'name'    => $location,
+					'address' => $location,
+				);
+			}
+		} elseif ( 'kosm_person' === $type ) {
+			$node['@type']            = 'Person';
+			$node['worksFor']         = array( '@id' => $home . '#organization' );
+			$node['jobTitle']         = get_post_meta( $post_id, 'kosm_person_role', true );
+			$node['email']            = get_post_meta( $post_id, 'kosm_person_email', true );
+			$node['telephone']        = get_post_meta( $post_id, 'kosm_person_phone', true );
+			$node                     = array_filter( $node );
+		} elseif ( 'kosm_document' === $type ) {
+			$node['@type']     = 'DigitalDocument';
+			$node['publisher'] = array( '@id' => $home . '#organization' );
+
+			$file = get_post_meta( $post_id, 'kosm_document_file', true );
+
+			if ( $file ) {
+				$node['url'] = $file;
 			}
 		} elseif ( 'kosm_school' === $type ) {
 			$node['@type']         = 'EducationalOrganization';
@@ -308,7 +386,7 @@ add_action( 'wp_head', 'kosmiteia_json_ld', 7 );
  * @return array
  */
 function kosmiteia_document_title_parts( $parts ) {
-	if ( is_post_type_archive( array( 'kosm_school', 'kosm_announcement', 'kosm_program' ) ) ) {
+	if ( is_post_type_archive( array( 'kosm_school', 'kosm_announcement', 'kosm_program', 'kosm_event', 'kosm_person', 'kosm_document' ) ) ) {
 		$object = get_queried_object();
 
 		if ( $object && isset( $object->labels->name ) ) {

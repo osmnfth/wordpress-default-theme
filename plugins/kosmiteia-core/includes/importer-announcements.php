@@ -1,79 +1,87 @@
 <?php
 /**
- * Εισαγωγή ανακοινώσεων από το παλιό site (health.duth.gr) στο νέο theme.
+ * Εισαγωγή ανακοινώσεων από τον παλιό ιστότοπο (RSS feed).
  *
- * Το παλιό site είναι classic WordPress: οι ανακοινώσεις είναι κανονικά posts
- * (permalink /YYYY/MM/DD/slug/) και η σελίδα /anakoinoseis/ απλώς τα εμφανίζει.
- * Το REST API (/wp-json, ?rest_route=) επιστρέφει 403 από το firewall του
- * server, οπότε η πηγή εδώ είναι το RSS feed με σελιδοποίηση:
- *
- *     https://health.duth.gr/feed/?paged=1 ... ?paged=40
+ * Ο παλιός ιστότοπος (π.χ. health.duth.gr) είναι classic WordPress: οι
+ * ανακοινώσεις είναι κανονικά posts (permalink /YYYY/MM/DD/slug/). Το REST API
+ * συνήθως είναι κλειστό από το firewall, οπότε η πηγή είναι το RSS feed με
+ * σελιδοποίηση:  https://.../feed/?paged=1 ... ?paged=N
  *
  * Κάθε <item> δίνει τίτλο, μόνιμο σύνδεσμο, ημερομηνία, κατηγορίες και
  * ολόκληρο το περιεχόμενο (content:encoded).
  *
- * Εκτέλεση (το site πρέπει να τρέχει: docker compose up -d):
- *
- *     docker compose run --rm --entrypoint wp \
- *         -e KOSM_IMPORT_DRYRUN=1 \
- *         provision eval-file /provision/import-announcements.php
- *
- * Ρυθμίσεις μέσω μεταβλητών περιβάλλοντος:
- *
- *   KOSM_IMPORT_FEED     Το feed (default https://health.duth.gr/feed/)
- *   KOSM_IMPORT_PAGES    Μέγιστες σελίδες feed (default 60)
- *   KOSM_IMPORT_LIMIT    Μέγιστες ανακοινώσεις (default 0 = όλες)
- *   KOSM_IMPORT_DRYRUN   1 = μόνο αναφορά, καμία εγγραφή στη βάση
- *   KOSM_IMPORT_MEDIA    0 = χωρίς κατέβασμα PDF/εικόνων (default 1)
- *   KOSM_IMPORT_FORCE    1 = ξαναγράφει ανακοινώσεις που έχουν ήδη εισαχθεί
- *   KOSM_IMPORT_STATUS   publish (default) ή draft
- *   KOSM_IMPORT_CATS     Μόνο αυτές οι κατηγορίες του παλιού site,
- *                        χωρισμένες με «|» (default: όλες)
- *   KOSM_IMPORT_FACULTY  Όρος kosm_faculty για όλες τις ανακοινώσεις
- *                        (default: κανένας)
+ * Εκτέλεση:
+ *   - Διαχείριση:  Κοσμητεία → Εργαλεία → «Εισαγωγή από παλιό ιστότοπο»
+ *   - Γραμμή εντολών:
+ *       wp kosmiteia import-announcements --dry-run
+ *       wp kosmiteia import-announcements --faculty="Σχολή Επιστημών Υγείας"
  *
  * Η αντιστοίχιση με το παλιό post γίνεται με το meta «kosm_source_url», ώστε
- * το script να είναι idempotent: ξανατρέξιμο δεν δημιουργεί διπλότυπα.
+ * η εισαγωγή να είναι idempotent: ξανατρέξιμο δεν δημιουργεί διπλότυπα.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
-if ( ! defined( 'WP_CLI' ) ) {
-	return;
-}
-
-require_once ABSPATH . 'wp-admin/includes/file.php';
-require_once ABSPATH . 'wp-admin/includes/media.php';
-require_once ABSPATH . 'wp-admin/includes/image.php';
-
-wp_set_current_user( 1 );
-
-/* =========================================================================
- * Ρυθμίσεις
- * ====================================================================== */
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Τιμή μεταβλητής περιβάλλοντος με προεπιλογή.
+ * Καταγραφή προόδου (WP-CLI ή σελίδα Εργαλείων).
+ *
+ * @param string $message Το μήνυμα.
+ * @param string $type    log | warning | success.
+ * @return array Όλα τα μηνύματα.
  */
-function kosm_import_env( $name, $default = '' ) {
-	$value = getenv( $name );
+function kosmiteia_import_log( $message = null, $type = 'log' ) {
+	static $messages = array();
 
-	return ( false === $value || '' === $value ) ? $default : $value;
+	if ( null === $message ) {
+		return $messages;
+	}
+
+	$messages[] = array(
+		'type'    => $type,
+		'message' => (string) $message,
+	);
+
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		if ( 'warning' === $type ) {
+			WP_CLI::warning( $message );
+		} elseif ( 'success' === $type ) {
+			WP_CLI::success( $message );
+		} else {
+			WP_CLI::log( $message );
+		}
+	}
+
+	return $messages;
 }
 
-$feed_url  = rtrim( kosm_import_env( 'KOSM_IMPORT_FEED', 'https://health.duth.gr/feed/' ), '?&' );
-$max_pages = (int) kosm_import_env( 'KOSM_IMPORT_PAGES', '60' );
-$limit     = (int) kosm_import_env( 'KOSM_IMPORT_LIMIT', '0' );
-$dry_run   = '1' === kosm_import_env( 'KOSM_IMPORT_DRYRUN', '0' );
-$do_media  = '0' !== kosm_import_env( 'KOSM_IMPORT_MEDIA', '1' );
-$force     = '1' === kosm_import_env( 'KOSM_IMPORT_FORCE', '0' );
-$status    = kosm_import_env( 'KOSM_IMPORT_STATUS', 'publish' );
-$only_cats = array_filter( array_map( 'trim', explode( '|', kosm_import_env( 'KOSM_IMPORT_CATS', '' ) ) ) );
-$faculty   = kosm_import_env( 'KOSM_IMPORT_FACULTY', '' );
+/**
+ * Προειδοποίηση.
+ *
+ * @param string $message Το μήνυμα.
+ */
+function kosmiteia_import_warn( $message ) {
+	kosmiteia_import_log( $message, 'warning' );
+}
 
-if ( $dry_run ) {
-	WP_CLI::log( '  ΔΟΚΙΜΗ (dry run): δεν γράφεται τίποτα στη βάση.' );
-	$do_media = false;
+/**
+ * Οι προεπιλεγμένες παράμετροι της εισαγωγής.
+ *
+ * @return array
+ */
+function kosmiteia_import_defaults() {
+	return array(
+		'feed'    => 'https://health.duth.gr/feed/',
+		'pages'   => 60,
+		'limit'   => 0,
+		'dry_run' => false,
+		'media'   => true,
+		'force'   => false,
+		'status'  => 'publish',
+		'cats'    => array(),
+		'faculty' => '',
+	);
 }
 
 /* =========================================================================
@@ -95,14 +103,14 @@ function kosm_feed_items( $feed_url, $page ) {
 	);
 
 	if ( is_wp_error( $response ) ) {
-		WP_CLI::warning( sprintf( 'Σελίδα %d: %s', $page, $response->get_error_message() ) );
+		kosmiteia_import_warn( sprintf( 'Σελίδα %d: %s', $page, $response->get_error_message() ) );
 		return array();
 	}
 
 	$code = (int) wp_remote_retrieve_response_code( $response );
 
 	if ( 200 !== $code ) {
-		WP_CLI::warning( sprintf( 'Σελίδα %d: HTTP %d', $page, $code ) );
+		kosmiteia_import_warn( sprintf( 'Σελίδα %d: HTTP %d', $page, $code ) );
 		return array();
 	}
 
@@ -233,7 +241,7 @@ function kosm_sideload( $url, $post_id = 0 ) {
 	$tmp = download_url( kosm_encode_url( $url ), 90 );
 
 	if ( is_wp_error( $tmp ) ) {
-		WP_CLI::warning( sprintf( 'Δεν κατέβηκε: %s (%s)', $url, $tmp->get_error_message() ) );
+		kosmiteia_import_warn( sprintf( 'Δεν κατέβηκε: %s (%s)', $url, $tmp->get_error_message() ) );
 		$cache[ $url ] = 0;
 		return 0;
 	}
@@ -253,7 +261,7 @@ function kosm_sideload( $url, $post_id = 0 ) {
 			wp_delete_file( $tmp );
 		}
 
-		WP_CLI::warning( sprintf( 'Δεν εισήχθη: %s (%s)', $url, $attachment_id->get_error_message() ) );
+		kosmiteia_import_warn( sprintf( 'Δεν εισήχθη: %s (%s)', $url, $attachment_id->get_error_message() ) );
 		$cache[ $url ] = 0;
 		return 0;
 	}
@@ -437,196 +445,248 @@ function kosm_html_to_blocks( $html, $images = array() ) {
 	return kosm_nodes_to_blocks( $root, $images );
 }
 
-/* =========================================================================
- * 1. Κατέβασμα του feed
- * ====================================================================== */
+/**
+ * Εκτελεί την εισαγωγή.
+ *
+ * @param array $args feed, pages, limit, dry_run, media, force, status, cats, faculty.
+ * @return array Σύνοψη: total, created, updated, skipped, files, messages.
+ */
+function kosmiteia_import_announcements( $args = array() ) {
+	$args = wp_parse_args( $args, kosmiteia_import_defaults() );
 
-WP_CLI::log( sprintf( '  Πηγή: %s', $feed_url ) );
+	$feed_url  = rtrim( (string) $args['feed'], '?&' );
+	$max_pages = max( 1, (int) $args['pages'] );
+	$limit     = max( 0, (int) $args['limit'] );
+	$dry_run   = (bool) $args['dry_run'];
+	$do_media  = (bool) $args['media'] && ! $dry_run;
+	$force     = (bool) $args['force'];
+	$status    = in_array( $args['status'], array( 'publish', 'draft', 'pending', 'private' ), true ) ? $args['status'] : 'publish';
+	$only_cats = array_filter( array_map( 'trim', (array) $args['cats'] ) );
+	$faculty   = (string) $args['faculty'];
 
-$items = array();
-$seen  = array();
-
-for ( $page = 1; $page <= $max_pages; $page++ ) {
-	$batch = kosm_feed_items( $feed_url, $page );
-
-	if ( ! $batch ) {
-		break;
+	if ( ! function_exists( 'media_handle_sideload' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
 	}
 
-	$new = 0;
+	if ( ! is_user_logged_in() ) {
+		wp_set_current_user( 1 );
+	}
 
-	foreach ( $batch as $item ) {
-		if ( '' === $item['link'] || isset( $seen[ $item['link'] ] ) ) {
+	if ( $dry_run ) {
+		kosmiteia_import_log( __( 'ΔΟΚΙΜΗ (dry run): δεν γράφεται τίποτα στη βάση.', 'kosmiteia' ) );
+	}
+
+	/* =========================================================================
+	 * 1. Κατέβασμα του feed
+	 * ====================================================================== */
+
+	kosmiteia_import_log( sprintf( '  Πηγή: %s', $feed_url ) );
+
+	$items = array();
+	$seen  = array();
+
+	for ( $page = 1; $page <= $max_pages; $page++ ) {
+		$batch = kosm_feed_items( $feed_url, $page );
+
+		if ( ! $batch ) {
+			break;
+		}
+
+		$new = 0;
+
+		foreach ( $batch as $item ) {
+			if ( '' === $item['link'] || isset( $seen[ $item['link'] ] ) ) {
+				continue;
+			}
+
+			$seen[ $item['link'] ] = true;
+			$items[]               = $item;
+			++$new;
+		}
+
+		kosmiteia_import_log( sprintf( '  Σελίδα %d: %d νέα (σύνολο %d)', $page, $new, count( $items ) ) );
+
+		if ( 0 === $new ) {
+			break;
+		}
+
+		usleep( 300000 );
+	}
+
+	if ( ! $items ) {
+		kosmiteia_import_warn( __( 'Δεν βρέθηκαν ανακοινώσεις στο feed.', 'kosmiteia' ) );
+
+		return array(
+			'total'    => 0,
+			'created'  => 0,
+			'updated'  => 0,
+			'skipped'  => 0,
+			'files'    => 0,
+			'messages' => kosmiteia_import_log(),
+		);
+	}
+
+	/* =========================================================================
+	 * 2. Εισαγωγή
+	 * ====================================================================== */
+
+	$created  = 0;
+	$updated  = 0;
+	$skipped  = 0;
+	$files    = 0;
+	$examined = 0;
+
+	foreach ( $items as $item ) {
+
+		if ( $only_cats && ! array_intersect( $only_cats, $item['categories'] ) ) {
 			continue;
 		}
 
-		$seen[ $item['link'] ] = true;
-		$items[]               = $item;
-		++$new;
-	}
+		if ( $limit && $examined >= $limit ) {
+			break;
+		}
 
-	WP_CLI::log( sprintf( '  Σελίδα %d: %d νέα (σύνολο %d)', $page, $new, count( $items ) ) );
+		++$examined;
 
-	if ( 0 === $new ) {
-		break;
-	}
+		$existing = kosm_existing_by_source( $item['link'] );
 
-	usleep( 300000 );
-}
+		if ( $existing && ! $force ) {
+			++$skipped;
+			continue;
+		}
 
-if ( ! $items ) {
-	WP_CLI::error( 'Δεν βρέθηκαν ανακοινώσεις στο feed.' );
-}
+		$timestamp = strtotime( $item['date'] );
+		$timestamp = $timestamp ? $timestamp : time();
+		$date_gmt  = gmdate( 'Y-m-d H:i:s', $timestamp );
+		$slug      = kosm_slug_from_link( $item['link'], sanitize_title( $item['title'] ) );
+		$content   = $item['content'];
 
-/* =========================================================================
- * 2. Εισαγωγή
- * ====================================================================== */
+		/* Συνημμένα: PDF και εικόνες του παλιού site. */
+		preg_match_all( '#https?://[^"\'\s<>]+#u', $content, $matches );
 
-$created  = 0;
-$updated  = 0;
-$skipped  = 0;
-$files    = 0;
-$examined = 0;
-
-foreach ( $items as $item ) {
-
-	if ( $only_cats && ! array_intersect( $only_cats, $item['categories'] ) ) {
-		continue;
-	}
-
-	if ( $limit && $examined >= $limit ) {
-		break;
-	}
-
-	++$examined;
-
-	$existing = kosm_existing_by_source( $item['link'] );
-
-	if ( $existing && ! $force ) {
-		++$skipped;
-		continue;
-	}
-
-	$timestamp = strtotime( $item['date'] );
-	$timestamp = $timestamp ? $timestamp : time();
-	$date_gmt  = gmdate( 'Y-m-d H:i:s', $timestamp );
-	$slug      = kosm_slug_from_link( $item['link'], sanitize_title( $item['title'] ) );
-	$content   = $item['content'];
-
-	/* Συνημμένα: PDF και εικόνες του παλιού site. */
-	preg_match_all( '#https?://[^"\'\s<>]+#u', $content, $matches );
-
-	$uploads = array_values(
-		array_unique(
-			array_filter(
-				$matches[0],
-				function ( $url ) {
-					return false !== strpos( $url, '/wp-content/uploads/' );
-				}
+		$uploads = array_values(
+			array_unique(
+				array_filter(
+					$matches[0],
+					function ( $url ) {
+						return false !== strpos( $url, '/wp-content/uploads/' );
+					}
+				)
 			)
-		)
-	);
+		);
 
-	$file_url = '';
-	$images   = array();
-	$replace  = array();
+		$file_url = '';
+		$images   = array();
+		$replace  = array();
 
-	foreach ( $uploads as $url ) {
-		$clean  = html_entity_decode( $url, ENT_QUOTES, 'UTF-8' );
-		$is_pdf = (bool) preg_match( '/\.pdf$/i', $clean );
+		foreach ( $uploads as $url ) {
+			$clean  = html_entity_decode( $url, ENT_QUOTES, 'UTF-8' );
+			$is_pdf = (bool) preg_match( '/\.pdf$/i', $clean );
 
-		if ( $do_media ) {
-			$attachment_id = kosm_sideload( $clean );
+			if ( $do_media ) {
+				$attachment_id = kosm_sideload( $clean );
 
-			if ( $attachment_id ) {
-				++$files;
+				if ( $attachment_id ) {
+					++$files;
 
-				$new_url         = wp_get_attachment_url( $attachment_id );
-				$replace[ $url ] = $new_url;
-				$clean           = $new_url;
+					$new_url         = wp_get_attachment_url( $attachment_id );
+					$replace[ $url ] = $new_url;
+					$clean           = $new_url;
 
-				if ( wp_attachment_is_image( $attachment_id ) ) {
-					$images[ $new_url ] = $attachment_id;
+					if ( wp_attachment_is_image( $attachment_id ) ) {
+						$images[ $new_url ] = $attachment_id;
+					}
 				}
+			}
+
+			if ( $is_pdf && '' === $file_url ) {
+				$file_url = $clean;
 			}
 		}
 
-		if ( $is_pdf && '' === $file_url ) {
-			$file_url = $clean;
+		if ( $replace ) {
+			$content = strtr( $content, $replace );
+		}
+
+		$blocks = kosm_html_to_blocks( $content, $images );
+
+		if ( $dry_run ) {
+			kosmiteia_import_log(
+				sprintf(
+					'  [%s] %s | %s | %s | αρχεία: %d',
+					$existing ? 'ΥΠΑΡΧΕΙ' : 'ΝΕΑ',
+					gmdate( 'Y-m-d', $timestamp ),
+					mb_substr( $item['title'], 0, 70 ),
+					$item['categories'] ? implode( ', ', $item['categories'] ) : '-',
+					count( $uploads )
+				)
+			);
+			continue;
+		}
+
+		$postarr = array(
+			'post_type'     => 'kosm_announcement',
+			'post_status'   => $status,
+			'post_title'    => $item['title'],
+			'post_name'     => $slug,
+			'post_content'  => $blocks,
+			'post_excerpt'  => wp_trim_words( wp_strip_all_tags( $item['excerpt'] ), 40, '…' ),
+			'post_date_gmt' => $date_gmt,
+			'post_date'     => get_date_from_gmt( $date_gmt ),
+		);
+
+		if ( $existing ) {
+			$postarr['ID'] = $existing;
+			$post_id       = wp_update_post( $postarr, true );
+		} else {
+			$post_id = wp_insert_post( $postarr, true );
+		}
+
+		if ( is_wp_error( $post_id ) ) {
+			kosmiteia_import_warn( sprintf( '%s: %s', $item['title'], $post_id->get_error_message() ) );
+			continue;
+		}
+
+		$post_id = (int) $post_id;
+
+		update_post_meta( $post_id, 'kosm_source_url', $item['link'] );
+
+		if ( '' !== $file_url ) {
+			update_post_meta( $post_id, 'kosm_file_url', $file_url );
+		}
+
+		if ( $item['categories'] ) {
+			wp_set_object_terms( $post_id, $item['categories'], 'kosm_ann_category' );
+		}
+
+		if ( '' !== $faculty ) {
+			wp_set_object_terms( $post_id, array( $faculty ), 'kosm_faculty' );
+		}
+
+		if ( $images && ! has_post_thumbnail( $post_id ) ) {
+			set_post_thumbnail( $post_id, (int) reset( $images ) );
+		}
+
+		if ( $existing ) {
+			++$updated;
+		} else {
+			++$created;
 		}
 	}
 
-	if ( $replace ) {
-		$content = strtr( $content, $replace );
-	}
+	kosmiteia_import_log( '' );
+	kosmiteia_import_log( sprintf( '  Ανακοινώσεις στο feed: %d', count( $items ) ) );
+	kosmiteia_import_log( sprintf( '  Νέες: %d | Ενημερωμένες: %d | Υπάρχουσες (παράλειψη): %d', $created, $updated, $skipped ) );
+	kosmiteia_import_log( sprintf( '  Αρχεία στη Βιβλιοθήκη: %d', $files ) );
 
-	$blocks = kosm_html_to_blocks( $content, $images );
-
-	if ( $dry_run ) {
-		WP_CLI::log(
-			sprintf(
-				'  [%s] %s | %s | %s | αρχεία: %d',
-				$existing ? 'ΥΠΑΡΧΕΙ' : 'ΝΕΑ',
-				gmdate( 'Y-m-d', $timestamp ),
-				mb_substr( $item['title'], 0, 70 ),
-				$item['categories'] ? implode( ', ', $item['categories'] ) : '-',
-				count( $uploads )
-			)
-		);
-		continue;
-	}
-
-	$postarr = array(
-		'post_type'     => 'kosm_announcement',
-		'post_status'   => $status,
-		'post_title'    => $item['title'],
-		'post_name'     => $slug,
-		'post_content'  => $blocks,
-		'post_excerpt'  => wp_trim_words( wp_strip_all_tags( $item['excerpt'] ), 40, '…' ),
-		'post_date_gmt' => $date_gmt,
-		'post_date'     => get_date_from_gmt( $date_gmt ),
+	return array(
+		'total'    => count( $items ),
+		'created'  => $created,
+		'updated'  => $updated,
+		'skipped'  => $skipped,
+		'files'    => $files,
+		'messages' => kosmiteia_import_log(),
 	);
-
-	if ( $existing ) {
-		$postarr['ID'] = $existing;
-		$post_id       = wp_update_post( $postarr, true );
-	} else {
-		$post_id = wp_insert_post( $postarr, true );
-	}
-
-	if ( is_wp_error( $post_id ) ) {
-		WP_CLI::warning( sprintf( '%s: %s', $item['title'], $post_id->get_error_message() ) );
-		continue;
-	}
-
-	$post_id = (int) $post_id;
-
-	update_post_meta( $post_id, 'kosm_source_url', $item['link'] );
-
-	if ( '' !== $file_url ) {
-		update_post_meta( $post_id, 'kosm_file_url', $file_url );
-	}
-
-	if ( $item['categories'] ) {
-		wp_set_object_terms( $post_id, $item['categories'], 'kosm_ann_category' );
-	}
-
-	if ( '' !== $faculty ) {
-		wp_set_object_terms( $post_id, array( $faculty ), 'kosm_faculty' );
-	}
-
-	if ( $images && ! has_post_thumbnail( $post_id ) ) {
-		set_post_thumbnail( $post_id, (int) reset( $images ) );
-	}
-
-	if ( $existing ) {
-		++$updated;
-	} else {
-		++$created;
-	}
 }
-
-WP_CLI::log( '' );
-WP_CLI::log( sprintf( '  Ανακοινώσεις στο feed: %d', count( $items ) ) );
-WP_CLI::log( sprintf( '  Νέες: %d | Ενημερωμένες: %d | Υπάρχουσες (παράλειψη): %d', $created, $updated, $skipped ) );
-WP_CLI::log( sprintf( '  Αρχεία στη Βιβλιοθήκη: %d', $files ) );

@@ -16,7 +16,7 @@
  * Τα scripts του editor είναι γραμμένα σε καθαρή JavaScript (χωρίς JSX),
  * οπότε το theme δεν χρειάζεται build step (npm/webpack).
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -27,54 +27,55 @@ defined( 'ABSPATH' ) || exit;
 function kosmiteia_register_block_scripts() {
 	wp_register_script(
 		'kosmiteia-slider-editor',
-		KOSMITEIA_URI . '/blocks/slider/index.js',
+		KOSMITEIA_CORE_URL . '/blocks/slider/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-		kosmiteia_asset_version( 'blocks/slider/index.js' ),
+		kosmiteia_core_asset_version( 'blocks/slider/index.js' ),
 		true
 	);
 
 	wp_register_script(
 		'kosmiteia-language-switcher-editor',
-		KOSMITEIA_URI . '/blocks/language-switcher/index.js',
+		KOSMITEIA_CORE_URL . '/blocks/language-switcher/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
-		kosmiteia_asset_version( 'blocks/language-switcher/index.js' ),
+		kosmiteia_core_asset_version( 'blocks/language-switcher/index.js' ),
 		true
 	);
 
 	wp_register_script(
 		'kosmiteia-announcement-filters-editor',
-		KOSMITEIA_URI . '/blocks/announcement-filters/index.js',
+		KOSMITEIA_CORE_URL . '/blocks/announcement-filters/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
-		kosmiteia_asset_version( 'blocks/announcement-filters/index.js' ),
+		kosmiteia_core_asset_version( 'blocks/announcement-filters/index.js' ),
 		true
 	);
 
 	wp_register_script(
 		'kosmiteia-breadcrumbs-editor',
-		KOSMITEIA_URI . '/blocks/breadcrumbs/index.js',
+		KOSMITEIA_CORE_URL . '/blocks/breadcrumbs/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
-		kosmiteia_asset_version( 'blocks/breadcrumbs/index.js' ),
+		kosmiteia_core_asset_version( 'blocks/breadcrumbs/index.js' ),
 		true
 	);
 
 	wp_register_script(
 		'kosmiteia-map-editor',
-		KOSMITEIA_URI . '/blocks/map/index.js',
+		KOSMITEIA_CORE_URL . '/blocks/map/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-		kosmiteia_asset_version( 'blocks/map/index.js' ),
+		kosmiteia_core_asset_version( 'blocks/map/index.js' ),
 		true
 	);
 
 	wp_register_script(
 		'kosmiteia-gallery-editor',
-		KOSMITEIA_URI . '/blocks/gallery/index.js',
+		KOSMITEIA_CORE_URL . '/blocks/gallery/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-		kosmiteia_asset_version( 'blocks/gallery/index.js' ),
+		kosmiteia_core_asset_version( 'blocks/gallery/index.js' ),
 		true
 	);
 
 	kosmiteia_register_map_assets();
 	kosmiteia_register_lightbox_assets();
+	kosmiteia_register_slider_assets();
 
 	if ( function_exists( 'wp_set_script_translations' ) ) {
 		$handles = array(
@@ -87,7 +88,7 @@ function kosmiteia_register_block_scripts() {
 		);
 
 		foreach ( $handles as $handle ) {
-			wp_set_script_translations( $handle, 'kosmiteia', KOSMITEIA_DIR . '/languages' );
+			wp_set_script_translations( $handle, 'kosmiteia', KOSMITEIA_CORE_DIR . '/languages' );
 		}
 	}
 }
@@ -103,14 +104,14 @@ add_action( 'init', 'kosmiteia_register_block_scripts', 5 );
 function kosmiteia_register_map_assets() {
 	wp_register_style(
 		'kosmiteia-leaflet',
-		KOSMITEIA_URI . '/assets/vendor/leaflet/leaflet.css',
+		KOSMITEIA_CORE_URL . '/assets/vendor/leaflet/leaflet.css',
 		array(),
 		'1.9.4'
 	);
 
 	wp_register_script(
 		'kosmiteia-leaflet',
-		KOSMITEIA_URI . '/assets/vendor/leaflet/leaflet.js',
+		KOSMITEIA_CORE_URL . '/assets/vendor/leaflet/leaflet.js',
 		array(),
 		'1.9.4',
 		true
@@ -120,14 +121,14 @@ function kosmiteia_register_map_assets() {
 		'kosmiteia-map',
 		false,
 		array( 'kosmiteia-leaflet' ),
-		KOSMITEIA_VERSION
+		KOSMITEIA_CORE_VERSION
 	);
 
 	wp_register_script(
 		'kosmiteia-map-view',
-		KOSMITEIA_URI . '/assets/js/map.js',
+		KOSMITEIA_CORE_URL . '/assets/js/map.js',
 		array( 'kosmiteia-leaflet' ),
-		kosmiteia_asset_version( 'assets/js/map.js' ),
+		kosmiteia_core_asset_version( 'assets/js/map.js' ),
 		true
 	);
 
@@ -137,8 +138,41 @@ function kosmiteia_register_map_assets() {
 		array(
 			'tileUrl'     => kosmiteia_map_tile_url(),
 			'attribution' => kosmiteia_map_attribution(),
-			'imagePath'   => KOSMITEIA_URI . '/assets/vendor/leaflet/images/',
+			'imagePath'   => KOSMITEIA_CORE_URL . '/assets/vendor/leaflet/images/',
 			'markerAlt'   => __( 'Σημείο στον χάρτη', 'kosmiteia' ),
+		)
+	);
+}
+
+/**
+ * Το script του slider.
+ *
+ * Φορτώνεται μόνο όπου υπάρχει μπλοκ slider (πεδίο "viewScript" του
+ * block.json) - όχι σε κάθε σελίδα. Τα στυλ του είναι στο θέμα.
+ */
+function kosmiteia_register_slider_assets() {
+	wp_register_script(
+		'kosmiteia-slider-view',
+		KOSMITEIA_CORE_URL . '/assets/js/slider.js',
+		array(),
+		kosmiteia_core_asset_version( 'assets/js/slider.js' ),
+		true
+	);
+
+	// Μεταφρασμένα labels για την προσβασιμότητα του slider (aria-label κ.λπ.).
+	wp_localize_script(
+		'kosmiteia-slider-view',
+		'kosmiteiaSliderL10n',
+		array(
+			'carousel'   => __( 'Παρουσίαση διαφανειών', 'kosmiteia' ),
+			'previous'   => __( 'Προηγούμενη διαφάνεια', 'kosmiteia' ),
+			'next'       => __( 'Επόμενη διαφάνεια', 'kosmiteia' ),
+			'play'       => __( 'Έναρξη αυτόματης εναλλαγής', 'kosmiteia' ),
+			'pause'      => __( 'Παύση αυτόματης εναλλαγής', 'kosmiteia' ),
+			/* translators: 1: αριθμός διαφάνειας, 2: σύνολο διαφανειών. */
+			'slideLabel' => __( 'Διαφάνεια %1$s από %2$s', 'kosmiteia' ),
+			/* translators: %s: αριθμός διαφάνειας. */
+			'goToSlide'  => __( 'Μετάβαση στη διαφάνεια %s', 'kosmiteia' ),
 		)
 	);
 }
@@ -152,9 +186,9 @@ function kosmiteia_register_map_assets() {
 function kosmiteia_register_lightbox_assets() {
 	wp_register_script(
 		'kosmiteia-lightbox',
-		KOSMITEIA_URI . '/assets/js/lightbox.js',
+		KOSMITEIA_CORE_URL . '/assets/js/lightbox.js',
 		array(),
-		kosmiteia_asset_version( 'assets/js/lightbox.js' ),
+		kosmiteia_core_asset_version( 'assets/js/lightbox.js' ),
 		true
 	);
 
@@ -200,38 +234,38 @@ function kosmiteia_map_attribution() {
  * Καταχώριση των μπλοκ από τα block.json.
  */
 function kosmiteia_register_blocks() {
-	register_block_type( KOSMITEIA_DIR . '/blocks/slider' );
+	register_block_type( KOSMITEIA_CORE_DIR . '/blocks/slider' );
 
 	register_block_type(
-		KOSMITEIA_DIR . '/blocks/language-switcher',
+		KOSMITEIA_CORE_DIR . '/blocks/language-switcher',
 		array(
 			'render_callback' => 'kosmiteia_render_language_switcher_block',
 		)
 	);
 
 	register_block_type(
-		KOSMITEIA_DIR . '/blocks/announcement-filters',
+		KOSMITEIA_CORE_DIR . '/blocks/announcement-filters',
 		array(
 			'render_callback' => 'kosmiteia_render_announcement_filters_block',
 		)
 	);
 
 	register_block_type(
-		KOSMITEIA_DIR . '/blocks/breadcrumbs',
+		KOSMITEIA_CORE_DIR . '/blocks/breadcrumbs',
 		array(
 			'render_callback' => 'kosmiteia_render_breadcrumbs_block',
 		)
 	);
 
 	register_block_type(
-		KOSMITEIA_DIR . '/blocks/map',
+		KOSMITEIA_CORE_DIR . '/blocks/map',
 		array(
 			'render_callback' => 'kosmiteia_render_map_block',
 		)
 	);
 
 	register_block_type(
-		KOSMITEIA_DIR . '/blocks/gallery',
+		KOSMITEIA_CORE_DIR . '/blocks/gallery',
 		array(
 			'render_callback' => 'kosmiteia_render_gallery_block',
 		)

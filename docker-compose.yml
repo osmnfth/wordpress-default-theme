@@ -6,8 +6,9 @@ name: kosmiteia
 #   docker compose down       -> σταματά (κρατά τη βάση)
 #   docker compose down -v    -> σβήνει τα πάντα και ξαναστήνει από την αρχή
 #
-# Ο φάκελος ./kosmiteia είναι mounted μέσα στο container: ό,τι αλλάζετε
-# τοπικά φαίνεται αμέσως στο site.
+# Οι φάκελοι ./kosmiteia (θέμα) και ./plugins/kosmiteia-core (πρόσθετο) είναι
+# mounted μέσα στο container: ό,τι αλλάζετε τοπικά φαίνεται αμέσως στο site.
+# Το πρόσθετο εμφανίζεται κανονικά στα Πρόσθετα της διαχείρισης.
 
 services:
   db:
@@ -49,6 +50,7 @@ services:
     volumes:
       - wp-data:/var/www/html
       - ./kosmiteia:/var/www/html/wp-content/themes/kosmiteia
+      - ./plugins/kosmiteia-core:/var/www/html/wp-content/plugins/kosmiteia-core
 
   # Τρέχει μία φορά στο "up": εγκαθιστά το WordPress, ενεργοποιεί το theme
   # και δημιουργεί δοκιμαστικό περιεχόμενο, μενού και αγγλικά template parts.
@@ -76,6 +78,7 @@ services:
     volumes:
       - wp-data:/var/www/html
       - ./kosmiteia:/var/www/html/wp-content/themes/kosmiteia
+      - ./plugins/kosmiteia-core:/var/www/html/wp-content/plugins/kosmiteia-core
       - ./docker:/provision:ro
     entrypoint: ["/bin/sh", "/provision/provision.sh"]
 

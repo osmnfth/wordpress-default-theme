@@ -1,5 +1,10 @@
 # Κοσμητεία — Kosmiteia
 
+> **Αρχιτεκτονική:** το θέμα δείχνει, το πρόσθετο **Κοσμητεία Core**
+> (`plugins/kosmiteia-core/`) παρέχει τύπους περιεχομένου, μπλοκ, φίλτρα, χάρτη,
+> γκαλερί, δίγλωσσο, SEO, ρυθμίσεις και εργαλεία εισαγωγής. Το θέμα εμφανίζει
+> ειδοποίηση στη διαχείριση αν το πρόσθετο δεν είναι ενεργό.
+
 Δίγλωσσο (Ελληνικά / Αγγλικά) **child theme του Twenty Twenty-Five** για ιστοσελίδες
 Κοσμητείας Σχολών. Όλο το περιεχόμενο είναι δυναμικό (custom post types + Query Loops)
 και κάθε ενότητα επεξεργάζεται από το UI (Site Editor), χωρίς κώδικα.
@@ -182,7 +187,7 @@ add_filter( 'kosmiteia_announcements_per_page', function () { return 12; } );
 του μπλοκ (εικονίδιο ⚙ πάνω δεξιά → καρτέλα «Μπλοκ»). Τις συντεταγμένες ενός
 σημείου τις βρίσκετε με δεξί κλικ στο openstreetmap.org → «Show address».
 
-- Η **Leaflet 1.9.4 συνοδεύει το theme** (`assets/vendor/leaflet/`): δεν φορτώνεται
+- Η **Leaflet 1.9.4 συνοδεύει το πρόσθετο** (`plugins/kosmiteia-core/assets/vendor/leaflet/`): δεν φορτώνεται
   τίποτα από CDN και τα αρχεία μπαίνουν στη σελίδα μόνο όταν υπάρχει μπλοκ χάρτη.
 - Ο χάρτης στήνεται μόλις πλησιάσει στο viewport, οπότε δεν ζητούνται πλακίδια από
   το OpenStreetMap αν ο επισκέπτης δεν φτάσει ποτέ σε αυτόν.
@@ -251,7 +256,7 @@ add_filter( 'kosmiteia_map_attribution', function () { return 'Πηγή χάρτ
 
 Στο hover/focus η μικρογραφία ανασηκώνεται, η εικόνα κάνει ελαφρύ zoom και
 εμφανίζεται εικονίδιο μεγέθυνσης. Με κλικ ανοίγει lightbox (σαν Colorbox, αλλά
-χωρίς jQuery — δικό μας `assets/js/lightbox.js`, φορτώνεται μόνο όπου υπάρχει
+χωρίς jQuery — δικό μας `plugins/kosmiteia-core/assets/js/lightbox.js`, φορτώνεται μόνο όπου υπάρχει
 γκαλερί) με βελάκια, μετρητή, λεζάντα, πλοήγηση με ← →, κλείσιμο με Escape ή κλικ
 έξω από την εικόνα, σύρσιμο στο κινητό και επιστροφή του focus στη μικρογραφία.
 Χωρίς JavaScript κάθε μικρογραφία παραμένει απλός σύνδεσμος προς την εικόνα.
@@ -346,15 +351,24 @@ python build-translations.py
 
 ```
 kosmiteia/
+kosmiteia/  (εμφάνιση)
 ├─ style.css, theme.json, functions.php, screenshot.png
-├─ inc/          setup, post-types, multilingual, announcements, breadcrumbs, blocks,
-│                gallery, media, seo
-├─ blocks/       slider, language-switcher, announcement-filters, breadcrumbs, map, gallery
+├─ inc/          setup (assets, block styles, pattern categories), dependency
 ├─ parts/        header, footer, home-hero, home-schools, home-announcements, home-programs
 ├─ templates/    front-page, page, archive/single ανά CPT, page-landing
 ├─ patterns/     7 patterns κατηγορίας «Κοσμητεία»
 ├─ styles/       παραλλαγή «Σκούρο ακαδημαϊκό»
-├─ assets/       theme.css, admin.css, slider.js, interactions.js, map.js, lightbox.js,
-│                admin-gallery.js, vendor/leaflet
+├─ assets/       theme.css, interactions.js
 └─ languages/    kosmiteia.pot, en_US.po, en_US.mo
+
+plugins/kosmiteia-core/  (λειτουργικότητα - φαίνεται στα Πρόσθετα)
+├─ kosmiteia-core.php   επικεφαλίδα προσθέτου, constants, ενεργοποίηση
+├─ includes/     settings, post-types, post-types-academic, bindings, multilingual,
+│                announcements, breadcrumbs, blocks, gallery, media, seo,
+│                demo-content, importer-announcements, admin, cli
+├─ blocks/       slider, language-switcher, announcement-filters, breadcrumbs, map, gallery
+├─ assets/       admin.css, slider.js, map.js, lightbox.js, admin-gallery.js,
+│                vendor/leaflet, demo/ (εικόνες αρχικού περιεχομένου)
+├─ languages/    kosmiteia.pot, en_US.po, en_US.mo
+├─ readme.txt, uninstall.php
 ```

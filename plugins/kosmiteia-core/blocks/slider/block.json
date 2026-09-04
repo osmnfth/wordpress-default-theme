@@ -43,5 +43,6 @@
 			"default": ""
 		}
 	},
-	"editorScript": "kosmiteia-slider-editor"
+	"editorScript": "kosmiteia-slider-editor",
+	"viewScript": "kosmiteia-slider-view"
 }

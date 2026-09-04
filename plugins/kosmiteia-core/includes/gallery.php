@@ -8,7 +8,7 @@
  *
  * Αποθηκεύονται στο meta `kosm_gallery` ως λίστα IDs χωρισμένη με κόμμα.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -243,16 +243,16 @@ function kosmiteia_gallery_admin_assets( $hook ) {
 
 	wp_enqueue_style(
 		'kosmiteia-admin',
-		KOSMITEIA_URI . '/assets/css/admin.css',
+		KOSMITEIA_CORE_URL . '/assets/css/admin.css',
 		array(),
-		kosmiteia_asset_version( 'assets/css/admin.css' )
+		kosmiteia_core_asset_version( 'assets/css/admin.css' )
 	);
 
 	wp_enqueue_script(
 		'kosmiteia-admin-gallery',
-		KOSMITEIA_URI . '/assets/js/admin-gallery.js',
+		KOSMITEIA_CORE_URL . '/assets/js/admin-gallery.js',
 		array( 'jquery' ),
-		kosmiteia_asset_version( 'assets/js/admin-gallery.js' ),
+		kosmiteia_core_asset_version( 'assets/js/admin-gallery.js' ),
 		true
 	);
 

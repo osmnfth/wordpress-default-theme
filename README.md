@@ -1,15 +1,22 @@
-# Κοσμητεία Σχολών — WordPress theme + έτοιμο περιβάλλον
+# Κοσμητεία Σχολών — WordPress theme + πρόσθετο + έτοιμο περιβάλλον
 
-Δίγλωσσο (EL/EN) **child theme του Twenty Twenty-Five** για ιστοσελίδες Κοσμητείας
-Σχολών, μαζί με πλήρες περιβάλλον Docker που στήνει μόνο του ένα λειτουργικό site
-με δοκιμαστικό περιεχόμενο.
+Δίγλωσσος (EL/EN) ιστότοπος Κοσμητείας Σχολών σε δύο κομμάτια — **πρόσθετο** για τη
+λειτουργικότητα και **child theme του Twenty Twenty-Five** για την εμφάνιση — μαζί με
+πλήρες περιβάλλον Docker που στήνει μόνο του ένα λειτουργικό site.
 
 ```
 .
-├─ kosmiteia/          → το theme (αυτό αντιγράφετε σε ένα πραγματικό WordPress)
-├─ docker-compose.yml  → WordPress + MariaDB + αυτόματο provisioning
-└─ docker/             → script στησίματος, δοκιμαστικό περιεχόμενο, εικόνες
+├─ plugins/kosmiteia-core/ → το πρόσθετο «Κοσμητεία Core» (φαίνεται στα Πρόσθετα)
+│                            τύποι περιεχομένου, μπλοκ, φίλτρα, χάρτης, γκαλερί,
+│                            δίγλωσσο, SEO, ρυθμίσεις και εργαλεία εισαγωγής
+├─ kosmiteia/             → το theme: templates, patterns, στυλ, block styles
+├─ docker-compose.yml     → WordPress + MariaDB + αυτόματο provisioning
+└─ docker/                → script στησίματος (provision.sh)
 ```
+
+**Γιατί χωριστά:** το περιεχόμενο (Σχολές, Ανακοινώσεις, Εκδηλώσεις, Προσωπικό,
+Έγγραφα) και τα πεδία του ανήκουν στο πρόσθετο, οπότε επιβιώνουν σε αλλαγή θέματος.
+Το θέμα κρατά μόνο ό,τι αφορά την εμφάνιση.
 
 ---
 
@@ -35,6 +42,7 @@ docker compose up -d
 
 - WordPress (τελευταία έκδοση) με **ελληνικά** ως γλώσσα διεπαφής
 - Twenty Twenty-Five (parent) + ενεργοποιημένο το theme **Κοσμητεία**
+- Ενεργοποιημένο το πρόσθετο **Κοσμητεία Core** (Πίνακας ελέγχου → Πρόσθετα)
 - **FileBird** (φάκελοι στη Βιβλιοθήκη πολυμέσων) εγκατεστημένο και ενεργό
 - Μόνιμοι σύνδεσμοι `/%postname%/`
 - Δοκιμαστικό περιεχόμενο αντλημένο από τον ιστότοπο της **Κοσμητείας της Σχολής
@@ -56,9 +64,33 @@ docker compose up -d
 docker compose down                              # σταμάτημα (κρατά τη βάση)
 docker compose down -v                           # σβήσιμο όλων και καθαρό ξεκίνημα
 docker compose logs -f provision                 # τι έκανε το στήσιμο
-docker compose run --rm -e KOSMITEIA_RESEED=1 provision   # ξαναχτίσιμο περιεχομένου
-docker compose run --rm provision wp plugin list          # οποιαδήποτε εντολή WP-CLI
+docker compose run --rm --entrypoint wp provision kosmiteia seed --force  # ξαναχτίσιμο περιεχομένου
+docker compose run --rm --entrypoint wp provision kosmiteia info          # σύνοψη περιεχομένου
+docker compose run --rm --entrypoint wp provision plugin list             # οποιαδήποτε εντολή WP-CLI
 ```
+
+Σε Git Bash (Windows) βάλτε `MSYS_NO_PATHCONV=1` μπροστά από τις εντολές, ώστε να μη
+μετατραπούν οι διαδρομές.
+
+### Εργαλεία μέσα από τη διαχείριση
+
+Χωρίς docker και χωρίς γραμμή εντολών, από **Κοσμητεία → Εργαλεία**:
+
+- **Δημιουργία αρχικού περιεχομένου** (ό,τι έκανε παλιά το `docker/seed.php`)
+- **Εισαγωγή ανακοινώσεων από παλιό ιστότοπο** μέσω RSS, με λήψη των PDF
+
+και από **Κοσμητεία → Ρυθμίσεις** τα στοιχεία επικοινωνίας, ο χάρτης, τα κοινωνικά
+δίκτυα και ο αριθμός ανακοινώσεων/εκδηλώσεων ανά σελίδα. Τα patterns τα διαβάζουν
+μέσω Block Bindings, οπότε μια αλλαγή εκεί ενημερώνει όλο τον ιστότοπο.
+
+### Ρόλος «Συντάκτης Ανακοινώσεων»
+
+Για τη γραμματεία που ανεβάζει μόνο ανακοινώσεις: **Χρήστες → Προσθήκη** και ρόλος
+*Συντάκτης Ανακοινώσεων*. Μπορεί να γράφει, να δημοσιεύει και να διορθώνει **τις
+δικές του** ανακοινώσεις και να ανεβάζει τα συνημμένα τους. Δεν βλέπει Σχολές,
+Μεταπτυχιακά, Εκδηλώσεις, Προσωπικό, Έγγραφα, σελίδες, θέματα, πρόσθετα, χρήστες,
+ρυθμίσεις, ούτε τις ανακοινώσεις των άλλων· στη Βιβλιοθήκη βλέπει μόνο τα δικά του
+αρχεία.
 
 Αλλαγή θύρας ή κωδικού (πριν το πρώτο `up`):
 
@@ -66,8 +98,9 @@ docker compose run --rm provision wp plugin list          # οποιαδήποτ
 KOSMITEIA_PORT=9000 KOSMITEIA_ADMIN_PASSWORD=secret docker compose up -d
 ```
 
-> Όταν αλλάξει το `docker/seed.php`, ανεβάστε το `KOSM_DEMO_VERSION` ώστε το
-> περιεχόμενο να ξαναχτιστεί στο επόμενο `up`, ή τρέξτε το με `KOSMITEIA_RESEED=1`.
+> Όταν αλλάξει το `plugins/kosmiteia-core/includes/demo-content.php`, ανεβάστε το
+> `KOSM_DEMO_VERSION` ώστε το περιεχόμενο να ξαναχτιστεί στο επόμενο `up`, ή τρέξτε
+> `wp kosmiteia seed --force` (ή `KOSMITEIA_RESEED=1 docker compose up provision`).
 > Το reseed **ενημερώνει** τα υπάρχοντα άρθρα (ίδιο slug) και δεν σβήνει παλιά:
 > για εντελώς καθαρό αποτέλεσμα χρησιμοποιήστε `docker compose down -v`.
 
@@ -78,9 +111,26 @@ KOSMITEIA_PORT=9000 KOSMITEIA_ADMIN_PASSWORD=secret docker compose up -d
 
 ## 2. Εγκατάσταση σε πραγματικό WordPress
 
-Αντιγράψτε **μόνο** τον φάκελο `kosmiteia/` στο `wp-content/themes/` και ενεργοποιήστε
-το από **Εμφάνιση → Θέματα**. Απαιτείται εγκατεστημένο το Twenty Twenty-Five.
-Αναλυτικές οδηγίες, δομή και δυνατότητες: [kosmiteia/README.md](kosmiteia/README.md).
+### Με αρχεία .zip (όπως κάθε πρόσθετο/θέμα που κατεβάζετε)
+
+```bash
+python tools/build-zips.py     # παράγει το dist/
+```
+
+- `dist/kosmiteia-core-1.0.0.zip` → **Πρόσθετα → Προσθήκη → Ανέβασμα αρχείου**
+- `dist/kosmiteia-1.0.0.zip` → **Εμφάνιση → Θέματα → Προσθήκη → Ανέβασμα**
+
+### Με αντιγραφή φακέλων
+
+1. `plugins/kosmiteia-core/` → `wp-content/plugins/` και ενεργοποίηση από **Πρόσθετα**.
+2. `kosmiteia/` → `wp-content/themes/` και ενεργοποίηση από **Εμφάνιση → Θέματα**
+   (απαιτείται εγκατεστημένο το Twenty Twenty-Five).
+3. **Κοσμητεία → Ρυθμίσεις** για τα στοιχεία του ιδρύματος και, προαιρετικά,
+   **Κοσμητεία → Εργαλεία** για αρχικό περιεχόμενο.
+
+Αν λείπει το πρόσθετο, το θέμα το λέει με ειδοποίηση στη διαχείριση.
+Αναλυτικές οδηγίες, δομή και δυνατότητες: [kosmiteia/README.md](kosmiteia/README.md)
+και [plugins/kosmiteia-core/readme.txt](plugins/kosmiteia-core/readme.txt).
 
 ---
 
@@ -101,14 +151,16 @@ KOSMITEIA_PORT=9000 KOSMITEIA_ADMIN_PASSWORD=secret docker compose up -d
   κανένα σφάλμα επικύρωσης μπλοκ** — δηλαδή όλα επεξεργάζονται κανονικά από το UI
 - Block Bindings (διάρκεια, ECTS, σύνδεσμος αίτησης, συνημμένα) εμφανίζονται σωστά
 - Structured data: `CollegeOrUniversity`, `Course`, `NewsArticle`,
-  `EducationalOrganization`, `BreadcrumbList`
+  `EducationalOrganization`, `Event`, `Person`, `DigitalDocument`, `BreadcrumbList`
+- Το πρόσθετο ενεργοποιείται/απενεργοποιείται από τα **Πρόσθετα** χωρίς σφάλματα και
+  οι εντολές `wp kosmiteia seed|import-announcements|info` τρέχουν κανονικά
 
 ---
 
 ## 4. Ανανέωση δοκιμαστικών εικόνων
 
 ```bash
-cd docker/assets && python generate.py
+cd plugins/kosmiteia-core/assets/demo && python generate.py
 ```
 
 Παράγει ξανά τα PNG (αφηρημένα ακαδημαϊκά μοτίβα, χωρίς εξωτερικές βιβλιοθήκες).

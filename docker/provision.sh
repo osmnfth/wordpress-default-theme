@@ -55,6 +55,9 @@ fi
 say "Ενεργοποίηση του child theme..."
 wp theme activate kosmiteia
 
+say "Ενεργοποίηση του προσθέτου «Κοσμητεία Core»..."
+wp plugin activate kosmiteia-core
+
 say "FileBird (φάκελοι στη Βιβλιοθήκη πολυμέσων)..."
 if wp plugin is-installed filebird 2>/dev/null; then
 	wp plugin activate filebird >/dev/null 2>&1 || true
@@ -66,8 +69,12 @@ say "Μόνιμοι σύνδεσμοι..."
 wp rewrite structure '/%postname%/' --hard
 wp rewrite flush --hard
 
-say "Δοκιμαστικό περιεχόμενο, μενού και αγγλικά parts..."
-wp eval-file /provision/seed.php
+say "Αρχικό περιεχόμενο, μενού και αγγλικά parts..."
+if [ "${KOSMITEIA_RESEED:-0}" = "1" ]; then
+	wp kosmiteia seed --force
+else
+	wp kosmiteia seed
+fi
 
 say "Καθαρισμός cache..."
 wp cache flush 2>/dev/null || true

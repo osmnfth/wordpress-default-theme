@@ -94,33 +94,6 @@ function kosmiteia_enqueue_assets() {
 		)
 	);
 
-	wp_enqueue_script(
-		'kosmiteia-slider',
-		KOSMITEIA_URI . '/assets/js/slider.js',
-		array(),
-		kosmiteia_asset_version( 'assets/js/slider.js' ),
-		array(
-			'strategy'  => 'defer',
-			'in_footer' => true,
-		)
-	);
-
-	// Μεταφρασμένα labels για την προσβασιμότητα του slider (aria-label κ.λπ.).
-	wp_localize_script(
-		'kosmiteia-slider',
-		'kosmiteiaSliderL10n',
-		array(
-			'carousel'   => __( 'Παρουσίαση διαφανειών', 'kosmiteia' ),
-			'previous'   => __( 'Προηγούμενη διαφάνεια', 'kosmiteia' ),
-			'next'       => __( 'Επόμενη διαφάνεια', 'kosmiteia' ),
-			'play'       => __( 'Έναρξη αυτόματης εναλλαγής', 'kosmiteia' ),
-			'pause'      => __( 'Παύση αυτόματης εναλλαγής', 'kosmiteia' ),
-			/* translators: 1: αριθμός διαφάνειας, 2: σύνολο διαφανειών. */
-			'slideLabel' => __( 'Διαφάνεια %1$s από %2$s', 'kosmiteia' ),
-			/* translators: %s: αριθμός διαφάνειας. */
-			'goToSlide'  => __( 'Μετάβαση στη διαφάνεια %s', 'kosmiteia' ),
-		)
-	);
 }
 add_action( 'wp_enqueue_scripts', 'kosmiteia_enqueue_assets' );
 
@@ -177,60 +150,6 @@ function kosmiteia_register_block_styles() {
 	) );
 }
 add_action( 'init', 'kosmiteia_register_block_styles' );
-
-/**
- * Δυναμικά tokens σε κείμενα και συνδέσμους.
- *
- * Γράψτε το token μέσα σε οποιοδήποτε μπλοκ κειμένου ή στο πεδίο URL ενός
- * κουμπιού / στοιχείου μενού:
- *
- *   {{year}}               - τρέχον έτος
- *   {{site}}               - όνομα ιστότοπου
- *   {{url_home}}           - αρχική σελίδα
- *   {{url_schools}}        - αρχείο Σχολών
- *   {{url_announcements}}  - αρχείο Ανακοινώσεων
- *   {{url_programs}}       - αρχείο Μεταπτυχιακών
- *
- * Έτσι οι σύνδεσμοι παραμένουν σωστοί ακόμη κι αν αλλάξουν τα permalinks.
- *
- * @param string $block_content Το HTML του μπλοκ.
- * @return string
- */
-function kosmiteia_render_dynamic_tokens( $block_content ) {
-	if ( false === strpos( $block_content, '{{' ) ) {
-		return $block_content;
-	}
-
-	$archive = static function ( $post_type ) {
-		$link = get_post_type_archive_link( $post_type );
-
-		return $link ? $link : home_url( '/' );
-	};
-
-	return strtr(
-		$block_content,
-		array(
-			'{{year}}'              => esc_html( wp_date( 'Y' ) ),
-			'{{site}}'              => esc_html( get_bloginfo( 'name' ) ),
-			'{{url_home}}'          => esc_url( home_url( '/' ) ),
-			'{{url_schools}}'       => esc_url( $archive( 'kosm_school' ) ),
-			'{{url_announcements}}' => esc_url( $archive( 'kosm_announcement' ) ),
-			'{{url_programs}}'      => esc_url( $archive( 'kosm_program' ) ),
-		)
-	);
-}
-add_filter( 'render_block', 'kosmiteia_render_dynamic_tokens' );
-
-/**
- * Excerpt: μήκος και κατάληξη, μεταφράσιμα.
- *
- * @param int $length Αριθμός λέξεων.
- * @return int
- */
-function kosmiteia_excerpt_length( $length ) {
-	return 24;
-}
-add_filter( 'excerpt_length', 'kosmiteia_excerpt_length' );
 
 /**
  * Προσβασιμότητα: το "Read more" των query loops παίρνει το όνομα του άρθρου.

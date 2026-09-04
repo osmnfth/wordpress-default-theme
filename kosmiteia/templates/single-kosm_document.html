@@ -1,0 +1,47 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"constrained"}} -->
+<main class="wp-block-group">
+	<!-- wp:group {"align":"full","backgroundColor":"accent-4","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignfull has-accent-4-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:kosmiteia/breadcrumbs {"fontSize":"small"} /-->
+
+		<!-- wp:post-terms {"term":"kosm_document_type","fontSize":"small"} /-->
+
+		<!-- wp:post-title {"level":1,"fontSize":"xx-large"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:post-content {"align":"wide","style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} /-->
+
+	<!-- wp:group {"align":"wide","className":"is-style-kosmiteia-card","style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|70"},"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignwide is-style-kosmiteia-card" style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--70);padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">
+		<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"core/post-meta","args":{"key":"kosm_document_number"}}}},"fontSize":"small"} -->
+		<p class="has-small-font-size">Αριθμός πρωτοκόλλου</p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"core/post-meta","args":{"key":"kosm_document_date"}}}},"fontSize":"small"} -->
+		<p class="has-small-font-size">Ημερομηνία εγγράφου</p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:buttons -->
+		<div class="wp-block-buttons">
+			<!-- wp:button {"metadata":{"bindings":{"url":{"source":"core/post-meta","args":{"key":"kosm_document_file"}}}}} -->
+			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Λήψη αρχείου</a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:buttons {"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|70"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
+	<div class="wp-block-buttons" style="margin-bottom:var(--wp--preset--spacing--70)">
+		<!-- wp:button {"className":"is-style-outline"} -->
+		<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="{{url_documents}}">Όλα τα έγγραφα</a></div>
+		<!-- /wp:button -->
+	</div>
+	<!-- /wp:buttons -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

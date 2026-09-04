@@ -12,7 +12,7 @@
  * 3. Σε κάθε περίπτωση: template part ή μενού με κατάληξη "-en"
  *    χρησιμοποιείται αυτόματα όταν η τρέχουσα γλώσσα είναι τα Αγγλικά.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -23,23 +23,27 @@ defined( 'ABSPATH' ) || exit;
  * @return array
  */
 function kosmiteia_default_languages() {
-	return apply_filters(
-		'kosmiteia_languages',
-		array(
-			'el' => array(
-				'name'   => 'Ελληνικά',
-				'short'  => 'EL',
-				'locale' => 'el',
-				'hreflang' => 'el',
-			),
-			'en' => array(
-				'name'   => 'English',
-				'short'  => 'EN',
-				'locale' => 'en_US',
-				'hreflang' => 'en',
-			),
-		)
+	$languages = array(
+		'el' => array(
+			'name'   => 'Ελληνικά',
+			'short'  => 'EL',
+			'locale' => 'el',
+			'hreflang' => 'el',
+		),
 	);
+
+	// Η αγγλική έκδοση ανοιγοκλείνει από τις Ρυθμίσεις Κοσμητείας. Διαβάζεται
+	// «ωμά», γιατί η συνάρτηση τρέχει μέσα από το φίλτρο locale, πολύ πριν το init.
+	if ( kosmiteia_option_raw( 'enable_en', 1 ) ) {
+		$languages['en'] = array(
+			'name'   => 'English',
+			'short'  => 'EN',
+			'locale' => 'en_US',
+			'hreflang' => 'en',
+		);
+	}
+
+	return apply_filters( 'kosmiteia_languages', $languages );
 }
 
 /**
@@ -163,6 +167,27 @@ function kosmiteia_get_languages() {
 
 	return $list;
 }
+
+/**
+ * Τίτλοι αρχείων στη γλώσσα της σελίδας.
+ *
+ * Τα labels των custom post types «παγώνουν» τη στιγμή της καταχώρισης (init),
+ * δηλαδή πριν αλλάξει η γλώσσα από το ?lang=en. Εδώ ξαναπερνούν από τον
+ * κατάλογο μεταφράσεων, ώστε το αρχείο Ανακοινώσεων να λέει «Announcements»
+ * και όχι «Ανακοινώσεις» στην αγγλική έκδοση.
+ *
+ * @param string $name Το όνομα του αρχείου.
+ * @return string
+ */
+function kosmiteia_translate_archive_title( $name ) {
+	if ( 'el' === kosmiteia_current_language() || '' === (string) $name ) {
+		return $name;
+	}
+
+	// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Το string υπάρχει ήδη στον κατάλογο· εδώ απλώς ξαναμεταφράζεται μετά την αλλαγή γλώσσας.
+	return translate( $name, 'kosmiteia' );
+}
+add_filter( 'post_type_archive_title', 'kosmiteia_translate_archive_title' );
 
 /**
  * URL της τρέχουσας σελίδας για συγκεκριμένη γλώσσα (fallback mode).

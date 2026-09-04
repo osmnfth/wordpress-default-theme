@@ -20,7 +20,7 @@
  * του template δουλεύει με «Κληρονομιά ερωτήματος» και η σελιδοποίηση του
  * WordPress (/page/2/) κρατά αυτόματα τις παραμέτρους.
  *
- * @package Kosmiteia
+ * @package Kosmiteia_Core
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -28,13 +28,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Ανακοινώσεις ανά σελίδα στο αρχείο.
  *
- * Αλλάξτε το από child theme ή plugin:
+ * Ορίζεται από τις Ρυθμίσεις Κοσμητείας (Περιεχόμενο → Ανακοινώσεις ανά
+ * σελίδα). Προγραμματιστικά:
  *   add_filter( 'kosmiteia_announcements_per_page', function () { return 12; } );
  *
  * @return int
  */
 function kosmiteia_announcements_per_page() {
-	return (int) apply_filters( 'kosmiteia_announcements_per_page', 10 );
+	return (int) apply_filters( 'kosmiteia_announcements_per_page', (int) kosmiteia_option( 'announcements_per_page', 10 ) );
 }
 
 /**

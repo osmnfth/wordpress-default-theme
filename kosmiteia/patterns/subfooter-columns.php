@@ -21,7 +21,7 @@
 
 			<!-- wp:site-title {"level":2,"fontSize":"large"} /-->
 
-			<!-- wp:paragraph {"fontSize":"small"} -->
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"tagline"}}}},"fontSize":"small"} -->
 			<p class="has-small-font-size"><?php esc_html_e( 'Παιδεία, έρευνα και κοινωνική προσφορά. Η Κοσμητεία συντονίζει τις Σχολές, τα προγράμματα σπουδών και την ακαδημαϊκή κοινότητα.', 'kosmiteia' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
@@ -63,12 +63,20 @@
 			<h2 class="wp-block-heading has-medium-font-size"><?php esc_html_e( 'Επικοινωνία', 'kosmiteia' ); ?></h2>
 			<!-- /wp:heading -->
 
-			<!-- wp:paragraph {"fontSize":"small"} -->
-			<p class="has-small-font-size"><?php esc_html_e( 'Πανεπιστημιούπολη, Κτίριο Διοίκησης', 'kosmiteia' ); ?><br><?php esc_html_e( 'Τ.Κ. 000 00, Πόλη', 'kosmiteia' ); ?></p>
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_address"}}}},"fontSize":"small"} -->
+			<p class="has-small-font-size"><?php esc_html_e( 'Διεύθυνση', 'kosmiteia' ); ?></p>
 			<!-- /wp:paragraph -->
 
-			<!-- wp:paragraph {"fontSize":"small"} -->
-			<p class="has-small-font-size"><a href="tel:+302100000000">+30 210 000 0000</a><br><a href="mailto:info@example.edu">info@example.edu</a></p>
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_phone_label"}}}},"fontSize":"small"} -->
+			<p class="has-small-font-size"><?php esc_html_e( 'Τηλέφωνο', 'kosmiteia' ); ?></p>
+			<!-- /wp:paragraph -->
+
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_email"}}}},"fontSize":"small"} -->
+			<p class="has-small-font-size"><?php esc_html_e( 'Email', 'kosmiteia' ); ?></p>
+			<!-- /wp:paragraph -->
+
+			<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"kosmiteia/option","args":{"key":"contact_hours_label"}}}},"fontSize":"small"} -->
+			<p class="has-small-font-size"><?php esc_html_e( 'Ωράριο', 'kosmiteia' ); ?></p>
 			<!-- /wp:paragraph -->
 
 			<!-- wp:heading {"level":2,"fontSize":"medium"} -->
@@ -76,13 +84,13 @@
 			<!-- /wp:heading -->
 
 			<!-- wp:social-links {"openInNewTab":true,"className":"is-style-logos-only","layout":{"type":"flex"}} -->
-			<ul class="wp-block-social-links is-style-logos-only"><!-- wp:social-link {"url":"#","service":"facebook","label":"Facebook"} /-->
+			<ul class="wp-block-social-links is-style-logos-only"><!-- wp:social-link {"url":"<?php echo esc_url( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'social_facebook', '#' ) : '#' ); ?>","service":"facebook","label":"Facebook"} /-->
 
-			<!-- wp:social-link {"url":"#","service":"instagram","label":"Instagram"} /-->
+			<!-- wp:social-link {"url":"<?php echo esc_url( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'social_instagram', '#' ) : '#' ); ?>","service":"instagram","label":"Instagram"} /-->
 
-			<!-- wp:social-link {"url":"#","service":"linkedin","label":"LinkedIn"} /-->
+			<!-- wp:social-link {"url":"<?php echo esc_url( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'social_linkedin', '#' ) : '#' ); ?>","service":"linkedin","label":"LinkedIn"} /-->
 
-			<!-- wp:social-link {"url":"#","service":"youtube","label":"YouTube"} /--></ul>
+			<!-- wp:social-link {"url":"<?php echo esc_url( function_exists( 'kosmiteia_option' ) ? kosmiteia_option( 'social_youtube', '#' ) : '#' ); ?>","service":"youtube","label":"YouTube"} /--></ul>
 			<!-- /wp:social-links -->
 		</div>
 		<!-- /wp:column -->
