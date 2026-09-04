@@ -94,7 +94,10 @@ function kosmiteia_import_defaults() {
 function kosm_feed_items( $feed_url, $page ) {
 	$url = add_query_arg( 'paged', $page, $feed_url );
 
-	$response = wp_remote_get(
+	// wp_safe_remote_get(): περνά από wp_http_validate_url(), δηλαδή μπλοκάρει
+	// loopback/ιδιωτικές διευθύνσεις και μη http(s) πρωτόκολλα. Το ίδιο κάνει
+	// ήδη ο πυρήνας στο download_url() για τα συνημμένα.
+	$response = wp_safe_remote_get(
 		$url,
 		array(
 			'timeout'    => 45,
@@ -140,7 +143,7 @@ function kosm_feed_items( $feed_url, $page ) {
 		}
 
 		$items[] = array(
-			'title'      => trim( html_entity_decode( (string) $item->title, ENT_QUOTES, 'UTF-8' ) ),
+			'title'      => trim( wp_strip_all_tags( html_entity_decode( (string) $item->title, ENT_QUOTES, 'UTF-8' ) ) ),
 			'link'       => trim( (string) $item->link ),
 			'date'       => trim( (string) $item->pubDate ),
 			'author'     => isset( $dc->creator ) ? trim( (string) $dc->creator ) : '',
@@ -311,6 +314,61 @@ function kosm_image_block( DOMElement $img, $images ) {
 }
 
 /**
+ * Καθαρίζει το φορτωμένο DOM πριν από οποιαδήποτε μετατροπή.
+ *
+ * Το περιεχόμενο έρχεται από ξένο ιστότοπο: ακόμη κι αν είναι «γνωστός»,
+ * μπορεί να έχει παραβιαστεί ή να έχει συντάκτες που δεν ελέγχουμε. Εδώ
+ * αφαιρούνται ολόκληροι οι επικίνδυνοι κόμβοι - σε οποιοδήποτε βάθος, όχι μόνο
+ * στο επίπεδο που διατρέχει ο μετατροπέας - και κάθε attribute που εκτελεί
+ * κώδικα (on*, javascript:, data: κ.λπ.).
+ *
+ * @param DOMDocument $dom Το έγγραφο.
+ */
+function kosm_import_clean_dom( DOMDocument $dom ) {
+	$xpath = new DOMXPath( $dom );
+
+	$dangerous = '//script | //style | //iframe | //frame | //frameset | //object | //embed'
+		. ' | //applet | //form | //input | //button | //select | //textarea | //link'
+		. ' | //meta | //base | //svg | //math | //template | //noscript';
+
+	foreach ( iterator_to_array( $xpath->query( $dangerous ) ) as $node ) {
+		if ( $node->parentNode ) {
+			$node->parentNode->removeChild( $node );
+		}
+	}
+
+	$url_attributes = array( 'href', 'src', 'action', 'formaction', 'xlink:href', 'data', 'poster', 'background' );
+
+	foreach ( iterator_to_array( $xpath->query( '//@*' ) ) as $attribute ) {
+		$name  = strtolower( $attribute->nodeName );
+		$value = html_entity_decode( (string) $attribute->nodeValue, ENT_QUOTES, 'UTF-8' );
+
+		$is_event  = ( 0 === strpos( $name, 'on' ) );
+		$is_srcdoc = ( 'srcdoc' === $name );
+		$is_scheme = in_array( $name, $url_attributes, true )
+			&& preg_match( '#^\\s*(?:javascript|vbscript|data|file)\\s*:#i', $value );
+
+		if ( $is_event || $is_srcdoc || $is_scheme ) {
+			$attribute->parentNode->removeAttributeNode( $attribute );
+		}
+	}
+}
+
+/**
+ * Δεύτερη γραμμή άμυνας για κάθε κομμάτι HTML που κρατάμε αυτούσιο.
+ *
+ * Δεν βασιζόμαστε στο ότι θα φιλτράρει το WordPress: ο χρήστης που τρέχει την
+ * εισαγωγή είναι συνήθως διαχειριστής, άρα έχει «unfiltered_html» και το
+ * wp_insert_post() δεν καθαρίζει τίποτα. Φιλτράρουμε ρητά εμείς.
+ *
+ * @param string $html Το HTML.
+ * @return string
+ */
+function kosm_import_safe_html( $html ) {
+	return wp_kses_post( (string) $html );
+}
+
+/**
  * Διατρέχει τα παιδιά ενός κόμβου και τα μεταφράζει σε blocks.
  */
 function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
@@ -347,7 +405,7 @@ function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 					break;
 				}
 
-				$blocks .= "<!-- wp:paragraph -->\n<p>" . $inner . "</p>\n<!-- /wp:paragraph -->\n\n";
+				$blocks .= "<!-- wp:paragraph -->\n<p>" . kosm_import_safe_html( $inner ) . "</p>\n<!-- /wp:paragraph -->\n\n";
 				break;
 
 			case 'h1':
@@ -361,7 +419,7 @@ function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 				$blocks .= sprintf(
 					"<!-- wp:heading {\"level\":%1\$d} -->\n<h%1\$d class=\"wp-block-heading\">%2\$s</h%1\$d>\n<!-- /wp:heading -->\n\n",
 					$level,
-					$inner
+					kosm_import_safe_html( $inner )
 				);
 				break;
 
@@ -370,7 +428,7 @@ function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 				$items = '';
 
 				foreach ( $node->getElementsByTagName( 'li' ) as $li ) {
-					$items .= "<!-- wp:list-item -->\n<li>" . kosm_inner_html( $li ) . "</li>\n<!-- /wp:list-item -->\n";
+					$items .= "<!-- wp:list-item -->\n<li>" . kosm_import_safe_html( kosm_inner_html( $li ) ) . "</li>\n<!-- /wp:list-item -->\n";
 				}
 
 				if ( '' === $items ) {
@@ -403,11 +461,36 @@ function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 				break;
 
 			case 'a':
-				$blocks .= "<!-- wp:paragraph -->\n<p>" . $node->ownerDocument->saveHTML( $node ) . "</p>\n<!-- /wp:paragraph -->\n\n";
+				$blocks .= "<!-- wp:paragraph -->\n<p>" . kosm_import_safe_html( $node->ownerDocument->saveHTML( $node ) ) . "</p>\n<!-- /wp:paragraph -->\n\n";
 				break;
 
 			default:
-				$blocks .= "<!-- wp:html -->\n" . trim( $node->ownerDocument->saveHTML( $node ) ) . "\n<!-- /wp:html -->\n\n";
+				// Δομικά στοιχεία (πίνακες, παραθέσεις) τα κρατάμε, αλλά μόνο
+				// φιλτραρισμένα. Οτιδήποτε άλλο το ανοίγουμε και συνεχίζουμε στα
+				// παιδιά του, ώστε να μη μένει ποτέ ξένο raw HTML στο άρθρο.
+				$keep = array( 'table', 'blockquote', 'pre', 'dl', 'hr' );
+
+				if ( in_array( $tag, $keep, true ) ) {
+					$safe = trim( kosm_import_safe_html( $node->ownerDocument->saveHTML( $node ) ) );
+
+					if ( '' !== $safe ) {
+						$blocks .= "<!-- wp:html -->\n" . $safe . "\n<!-- /wp:html -->\n\n";
+					}
+
+					break;
+				}
+
+				if ( $node->hasChildNodes() ) {
+					$blocks .= kosm_nodes_to_blocks( $node, $images );
+
+					break;
+				}
+
+				$text = trim( $node->textContent );
+
+				if ( '' !== $text ) {
+					$blocks .= "<!-- wp:paragraph -->\n<p>" . esc_html( $text ) . "</p>\n<!-- /wp:paragraph -->\n\n";
+				}
 				break;
 		}
 	}
@@ -436,10 +519,16 @@ function kosm_html_to_blocks( $html, $images = array() ) {
 	libxml_clear_errors();
 	libxml_use_internal_errors( $previous );
 
+	kosm_import_clean_dom( $dom );
+
 	$root = $dom->getElementById( 'kosm-root' );
 
 	if ( ! $root ) {
-		return "<!-- wp:html -->\n" . $html . "\n<!-- /wp:html -->\n\n";
+		// Αν το DOM δεν φορτώθηκε, κρατάμε μόνο κείμενο: σε καμία
+		// περίπτωση δεν καταλήγει ξένο έγγραφο ως raw HTML στο άρθρο.
+		$text = trim( wp_strip_all_tags( $html ) );
+
+		return ( '' === $text ) ? '' : "<!-- wp:paragraph -->\n<p>" . esc_html( $text ) . "</p>\n<!-- /wp:paragraph -->\n\n";
 	}
 
 	return kosm_nodes_to_blocks( $root, $images );
@@ -611,6 +700,20 @@ function kosmiteia_import_announcements( $args = array() ) {
 		}
 
 		$blocks = kosm_html_to_blocks( $content, $images );
+
+	// Τελευταία δικλείδα: αν παρ' ελπίδα έχει μείνει εκτελέσιμο HTML,
+	// φιλτράρεται και καταγράφεται.
+	if ( false !== stripos( $blocks, '<script' ) || preg_match( '/\\son[a-z]+\\s*=/i', $blocks ) ) {
+		kosmiteia_import_warn(
+			sprintf(
+				/* translators: %s: τίτλος ανακοίνωσης. */
+				__( 'Αφαιρέθηκε επικίνδυνο HTML από: %s', 'kosmiteia' ),
+				$item['title']
+			)
+		);
+
+		$blocks = kosm_import_safe_html( $blocks );
+	}
 
 		if ( $dry_run ) {
 			kosmiteia_import_log(

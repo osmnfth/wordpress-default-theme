@@ -536,6 +536,7 @@ EN = {
     u"Ναι": u"Yes",
     u"Τα στοιχεία αυτά τροφοδοτούν το υποσέλιδο, τη σελίδα επικοινωνίας, τον χάρτη και τα δομημένα δεδομένα. Δεν χρειάζεται επέμβαση σε templates.": u"These details feed the footer, the contact page, the map and the structured data. No template editing needed.",
     u"Συντάκτης Ανακοινώσεων": u"Announcements editor",
+    u"Αφαιρέθηκε επικίνδυνο HTML από: %s": u"Dangerous HTML was removed from: %s",
     u'Προηγούμενη φωτογραφία': u'Previous photo',
     u'Επόμενη φωτογραφία': u'Next photo',
     u'Κλείσιμο': u'Close',

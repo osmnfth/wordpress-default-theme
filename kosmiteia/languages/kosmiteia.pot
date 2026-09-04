@@ -451,6 +451,9 @@ msgstr ""
 msgid "Δεν βρέθηκαν ανακοινώσεις στο feed."
 msgstr ""
 
+msgid "Αφαιρέθηκε επικίνδυνο HTML από: %s"
+msgstr ""
+
 msgid "Η μετατροπή σε WebP απέτυχε."
 msgstr ""
 

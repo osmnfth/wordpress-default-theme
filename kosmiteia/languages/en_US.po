@@ -451,6 +451,9 @@ msgstr "DRY RUN: nothing is written to the database."
 msgid "Δεν βρέθηκαν ανακοινώσεις στο feed."
 msgstr "No announcements were found in the feed."
 
+msgid "Αφαιρέθηκε επικίνδυνο HTML από: %s"
+msgstr "Dangerous HTML was removed from: %s"
+
 msgid "Η μετατροπή σε WebP απέτυχε."
 msgstr "The WebP conversion failed."
 

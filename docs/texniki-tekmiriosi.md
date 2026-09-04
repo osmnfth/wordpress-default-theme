@@ -120,6 +120,24 @@ tools/build-zips.py            παράγει dist/*.zip για εγκατάστ
 (`CollegeOrUniversity`, `EducationalOrganization`, `NewsArticle`, `Course`,
 `Event`, `Person`, `DigitalDocument`, `BreadcrumbList`).
 
+**Ασφάλεια της εισαγωγής** — το περιεχόμενο του παλιού ιστότοπου είναι *ξένο*
+περιεχόμενο, ακόμη κι αν ο ιστότοπος είναι γνωστός. Ο `importer-announcements.php`
+το περνά από τρία στάδια πριν φτάσει στη βάση:
+
+1. `kosm_import_clean_dom()` — αφαιρεί από το φορτωμένο DOM, σε **οποιοδήποτε
+   βάθος**, τους επικίνδυνους κόμβους (`script`, `iframe`, `object`, `svg`,
+   `form`, `meta`, `base`…) και κάθε attribute που εκτελεί κώδικα (`on*`,
+   `javascript:`/`data:`/`vbscript:` σε `href`/`src`, `srcdoc`).
+2. `kosm_import_safe_html()` (`wp_kses_post`) σε κάθε θραύσμα που κρατιέται
+   αυτούσιο — παράγραφοι, επικεφαλίδες, στοιχεία λίστας, σύνδεσμοι, πίνακες.
+   Δεν βασιζόμαστε στο φιλτράρισμα του `wp_insert_post()`: ο διαχειριστής έχει
+   `unfiltered_html`, άρα ο πυρήνας **δεν** θα φιλτράρει.
+3. Τελικός έλεγχος του συναρμολογημένου markup· ό,τι ξεφύγει καθαρίζεται και
+   καταγράφεται στην αναφορά της εισαγωγής.
+
+Ο τίτλος του feed περνά από `wp_strip_all_tags()`, και το feed κατεβαίνει με
+`wp_safe_remote_get()` (μπλοκάρει loopback/ιδιωτικές διευθύνσεις — SSRF).
+
 **Δικαιώματα** — οι Ανακοινώσεις έχουν δικά τους capabilities
 (`capability_type => kosm_announcement`, `map_meta_cap => true`). Ο ρόλος
 `kosmiteia_announcer` παίρνει τα «δικά μου» (edit/publish/delete + published),
