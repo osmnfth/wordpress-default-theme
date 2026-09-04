@@ -1,0 +1,84 @@
+name: kosmiteia
+
+# Πλήρες περιβάλλον ανάπτυξης για το theme "Κοσμητεία":
+#   docker compose up -d      -> WordPress στο http://localhost:${KOSMITEIA_PORT:-8090}
+#                                (στοιχεία διαχειριστή: δείτε το .env)
+#   docker compose down       -> σταματά (κρατά τη βάση)
+#   docker compose down -v    -> σβήνει τα πάντα και ξαναστήνει από την αρχή
+#
+# Ο φάκελος ./kosmiteia είναι mounted μέσα στο container: ό,τι αλλάζετε
+# τοπικά φαίνεται αμέσως στο site.
+
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  wordpress:
+    image: wordpress:php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${KOSMITEIA_PORT:-8090}:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_DEBUG_LOG', true );
+        define( 'WP_DEBUG_DISPLAY', false );
+        define( 'FS_METHOD', 'direct' );
+        define( 'WP_HOME', 'http://localhost:${KOSMITEIA_PORT:-8090}' );
+        define( 'WP_SITEURL', 'http://localhost:${KOSMITEIA_PORT:-8090}' );
+    volumes:
+      - wp-data:/var/www/html
+      - ./kosmiteia:/var/www/html/wp-content/themes/kosmiteia
+
+  # Τρέχει μία φορά στο "up": εγκαθιστά το WordPress, ενεργοποιεί το theme
+  # και δημιουργεί δοκιμαστικό περιεχόμενο, μενού και αγγλικά template parts.
+  provision:
+    image: wordpress:cli-php8.3
+    # Ίδιο uid με τον Apache (www-data), ώστε τα αρχεία που δημιουργούνται
+    # (uploads, thumbnails) να ανήκουν στον σωστό χρήστη.
+    user: "33:33"
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      KOSMITEIA_URL: "http://localhost:${KOSMITEIA_PORT:-8090}"
+      KOSMITEIA_ADMIN_USER: "${KOSMITEIA_ADMIN_USER:-admin}"
+      KOSMITEIA_ADMIN_PASSWORD: "${KOSMITEIA_ADMIN_PASSWORD:-admin}"
+      KOSMITEIA_ADMIN_EMAIL: "${KOSMITEIA_ADMIN_EMAIL:-admin@example.edu}"
+      KOSMITEIA_RESEED: "${KOSMITEIA_RESEED:-0}"
+      HOME: /tmp
+    volumes:
+      - wp-data:/var/www/html
+      - ./kosmiteia:/var/www/html/wp-content/themes/kosmiteia
+      - ./docker:/provision:ro
+    entrypoint: ["/bin/sh", "/provision/provision.sh"]
+
+volumes:
+  db-data:
+  wp-data:

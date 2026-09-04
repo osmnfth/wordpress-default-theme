@@ -1,0 +1,19 @@
+/*
+Theme Name: Κοσμητεία — Kosmiteia
+Theme URI: https://example.edu/kosmiteia
+Author: Osman Fatih
+Author URI: https://example.edu
+Description: Δίγλωσσο (EL/EN) child theme του Twenty Twenty-Five για Κοσμητείες Σχολών. Πλήρως δυναμικό: Σχολές, Ανακοινώσεις και Μεταπτυχιακά Προγράμματα ως custom post types, όλα επεξεργάσιμα από τον Site Editor. Bilingual (EL/EN) Twenty Twenty-Five child theme for university faculty deaneries.
+Requires at least: 6.6
+Tested up to: 7.1
+Requires PHP: 7.4
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Template: twentytwentyfive
+Text Domain: kosmiteia
+Tags: education, block-patterns, full-site-editing, translation-ready, accessibility-ready, block-styles, custom-logo, custom-menu, featured-images, rtl-language-support, threaded-comments, wide-blocks
+*/
+
+/* Τα στυλ του theme βρίσκονται στο assets/css/theme.css (φορτώνεται από το inc/setup.php)
+   και στο theme.json. Μην προσθέτετε CSS εδώ — δεν φορτώνεται στον editor. */

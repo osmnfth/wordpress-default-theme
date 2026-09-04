@@ -1,0 +1,87 @@
+<?php
+/**
+ * Title: Hero slider με κουμπιά
+ * Slug: kosmiteia/hero-slider
+ * Categories: kosmiteia, banner, featured
+ * Description: Slider πλήρους πλάτους με διαφάνειες (φωτογραφία ή βίντεο φόντου), τίτλο, κείμενο και κουμπιά, με κουμπί κύλισης.
+ * Keywords: hero, slider, banner, carousel
+ *
+ * @package Kosmiteia
+ */
+
+?>
+<!-- wp:kosmiteia/slider {"autoplay":true,"interval":7000,"effect":"slide","label":"<?php esc_attr_e( 'Κεντρική παρουσίαση Κοσμητείας', 'kosmiteia' ); ?>","align":"full"} -->
+<div class="wp-block-kosmiteia-slider alignfull kosmiteia-slider has-effect-slide" data-autoplay="true" data-interval="7000" data-arrows="true" data-dots="true" data-effect="slide" data-label="<?php esc_attr_e( 'Κεντρική παρουσίαση Κοσμητείας', 'kosmiteia' ); ?>"><div class="kosmiteia-slider__track">
+	<!-- wp:cover {"overlayColor":"accent-1","dimRatio":100,"isUserOverlayColor":true,"minHeight":72,"minHeightUnit":"vh","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|70","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-cover" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--70);padding-left:var(--wp--preset--spacing--50);min-height:72vh"><span aria-hidden="true" class="wp-block-cover__background has-accent-1-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">
+		<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"xx-large"} -->
+		<h1 class="wp-block-heading has-text-align-center has-xx-large-font-size"><?php esc_html_e( 'Κοσμητεία Σχολών', 'kosmiteia' ); ?></h1>
+		<!-- /wp:heading -->
+
+		<!-- wp:paragraph {"align":"center","fontSize":"large"} -->
+		<p class="has-text-align-center has-large-font-size"><?php esc_html_e( 'Σπουδές, έρευνα και καινοτομία σε τρεις Σχολές. Ανακαλύψτε τα προγράμματα και την ακαδημαϊκή μας κοινότητα.', 'kosmiteia' ); ?></p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+		<div class="wp-block-buttons">
+			<!-- wp:button {"backgroundColor":"base","textColor":"accent-1"} -->
+			<div class="wp-block-button"><a class="wp-block-button__link has-accent-1-color has-base-background-color has-text-color has-background wp-element-button" href="{{url_schools}}"><?php esc_html_e( 'Οι Σχολές μας', 'kosmiteia' ); ?></a></div>
+			<!-- /wp:button -->
+
+			<!-- wp:button {"className":"is-style-outline"} -->
+			<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="{{url_programs}}"><?php esc_html_e( 'Μεταπτυχιακά', 'kosmiteia' ); ?></a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div></div>
+	<!-- /wp:cover -->
+
+	<!-- wp:cover {"overlayColor":"contrast","dimRatio":100,"isUserOverlayColor":true,"minHeight":72,"minHeightUnit":"vh","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|70","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-cover" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--70);padding-left:var(--wp--preset--spacing--50);min-height:72vh"><span aria-hidden="true" class="wp-block-cover__background has-contrast-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">
+		<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"xx-large"} -->
+		<h2 class="wp-block-heading has-text-align-center has-xx-large-font-size"><?php esc_html_e( 'Αιτήσεις μεταπτυχιακών σπουδών', 'kosmiteia' ); ?></h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:paragraph {"align":"center","fontSize":"large"} -->
+		<p class="has-text-align-center has-large-font-size"><?php esc_html_e( 'Δείτε τις ανοιχτές προκηρύξεις και τις προθεσμίες υποβολής για το νέο ακαδημαϊκό έτος.', 'kosmiteia' ); ?></p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+		<div class="wp-block-buttons">
+			<!-- wp:button {"backgroundColor":"base","textColor":"contrast"} -->
+			<div class="wp-block-button"><a class="wp-block-button__link has-contrast-color has-base-background-color has-text-color has-background wp-element-button" href="{{url_announcements}}"><?php esc_html_e( 'Προκηρύξεις', 'kosmiteia' ); ?></a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div></div>
+	<!-- /wp:cover -->
+
+	<!-- wp:cover {"overlayColor":"accent-6","dimRatio":100,"isUserOverlayColor":true,"minHeight":72,"minHeightUnit":"vh","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|70","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-cover" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--70);padding-left:var(--wp--preset--spacing--50);min-height:72vh"><span aria-hidden="true" class="wp-block-cover__background has-accent-6-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">
+		<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"xx-large"} -->
+		<h2 class="wp-block-heading has-text-align-center has-xx-large-font-size"><?php esc_html_e( 'Έρευνα με αντίκτυπο', 'kosmiteia' ); ?></h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:paragraph {"align":"center","fontSize":"large"} -->
+		<p class="has-text-align-center has-large-font-size"><?php esc_html_e( 'Ερευνητικά εργαστήρια, διεθνείς συνεργασίες και προγράμματα κινητικότητας φοιτητών.', 'kosmiteia' ); ?></p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+		<div class="wp-block-buttons">
+			<!-- wp:button {"backgroundColor":"base","textColor":"accent-6"} -->
+			<div class="wp-block-button"><a class="wp-block-button__link has-accent-6-color has-base-background-color has-text-color has-background wp-element-button" href="#anakoinoseis"><?php esc_html_e( 'Τα νέα μας', 'kosmiteia' ); ?></a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div></div>
+	<!-- /wp:cover -->
+</div></div>
+<!-- /wp:kosmiteia/slider -->
+
+<!-- wp:buttons {"className":"is-style-kosmiteia-scroll-down","style":{"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
+<div class="wp-block-buttons is-style-kosmiteia-scroll-down" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--40)">
+	<!-- wp:button {"textColor":"accent-1","className":"is-style-outline"} -->
+	<div class="wp-block-button is-style-outline"><a class="wp-block-button__link has-accent-1-color has-text-color wp-element-button" href="#sxoles"><?php esc_html_e( 'Συνεχίστε την περιήγηση', 'kosmiteia' ); ?></a></div>
+	<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->

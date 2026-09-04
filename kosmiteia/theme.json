@@ -1,0 +1,196 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"useRootPaddingAwareAlignments": true,
+		"layout": {
+			"contentSize": "820px",
+			"wideSize": "1280px"
+		},
+		"color": {
+			"defaultDuotone": false,
+			"defaultGradients": false,
+			"defaultPalette": false,
+			"palette": [
+				{ "slug": "base", "color": "#ffffff", "name": "Λευκό / White" },
+				{ "slug": "contrast", "color": "#0e1a2b", "name": "Σκούρο μπλε / Ink" },
+				{ "slug": "accent-1", "color": "#0b3d91", "name": "Ακαδημαϊκό μπλε / Academic blue" },
+				{ "slug": "accent-2", "color": "#12559e", "name": "Μπλε / Blue" },
+				{ "slug": "accent-3", "color": "#8a6a1f", "name": "Χρυσό / Gold" },
+				{ "slug": "accent-4", "color": "#f4f6fa", "name": "Απαλό γκρι / Surface" },
+				{ "slug": "accent-5", "color": "#dbe2ec", "name": "Περίγραμμα / Border" },
+				{ "slug": "accent-6", "color": "#7a1f2b", "name": "Βαθύ κόκκινο / Deep red" }
+			],
+			"gradients": [
+				{
+					"slug": "hero-overlay",
+					"name": "Επικάλυψη hero",
+					"gradient": "linear-gradient(180deg, rgba(14,26,43,0.15) 0%, rgba(14,26,43,0.75) 100%)"
+				},
+				{
+					"slug": "accent-fade",
+					"name": "Μπλε βαθμίδα",
+					"gradient": "linear-gradient(135deg, #0b3d91 0%, #12559e 100%)"
+				},
+				{
+					"slug": "surface-fade",
+					"name": "Απαλή βαθμίδα",
+					"gradient": "linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%)"
+				}
+			]
+		},
+		"typography": {
+			"fluid": true,
+			"fontSizes": [
+				{ "slug": "small", "size": "0.875rem", "name": "Μικρό", "fluid": false },
+				{
+					"slug": "medium",
+					"size": "1rem",
+					"name": "Κανονικό",
+					"fluid": { "min": "1rem", "max": "1.125rem" }
+				},
+				{
+					"slug": "large",
+					"size": "1.5rem",
+					"name": "Μεγάλο",
+					"fluid": { "min": "1.25rem", "max": "1.5rem" }
+				},
+				{
+					"slug": "x-large",
+					"size": "2.25rem",
+					"name": "Πολύ μεγάλο",
+					"fluid": { "min": "1.75rem", "max": "2.25rem" }
+				},
+				{
+					"slug": "xx-large",
+					"size": "3.5rem",
+					"name": "Τεράστιο",
+					"fluid": { "min": "2.25rem", "max": "3.5rem" }
+				}
+			]
+		},
+		"spacing": {
+			"units": [ "%", "px", "em", "rem", "vh", "vw" ]
+		},
+		"custom": {
+			"radius": {
+				"card": "12px",
+				"button": "6px"
+			},
+			"shadow": {
+				"card": "0 1px 2px rgba(14,26,43,0.06), 0 8px 24px rgba(14,26,43,0.08)",
+				"cardHover": "0 2px 4px rgba(14,26,43,0.08), 0 16px 40px rgba(14,26,43,0.14)"
+			},
+			"transition": {
+				"base": "200ms cubic-bezier(0.2, 0, 0.2, 1)"
+			}
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--base)",
+			"text": "var(--wp--preset--color--contrast)"
+		},
+		"typography": {
+			"lineHeight": "1.65"
+		},
+		"elements": {
+			"link": {
+				"color": { "text": "var(--wp--preset--color--accent-1)" },
+				"typography": { "textDecoration": "underline" },
+				":hover": {
+					"color": { "text": "var(--wp--preset--color--accent-6)" }
+				},
+				":focus": {
+					"outline": {
+						"color": "var(--wp--preset--color--accent-1)",
+						"style": "solid",
+						"width": "2px",
+						"offset": "2px"
+					}
+				}
+			},
+			"heading": {
+				"typography": {
+					"lineHeight": "1.2",
+					"fontWeight": "700",
+					"letterSpacing": "-0.01em"
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var(--wp--preset--color--accent-1)",
+					"text": "var(--wp--preset--color--base)"
+				},
+				"border": { "radius": "var(--wp--custom--radius--button)" },
+				"spacing": { "padding": { "top": "0.85rem", "bottom": "0.85rem", "left": "1.5rem", "right": "1.5rem" } },
+				"typography": { "fontWeight": "600", "textDecoration": "none" },
+				":hover": {
+					"color": {
+						"background": "var(--wp--preset--color--contrast)",
+						"text": "var(--wp--preset--color--base)"
+					}
+				},
+				":focus": {
+					"outline": {
+						"color": "var(--wp--preset--color--contrast)",
+						"style": "solid",
+						"width": "2px",
+						"offset": "2px"
+					}
+				}
+			},
+			"caption": {
+				"typography": { "fontSize": "var(--wp--preset--font-size--small)" }
+			}
+		},
+		"blocks": {
+			"core/site-title": {
+				"typography": { "fontWeight": "700", "textDecoration": "none" }
+			},
+			"core/navigation": {
+				"typography": { "fontWeight": "500" },
+				"elements": {
+					"link": { "typography": { "textDecoration": "none" } }
+				}
+			},
+			"core/post-title": {
+				"typography": { "lineHeight": "1.2" },
+				"elements": {
+					"link": { "typography": { "textDecoration": "none" } }
+				}
+			},
+			"core/separator": {
+				"color": { "text": "var(--wp--preset--color--accent-5)" }
+			},
+			"core/quote": {
+				"border": {
+					"left": {
+						"color": "var(--wp--preset--color--accent-1)",
+						"style": "solid",
+						"width": "4px"
+					}
+				},
+				"spacing": { "padding": { "left": "1.5rem" } }
+			}
+		}
+	},
+	"templateParts": [
+		{ "name": "header", "title": "Κεφαλίδα (EL)", "area": "header" },
+		{ "name": "header-en", "title": "Header (EN)", "area": "header" },
+		{ "name": "footer", "title": "Υποσέλιδο (EL)", "area": "footer" },
+		{ "name": "footer-en", "title": "Footer (EN)", "area": "footer" },
+		{ "name": "home-hero", "title": "Αρχική: Hero slider", "area": "uncategorized" },
+		{ "name": "home-schools", "title": "Αρχική: Σχολές", "area": "uncategorized" },
+		{ "name": "home-announcements", "title": "Αρχική: Ανακοινώσεις", "area": "uncategorized" },
+		{ "name": "home-programs", "title": "Αρχική: Μεταπτυχιακά", "area": "uncategorized" }
+	],
+	"customTemplates": [
+		{
+			"name": "page-landing",
+			"title": "Σελίδα προορισμού (πλήρες πλάτος)",
+			"postTypes": [ "page" ]
+		}
+	]
+}

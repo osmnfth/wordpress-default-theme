@@ -1,0 +1,804 @@
+# Kosmiteia - πρότυπο μεταφράσεων.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kosmiteia 1.0.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Αναζήτηση"
+msgstr "Search"
+
+msgid "Λέξη-κλειδί, π.χ. υποτροφίες"
+msgstr "Keyword, e.g. scholarships"
+
+msgid "Κατηγορία"
+msgstr "Category"
+
+msgid "Όλες οι κατηγορίες"
+msgstr "All categories"
+
+msgid "Σχολή"
+msgstr "School"
+
+msgid "Όλες οι Σχολές"
+msgstr "All Schools"
+
+msgid "Όλα τα έτη"
+msgstr "All years"
+
+msgid "Έτος"
+msgstr "Year"
+
+msgid "Φιλτράρισμα"
+msgstr "Filter"
+
+msgid "Καθαρισμός φίλτρων"
+msgstr "Clear filters"
+
+msgid "Αναζήτηση και φίλτρα ανακοινώσεων"
+msgstr "Announcement search and filters"
+
+msgid "Ο αριθμός αποτελεσμάτων εμφανίζεται στο front-end."
+msgstr "The result count is shown on the front end."
+
+msgid "Καμία ανακοίνωση δεν ταιριάζει με τα φίλτρα."
+msgstr "No announcements match these filters."
+
+msgid "Βρέθηκε 1 ανακοίνωση."
+msgstr "Found 1 announcement."
+
+msgid "Βρέθηκαν %d ανακοινώσεις."
+msgstr "Found %d announcements."
+
+msgid "Σύνολο: %d ανακοινώσεις."
+msgstr "%d announcements in total."
+
+msgid "Σημείο στον χάρτη"
+msgstr "Map location"
+
+msgid "Προβολή φωτογραφίας"
+msgstr "Photo viewer"
+
+msgid "Προηγούμενη φωτογραφία"
+msgstr "Previous photo"
+
+msgid "Επόμενη φωτογραφία"
+msgstr "Next photo"
+
+msgid "Κλείσιμο"
+msgstr "Close"
+
+msgid "%1$s από %2$s"
+msgstr "%1$s of %2$s"
+
+msgid "Δεν βρέθηκαν γλώσσες προς εμφάνιση."
+msgstr "No languages available to display."
+
+msgid "Χάρτης τοποθεσίας"
+msgstr "Location map"
+
+msgid "Άνοιγμα στον χάρτη (OpenStreetMap)"
+msgstr "Open in OpenStreetMap"
+
+msgid "Οδηγίες πρόσβασης"
+msgstr "Directions"
+
+msgid "Δεν έχουν επιλεγεί φωτογραφίες στο πεδίο «Φωτογραφίες (γκαλερί)» της σελίδας."
+msgstr "No photos selected in the page field \"Photos (gallery)\"."
+
+msgid "Άνοιγμα φωτογραφίας σε μεγέθυνση: %s"
+msgstr "Open larger photo: %s"
+
+msgid "Άνοιγμα φωτογραφίας σε μεγέθυνση"
+msgstr "Open larger photo"
+
+msgid "Αρχική"
+msgstr "Home"
+
+msgid "Αναζήτηση: %s"
+msgstr "Search: %s"
+
+msgid "Η σελίδα δεν βρέθηκε"
+msgstr "Page not found"
+
+msgid "Διαδρομή πλοήγησης"
+msgstr "Breadcrumb"
+
+msgid "Η διαδρομή εμφανίζεται στις εσωτερικές σελίδες."
+msgstr "The breadcrumb trail appears on inner pages."
+
+msgid "Φωτογραφίες (γκαλερί)"
+msgstr "Photos (gallery)"
+
+msgid "Μετακίνηση πιο μπροστά"
+msgstr "Move earlier"
+
+msgid "Μετακίνηση πιο πίσω"
+msgstr "Move later"
+
+msgid "Αφαίρεση φωτογραφίας"
+msgstr "Remove photo"
+
+msgid "Δεν έχουν επιλεγεί φωτογραφίες."
+msgstr "No photos selected yet."
+
+msgid "Επιλογή φωτογραφιών"
+msgstr "Select photos"
+
+msgid "Αφαίρεση όλων"
+msgstr "Remove all"
+
+msgid "Οι φωτογραφίες εμφανίζονται ως μικρογραφίες στη σελίδα και ανοίγουν σε lightbox. Δεν έχουν σχέση με τις εικόνες που βάζετε μέσα στο κείμενο ούτε με την επιλεγμένη εικόνα."
+msgstr "These photos appear as thumbnails on the page and open in a lightbox. They are separate from the images inside the text and from the featured image."
+
+msgid "Χρήση αυτών των φωτογραφιών"
+msgstr "Use these photos"
+
+msgid "Να αφαιρεθούν όλες οι φωτογραφίες από τη γκαλερί;"
+msgstr "Remove every photo from the gallery?"
+
+msgid "Η μετατροπή σε WebP απέτυχε."
+msgstr "The WebP conversion failed."
+
+msgid "Τα βίντεο ανεβαίνουν μόνο σε μορφή WebM. Μετατρέψτε το αρχείο σε .webm και δοκιμάστε ξανά."
+msgstr "Videos can only be uploaded as WebM. Convert the file to .webm and try again."
+
+msgid "Το αρχείο δεν είναι JPEG ή PNG."
+msgstr "The file is not a JPEG or PNG."
+
+msgid "Ο server δεν υποστηρίζει WebP."
+msgstr "This server cannot write WebP."
+
+msgid "Το αρχείο δεν βρέθηκε."
+msgstr "The file was not found."
+
+msgid "Το αρχείο δεν είναι έγκυρη εικόνα."
+msgstr "The file is not a valid image."
+
+msgid "Μετατροπή σε WebP"
+msgstr "Convert to WebP"
+
+msgid "Επιλογή γλώσσας"
+msgstr "Language selection"
+
+msgid "Σχολές"
+msgstr "Schools"
+
+msgid "Προσθήκη νέας"
+msgstr "Add New"
+
+msgid "Προσθήκη νέας Σχολής"
+msgstr "Add New School"
+
+msgid "Επεξεργασία Σχολής"
+msgstr "Edit School"
+
+msgid "Νέα Σχολή"
+msgstr "New School"
+
+msgid "Προβολή Σχολής"
+msgstr "View School"
+
+msgid "Προβολή Σχολών"
+msgstr "View Schools"
+
+msgid "Αναζήτηση Σχολών"
+msgstr "Search Schools"
+
+msgid "Δεν βρέθηκαν Σχολές"
+msgstr "No schools found"
+
+msgid "Δεν βρέθηκαν Σχολές στον κάδο"
+msgstr "No schools found in Trash"
+
+msgid "Αρχείο Σχολών"
+msgstr "School Archive"
+
+msgid "Φωτογραφία Σχολής"
+msgstr "School image"
+
+msgid "Ορισμός φωτογραφίας Σχολής"
+msgstr "Set school image"
+
+msgid "Η Σχολή ενημερώθηκε."
+msgstr "School updated."
+
+msgid "Η Σχολή δημοσιεύτηκε."
+msgstr "School published."
+
+msgid "Οι Σχολές που υπάγονται στην Κοσμητεία."
+msgstr "The schools that belong to the Deanery."
+
+msgid "schools"
+msgstr "schools"
+
+msgid "Σύντομη περιγραφή της Σχολής..."
+msgstr "A short description of the school..."
+
+msgid "Τμήματα"
+msgstr "Departments"
+
+msgid "Ανακοινώσεις"
+msgstr "Announcements"
+
+msgid "Ανακοίνωση"
+msgstr "Announcement"
+
+msgid "Προσθήκη νέας Ανακοίνωσης"
+msgstr "Add New Announcement"
+
+msgid "Επεξεργασία Ανακοίνωσης"
+msgstr "Edit Announcement"
+
+msgid "Νέα Ανακοίνωση"
+msgstr "New Announcement"
+
+msgid "Προβολή Ανακοίνωσης"
+msgstr "View Announcement"
+
+msgid "Προβολή Ανακοινώσεων"
+msgstr "View Announcements"
+
+msgid "Αναζήτηση Ανακοινώσεων"
+msgstr "Search Announcements"
+
+msgid "Δεν βρέθηκαν Ανακοινώσεις"
+msgstr "No announcements found"
+
+msgid "Δεν βρέθηκαν Ανακοινώσεις στον κάδο"
+msgstr "No announcements found in Trash"
+
+msgid "Όλες οι Ανακοινώσεις"
+msgstr "All Announcements"
+
+msgid "Αρχείο Ανακοινώσεων"
+msgstr "Announcement Archive"
+
+msgid "Ανακοινώσεις, νέα και προκηρύξεις της Κοσμητείας."
+msgstr "Announcements, news and calls from the Deanery."
+
+msgid "announcements"
+msgstr "announcements"
+
+msgid "Μεταπτυχιακά"
+msgstr "Postgraduate"
+
+msgid "Μεταπτυχιακό Πρόγραμμα"
+msgstr "Postgraduate Programme"
+
+msgid "Προσθήκη νέου"
+msgstr "Add New"
+
+msgid "Προσθήκη νέου Προγράμματος"
+msgstr "Add New Programme"
+
+msgid "Επεξεργασία Προγράμματος"
+msgstr "Edit Programme"
+
+msgid "Νέο Πρόγραμμα"
+msgstr "New Programme"
+
+msgid "Προβολή Προγράμματος"
+msgstr "View Programme"
+
+msgid "Προβολή Προγραμμάτων"
+msgstr "View Programmes"
+
+msgid "Αναζήτηση Προγραμμάτων"
+msgstr "Search Programmes"
+
+msgid "Δεν βρέθηκαν Προγράμματα"
+msgstr "No programmes found"
+
+msgid "Δεν βρέθηκαν Προγράμματα στον κάδο"
+msgstr "No programmes found in Trash"
+
+msgid "Όλα τα Προγράμματα"
+msgstr "All Programmes"
+
+msgid "Αρχείο Μεταπτυχιακών"
+msgstr "Postgraduate Archive"
+
+msgid "Προγράμματα Μεταπτυχιακών Σπουδών (Π.Μ.Σ.)."
+msgstr "Postgraduate study programmes (MSc / MA)."
+
+msgid "programs"
+msgstr "programs"
+
+msgid "Σχολές (φίλτρο)"
+msgstr "Schools (filter)"
+
+msgid "Σχολή (φίλτρο)"
+msgstr "School (filter)"
+
+msgid "Φίλτρο Σχολής"
+msgstr "School filter"
+
+msgid "Προσθήκη Σχολής"
+msgstr "Add School"
+
+msgid "Συνδέει Ανακοινώσεις και Μεταπτυχιακά με μια Σχολή."
+msgstr "Links announcements and programmes to a school."
+
+msgid "faculty"
+msgstr "faculty"
+
+msgid "Κατηγορίες Ανακοινώσεων"
+msgstr "Announcement Categories"
+
+msgid "Κατηγορία Ανακοίνωσης"
+msgstr "Announcement Category"
+
+msgid "Κατηγορίες"
+msgstr "Categories"
+
+msgid "Προσθήκη κατηγορίας"
+msgstr "Add category"
+
+msgid "announcement-category"
+msgstr "announcement-category"
+
+msgid "Τύποι Προγραμμάτων"
+msgstr "Programme Types"
+
+msgid "Τύπος Προγράμματος"
+msgstr "Programme Type"
+
+msgid "Τύποι"
+msgstr "Types"
+
+msgid "Προσθήκη τύπου"
+msgstr "Add type"
+
+msgid "program-type"
+msgstr "program-type"
+
+msgid "Διάρκεια"
+msgstr "Duration"
+
+msgid "Πιστωτικές μονάδες (ECTS)"
+msgstr "Credits (ECTS)"
+
+msgid "Δίδακτρα"
+msgstr "Tuition fees"
+
+msgid "Προθεσμία αιτήσεων"
+msgstr "Application deadline"
+
+msgid "Διευθυντής/-τρια Προγράμματος"
+msgstr "Programme Director"
+
+msgid "Σύνδεσμος αίτησης"
+msgstr "Application link"
+
+msgid "Κοσμήτορας"
+msgstr "Dean"
+
+msgid "Τηλέφωνο"
+msgstr "Phone"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Διεύθυνση"
+msgstr "Address"
+
+msgid "Ιστοσελίδα Σχολής"
+msgstr "School website"
+
+msgid "Προθεσμία"
+msgstr "Deadline"
+
+msgid "Συνημμένο αρχείο (URL)"
+msgstr "Attached file (URL)"
+
+msgid "Αποτελέσματα αναζήτησης για: %s"
+msgstr "Search results for: %s"
+
+msgid "Card (3:2)"
+msgstr "Card (3:2)"
+
+msgid "Hero (16:9)"
+msgstr "Hero (16:9)"
+
+msgid "Παρουσίαση διαφανειών"
+msgstr "Carousel"
+
+msgid "Προηγούμενη διαφάνεια"
+msgstr "Previous slide"
+
+msgid "Επόμενη διαφάνεια"
+msgstr "Next slide"
+
+msgid "Έναρξη αυτόματης εναλλαγής"
+msgstr "Start autoplay"
+
+msgid "Παύση αυτόματης εναλλαγής"
+msgstr "Pause autoplay"
+
+msgid "Διαφάνεια %1$s από %2$s"
+msgstr "Slide %1$s of %2$s"
+
+msgid "Μετάβαση στη διαφάνεια %s"
+msgstr "Go to slide %s"
+
+msgid "Κοσμητεία"
+msgstr "Deanery"
+
+msgid "Ενότητες σελίδας για την ιστοσελίδα της Κοσμητείας."
+msgstr "Page sections for the Deanery website."
+
+msgid "Κάρτες Κοσμητείας"
+msgstr "Deanery cards"
+
+msgid "Κάρτα με σκιά"
+msgstr "Card with shadow"
+
+msgid "Subfooter 4 στηλών"
+msgstr "Four column subfooter"
+
+msgid "Κουμπί κύλισης (scroll)"
+msgstr "Scroll down button"
+
+msgid "Zoom στο hover"
+msgstr "Zoom on hover"
+
+msgid "Με υπογράμμιση"
+msgstr "With underline"
+
+msgid "Περισσότερα για: %s"
+msgstr "Read more about: %s"
+
+msgid "Πρόσφατες ανακοινώσεις"
+msgstr "Latest announcements"
+
+msgid "Προκηρύξεις, προθεσμίες και νέα της ακαδημαϊκής κοινότητας."
+msgstr "Calls, deadlines and news from the academic community."
+
+msgid "Όλες οι ανακοινώσεις"
+msgstr "All announcements"
+
+msgid "Διαβάστε την ανακοίνωση"
+msgstr "Read the announcement"
+
+msgid "Δεν υπάρχουν ανακοινώσεις αυτή τη στιγμή. Προσθέστε την πρώτη από:"
+msgstr "There are no announcements yet. Add the first one from:"
+
+msgid "Ανακοινώσεις → Προσθήκη νέας"
+msgstr "Announcements → Add New"
+
+msgid "Πού θα μας βρείτε"
+msgstr "Where to find us"
+
+msgid "Η Γραμματεία της Κοσμητείας στεγάζεται στο Κτίριο Διοίκησης της Πανεπιστημιούπολης. Η είσοδος είναι προσβάσιμη σε άτομα με αναπηρία."
+msgstr "The Deanery office is located in the Administration Building on campus. The entrance is wheelchair accessible."
+
+msgid "Διεύθυνση: Πανεπιστημιούπολη, Κτίριο Διοίκησης"
+msgstr "Address: University Campus, Administration Building"
+
+msgid "Ωράριο: Δευτέρα έως Παρασκευή, 09:00-14:00"
+msgstr "Opening hours: Monday to Friday, 09:00-14:00"
+
+msgid "Μέσα μεταφοράς: αστικές γραμμές και στάση μετρό στην είσοδο της Πανεπιστημιούπολης"
+msgstr "Transport: city bus lines and a metro stop at the campus entrance"
+
+msgid "Κοσμητεία Σχολών"
+msgstr "Deanery of Schools"
+
+msgid "Πανεπιστημιούπολη, Κτίριο Διοίκησης"
+msgstr "University Campus, Administration Building"
+
+msgid "Κεντρική παρουσίαση Κοσμητείας"
+msgstr "Main Deanery carousel"
+
+msgid "Σπουδές, έρευνα και καινοτομία σε τρεις Σχολές. Ανακαλύψτε τα προγράμματα και την ακαδημαϊκή μας κοινότητα."
+msgstr "Study, research and innovation across three schools. Explore our programmes and academic community."
+
+msgid "Οι Σχολές μας"
+msgstr "Our schools"
+
+msgid "Αιτήσεις μεταπτυχιακών σπουδών"
+msgstr "Postgraduate applications"
+
+msgid "Δείτε τις ανοιχτές προκηρύξεις και τις προθεσμίες υποβολής για το νέο ακαδημαϊκό έτος."
+msgstr "See the open calls and submission deadlines for the new academic year."
+
+msgid "Προκηρύξεις"
+msgstr "Calls"
+
+msgid "Έρευνα με αντίκτυπο"
+msgstr "Research with impact"
+
+msgid "Ερευνητικά εργαστήρια, διεθνείς συνεργασίες και προγράμματα κινητικότητας φοιτητών."
+msgstr "Research labs, international partnerships and student mobility programmes."
+
+msgid "Τα νέα μας"
+msgstr "Our news"
+
+msgid "Συνεχίστε την περιήγηση"
+msgstr "Keep exploring"
+
+msgid "Μεταπτυχιακά προγράμματα"
+msgstr "Postgraduate programmes"
+
+msgid "Προγράμματα Μεταπτυχιακών Σπουδών με ερευνητικό και επαγγελματικό προσανατολισμό."
+msgstr "Postgraduate programmes with a research and professional focus."
+
+msgid "Όλα τα προγράμματα"
+msgstr "All programmes"
+
+msgid "Πληροφορίες προγράμματος"
+msgstr "Programme details"
+
+msgid "Δεν έχουν καταχωριστεί ακόμη προγράμματα. Προσθέστε το πρώτο από:"
+msgstr "No programmes have been added yet. Add the first one from:"
+
+msgid "Μεταπτυχιακά → Προσθήκη νέου"
+msgstr "Postgraduate → Add New"
+
+msgid "Τρεις Σχολές με διακριτή ταυτότητα, κοινό στόχο την ποιοτική εκπαίδευση και την έρευνα."
+msgstr "Three schools with a distinct identity and a shared commitment to quality education and research."
+
+msgid "Δείτε τη Σχολή"
+msgstr "Visit the school"
+
+msgid "Δεν έχουν καταχωριστεί ακόμη Σχολές. Προσθέστε την πρώτη από τον πίνακα ελέγχου:"
+msgstr "No schools have been added yet. Add the first one from the dashboard:"
+
+msgid "Σχολές → Προσθήκη νέας"
+msgstr "Schools → Add New"
+
+msgid "Παιδεία, έρευνα και κοινωνική προσφορά. Η Κοσμητεία συντονίζει τις Σχολές, τα προγράμματα σπουδών και την ακαδημαϊκή κοινότητα."
+msgstr "Education, research and public service. The Deanery coordinates the schools, the study programmes and the academic community."
+
+msgid "Πλοήγηση"
+msgstr "Navigation"
+
+msgid "Μενού υποσέλιδου 1"
+msgstr "Footer menu 1"
+
+msgid "Η Κοσμητεία"
+msgstr "The Deanery"
+
+msgid "Χρήσιμα"
+msgstr "Useful links"
+
+msgid "Μενού υποσέλιδου 2"
+msgstr "Footer menu 2"
+
+msgid "Φοιτητική μέριμνα"
+msgstr "Student welfare"
+
+msgid "Κανονισμοί σπουδών"
+msgstr "Study regulations"
+
+msgid "Προσβασιμότητα"
+msgstr "Accessibility"
+
+msgid "Πολιτική απορρήτου"
+msgstr "Privacy policy"
+
+msgid "Επικοινωνία"
+msgstr "Contact"
+
+msgid "Τ.Κ. 000 00, Πόλη"
+msgstr "000 00, City"
+
+msgid "Ακολουθήστε μας"
+msgstr "Follow us"
+
+msgid "© {{year}} {{site}}. Με επιφύλαξη παντός δικαιώματος."
+msgstr "© {{year}} {{site}}. All rights reserved."
+
+msgid "Δήλωση προσβασιμότητας"
+msgstr "Accessibility statement"
+
+msgid "Χάρτης ιστότοπου"
+msgstr "Sitemap"
+
+msgid "Πεδίο αναζήτησης"
+msgstr "Search field"
+
+msgid "Φίλτρο κατηγορίας"
+msgstr "Category filter"
+
+msgid "Φίλτρο έτους"
+msgstr "Year filter"
+
+msgid "Αριθμός αποτελεσμάτων"
+msgstr "Result count"
+
+msgid "Πεδία φίλτρων"
+msgstr "Filter fields"
+
+msgid "Εμφάνιση"
+msgstr "Display"
+
+msgid "Σύνδεσμος Αρχικής"
+msgstr "Home link"
+
+msgid "Τρέχουσα σελίδα"
+msgstr "Current page"
+
+msgid "Τετράγωνο (1:1)"
+msgstr "Square (1:1)"
+
+msgid "Οριζόντιο (4:3)"
+msgstr "Landscape (4:3)"
+
+msgid "Οριζόντιο (3:2)"
+msgstr "Landscape (3:2)"
+
+msgid "Πανοραμικό (16:9)"
+msgstr "Widescreen (16:9)"
+
+msgid "Κατακόρυφο (3:4)"
+msgstr "Portrait (3:4)"
+
+msgid "Φυσικές αναλογίες"
+msgstr "Original proportions"
+
+msgid "Ενότητα"
+msgstr "Section"
+
+msgid "Τίτλος ενότητας"
+msgstr "Section title"
+
+msgid "Προαιρετικός· εμφανίζεται μόνο όταν υπάρχουν εικόνες."
+msgstr "Optional; shown only when there are images."
+
+msgid "Μέγιστο πλήθος εικόνων"
+msgstr "Maximum number of images"
+
+msgid "0 = χωρίς όριο."
+msgstr "0 = no limit."
+
+msgid "Διάταξη"
+msgstr "Layout"
+
+msgid "Στήλες σε μεγάλες οθόνες"
+msgstr "Columns on large screens"
+
+msgid "Κενό ανάμεσα στις μικρογραφίες (px)"
+msgstr "Gap between thumbnails (px)"
+
+msgid "Ελάχιστο πλάτος μικρογραφίας (px)"
+msgstr "Minimum thumbnail width (px)"
+
+msgid "Καθορίζει πόσες μικρογραφίες χωρούν σε μικρές οθόνες."
+msgstr "Controls how many thumbnails fit on small screens."
+
+msgid "Αναλογίες μικρογραφίας"
+msgstr "Thumbnail aspect ratio"
+
+msgid "Λεζάντες κάτω από τις μικρογραφίες"
+msgstr "Captions below the thumbnails"
+
+msgid "Οι λεζάντες εμφανίζονται πάντα μέσα στο lightbox."
+msgstr "Captions always appear inside the lightbox."
+
+msgid "Γκαλερί εικόνων"
+msgstr "Image gallery"
+
+msgid "Οι φωτογραφίες επιλέγονται στο πεδίο «Φωτογραφίες (γκαλερί)», κάτω από το κείμενο της σελίδας. Εδώ ρυθμίζεται μόνο η εμφάνιση."
+msgstr "Photos are chosen in the \"Photos (gallery)\" field below the page content. This block only controls how they look."
+
+msgid "Στήλες: %1$s — αναλογίες: %2$s"
+msgstr "Columns: %1$s — aspect ratio: %2$s"
+
+msgid "Ετικέτες γλωσσών"
+msgstr "Language labels"
+
+msgid "Σύντομες (EL / EN)"
+msgstr "Short (EL / EN)"
+
+msgid "Πλήρεις (Ελληνικά / English)"
+msgstr "Full (Ελληνικά / English)"
+
+msgid "Θέση στον χάρτη"
+msgstr "Map position"
+
+msgid "Γεωγραφικό πλάτος (latitude)"
+msgstr "Latitude"
+
+msgid "Δεξί κλικ σε σημείο του openstreetmap.org και «Show address» δίνει τις συντεταγμένες."
+msgstr "Right-click a spot on openstreetmap.org and choose \"Show address\" to read its coordinates."
+
+msgid "Γεωγραφικό μήκος (longitude)"
+msgstr "Longitude"
+
+msgid "Ζουμ"
+msgstr "Zoom"
+
+msgid "Ύψος χάρτη (px)"
+msgstr "Map height (px)"
+
+msgid "Πινέζα και συμπεριφορά"
+msgstr "Marker and behaviour"
+
+msgid "Εμφάνιση πινέζας"
+msgstr "Show marker"
+
+msgid "Τίτλος πινέζας"
+msgstr "Marker title"
+
+msgid "Εμφανίζεται στην πινέζα και ως εναλλακτικό κείμενο χωρίς JavaScript."
+msgstr "Shown in the marker popup and as the fallback when JavaScript is unavailable."
+
+msgid "Ζουμ με τη ρόδα του ποντικιού"
+msgstr "Zoom with the mouse wheel"
+
+msgid "Απενεργοποιημένο ώστε η κύλιση της σελίδας να μη «κολλάει» στον χάρτη."
+msgstr "Off by default, so page scrolling is not trapped by the map."
+
+msgid "Σύνδεσμος για οδηγίες πρόσβασης"
+msgstr "Directions link"
+
+msgid "Χάρτης (Leaflet)"
+msgstr "Map (Leaflet)"
+
+msgid "Ο διαδραστικός χάρτης εμφανίζεται στο front-end. Ρυθμίστε τη θέση από τις ρυθμίσεις του μπλοκ."
+msgstr "The interactive map appears on the front end. Set its position in the block settings."
+
+msgid "Χωρίς τίτλο πινέζας"
+msgstr "No marker title"
+
+msgid "Έλεγχος θέσης στο OpenStreetMap"
+msgstr "Check the position on OpenStreetMap"
+
+msgid "Τίτλος διαφάνειας"
+msgstr "Slide title"
+
+msgid "Σύντομο κείμενο για τη διαφάνεια."
+msgstr "A short line of text for this slide."
+
+msgid "Μάθετε περισσότερα"
+msgstr "Learn more"
+
+msgid "Ρυθμίσεις slider"
+msgstr "Slider settings"
+
+msgid "Αυτόματη εναλλαγή"
+msgstr "Autoplay"
+
+msgid "Σταματά αυτόματα όταν ο χρήστης κάνει hover ή focus, και όταν έχει ενεργό το \"μειωμένη κίνηση\"."
+msgstr "Pauses automatically on hover or focus, and when the visitor prefers reduced motion."
+
+msgid "Διάρκεια διαφάνειας (ms)"
+msgstr "Slide duration (ms)"
+
+msgid "Βέλη πλοήγησης"
+msgstr "Navigation arrows"
+
+msgid "Κουκκίδες"
+msgstr "Dots"
+
+msgid "Εφέ εναλλαγής"
+msgstr "Transition effect"
+
+msgid "Κύλιση"
+msgstr "Slide"
+
+msgid "Σβήσιμο (fade)"
+msgstr "Fade"
+
+msgid "Περιγραφή για αναγνώστες οθόνης"
+msgstr "Screen reader description"
+
+msgid "Προαιρετικό aria-label, π.χ. \"Κεντρική παρουσίαση Κοσμητείας\"."
+msgstr "Optional aria-label, e.g. \"Main Deanery carousel\"."
+
+msgid "Slider: κάθε μπλοκ παρακάτω είναι μία διαφάνεια. Στο front-end εμφανίζονται εναλλάξ."
+msgstr "Slider: each block below is one slide. They rotate on the front end."
+
+msgid "Μετατράπηκε %d αρχείο σε WebP."
+msgid_plural "Μετατράπηκαν %d αρχεία σε WebP."
+msgstr[0] "Converted %d file to WebP."
+msgstr[1] "Converted %d files to WebP."
+
+msgid "%d αρχείο παραλείφθηκε."
+msgid_plural "%d αρχεία παραλείφθηκαν."
+msgstr[0] "%d file was skipped."
+msgstr[1] "%d files were skipped."

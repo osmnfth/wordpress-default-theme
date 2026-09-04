@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "kosmiteia/announcement-filters",
+	"title": "Φίλτρα ανακοινώσεων",
+	"category": "theme",
+	"icon": "filter",
+	"description": "Αναζήτηση και φίλτρα (κατηγορία, Σχολή, έτος) για το αρχείο Ανακοινώσεων. Δουλεύει μαζί με το Query Loop που κληρονομεί το ερώτημα, οπότε η σελιδοποίηση κρατά τα φίλτρα.",
+	"textdomain": "kosmiteia",
+	"keywords": [ "search", "filter", "αναζήτηση", "φίλτρα", "ανακοινώσεις" ],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": [ "wide", "full" ],
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"typography": {
+			"fontSize": true
+		}
+	},
+	"attributes": {
+		"showSearch": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCategory": {
+			"type": "boolean",
+			"default": true
+		},
+		"showFaculty": {
+			"type": "boolean",
+			"default": true
+		},
+		"showYear": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCount": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"editorScript": "kosmiteia-announcement-filters-editor"
+}

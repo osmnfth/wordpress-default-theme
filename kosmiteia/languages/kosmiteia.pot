@@ -1,0 +1,804 @@
+# Kosmiteia - πρότυπο μεταφράσεων.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kosmiteia 1.0.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Αναζήτηση"
+msgstr ""
+
+msgid "Λέξη-κλειδί, π.χ. υποτροφίες"
+msgstr ""
+
+msgid "Κατηγορία"
+msgstr ""
+
+msgid "Όλες οι κατηγορίες"
+msgstr ""
+
+msgid "Σχολή"
+msgstr ""
+
+msgid "Όλες οι Σχολές"
+msgstr ""
+
+msgid "Όλα τα έτη"
+msgstr ""
+
+msgid "Έτος"
+msgstr ""
+
+msgid "Φιλτράρισμα"
+msgstr ""
+
+msgid "Καθαρισμός φίλτρων"
+msgstr ""
+
+msgid "Αναζήτηση και φίλτρα ανακοινώσεων"
+msgstr ""
+
+msgid "Ο αριθμός αποτελεσμάτων εμφανίζεται στο front-end."
+msgstr ""
+
+msgid "Καμία ανακοίνωση δεν ταιριάζει με τα φίλτρα."
+msgstr ""
+
+msgid "Βρέθηκε 1 ανακοίνωση."
+msgstr ""
+
+msgid "Βρέθηκαν %d ανακοινώσεις."
+msgstr ""
+
+msgid "Σύνολο: %d ανακοινώσεις."
+msgstr ""
+
+msgid "Σημείο στον χάρτη"
+msgstr ""
+
+msgid "Προβολή φωτογραφίας"
+msgstr ""
+
+msgid "Προηγούμενη φωτογραφία"
+msgstr ""
+
+msgid "Επόμενη φωτογραφία"
+msgstr ""
+
+msgid "Κλείσιμο"
+msgstr ""
+
+msgid "%1$s από %2$s"
+msgstr ""
+
+msgid "Δεν βρέθηκαν γλώσσες προς εμφάνιση."
+msgstr ""
+
+msgid "Χάρτης τοποθεσίας"
+msgstr ""
+
+msgid "Άνοιγμα στον χάρτη (OpenStreetMap)"
+msgstr ""
+
+msgid "Οδηγίες πρόσβασης"
+msgstr ""
+
+msgid "Δεν έχουν επιλεγεί φωτογραφίες στο πεδίο «Φωτογραφίες (γκαλερί)» της σελίδας."
+msgstr ""
+
+msgid "Άνοιγμα φωτογραφίας σε μεγέθυνση: %s"
+msgstr ""
+
+msgid "Άνοιγμα φωτογραφίας σε μεγέθυνση"
+msgstr ""
+
+msgid "Αρχική"
+msgstr ""
+
+msgid "Αναζήτηση: %s"
+msgstr ""
+
+msgid "Η σελίδα δεν βρέθηκε"
+msgstr ""
+
+msgid "Διαδρομή πλοήγησης"
+msgstr ""
+
+msgid "Η διαδρομή εμφανίζεται στις εσωτερικές σελίδες."
+msgstr ""
+
+msgid "Φωτογραφίες (γκαλερί)"
+msgstr ""
+
+msgid "Μετακίνηση πιο μπροστά"
+msgstr ""
+
+msgid "Μετακίνηση πιο πίσω"
+msgstr ""
+
+msgid "Αφαίρεση φωτογραφίας"
+msgstr ""
+
+msgid "Δεν έχουν επιλεγεί φωτογραφίες."
+msgstr ""
+
+msgid "Επιλογή φωτογραφιών"
+msgstr ""
+
+msgid "Αφαίρεση όλων"
+msgstr ""
+
+msgid "Οι φωτογραφίες εμφανίζονται ως μικρογραφίες στη σελίδα και ανοίγουν σε lightbox. Δεν έχουν σχέση με τις εικόνες που βάζετε μέσα στο κείμενο ούτε με την επιλεγμένη εικόνα."
+msgstr ""
+
+msgid "Χρήση αυτών των φωτογραφιών"
+msgstr ""
+
+msgid "Να αφαιρεθούν όλες οι φωτογραφίες από τη γκαλερί;"
+msgstr ""
+
+msgid "Η μετατροπή σε WebP απέτυχε."
+msgstr ""
+
+msgid "Τα βίντεο ανεβαίνουν μόνο σε μορφή WebM. Μετατρέψτε το αρχείο σε .webm και δοκιμάστε ξανά."
+msgstr ""
+
+msgid "Το αρχείο δεν είναι JPEG ή PNG."
+msgstr ""
+
+msgid "Ο server δεν υποστηρίζει WebP."
+msgstr ""
+
+msgid "Το αρχείο δεν βρέθηκε."
+msgstr ""
+
+msgid "Το αρχείο δεν είναι έγκυρη εικόνα."
+msgstr ""
+
+msgid "Μετατροπή σε WebP"
+msgstr ""
+
+msgid "Επιλογή γλώσσας"
+msgstr ""
+
+msgid "Σχολές"
+msgstr ""
+
+msgid "Προσθήκη νέας"
+msgstr ""
+
+msgid "Προσθήκη νέας Σχολής"
+msgstr ""
+
+msgid "Επεξεργασία Σχολής"
+msgstr ""
+
+msgid "Νέα Σχολή"
+msgstr ""
+
+msgid "Προβολή Σχολής"
+msgstr ""
+
+msgid "Προβολή Σχολών"
+msgstr ""
+
+msgid "Αναζήτηση Σχολών"
+msgstr ""
+
+msgid "Δεν βρέθηκαν Σχολές"
+msgstr ""
+
+msgid "Δεν βρέθηκαν Σχολές στον κάδο"
+msgstr ""
+
+msgid "Αρχείο Σχολών"
+msgstr ""
+
+msgid "Φωτογραφία Σχολής"
+msgstr ""
+
+msgid "Ορισμός φωτογραφίας Σχολής"
+msgstr ""
+
+msgid "Η Σχολή ενημερώθηκε."
+msgstr ""
+
+msgid "Η Σχολή δημοσιεύτηκε."
+msgstr ""
+
+msgid "Οι Σχολές που υπάγονται στην Κοσμητεία."
+msgstr ""
+
+msgid "schools"
+msgstr ""
+
+msgid "Σύντομη περιγραφή της Σχολής..."
+msgstr ""
+
+msgid "Τμήματα"
+msgstr ""
+
+msgid "Ανακοινώσεις"
+msgstr ""
+
+msgid "Ανακοίνωση"
+msgstr ""
+
+msgid "Προσθήκη νέας Ανακοίνωσης"
+msgstr ""
+
+msgid "Επεξεργασία Ανακοίνωσης"
+msgstr ""
+
+msgid "Νέα Ανακοίνωση"
+msgstr ""
+
+msgid "Προβολή Ανακοίνωσης"
+msgstr ""
+
+msgid "Προβολή Ανακοινώσεων"
+msgstr ""
+
+msgid "Αναζήτηση Ανακοινώσεων"
+msgstr ""
+
+msgid "Δεν βρέθηκαν Ανακοινώσεις"
+msgstr ""
+
+msgid "Δεν βρέθηκαν Ανακοινώσεις στον κάδο"
+msgstr ""
+
+msgid "Όλες οι Ανακοινώσεις"
+msgstr ""
+
+msgid "Αρχείο Ανακοινώσεων"
+msgstr ""
+
+msgid "Ανακοινώσεις, νέα και προκηρύξεις της Κοσμητείας."
+msgstr ""
+
+msgid "announcements"
+msgstr ""
+
+msgid "Μεταπτυχιακά"
+msgstr ""
+
+msgid "Μεταπτυχιακό Πρόγραμμα"
+msgstr ""
+
+msgid "Προσθήκη νέου"
+msgstr ""
+
+msgid "Προσθήκη νέου Προγράμματος"
+msgstr ""
+
+msgid "Επεξεργασία Προγράμματος"
+msgstr ""
+
+msgid "Νέο Πρόγραμμα"
+msgstr ""
+
+msgid "Προβολή Προγράμματος"
+msgstr ""
+
+msgid "Προβολή Προγραμμάτων"
+msgstr ""
+
+msgid "Αναζήτηση Προγραμμάτων"
+msgstr ""
+
+msgid "Δεν βρέθηκαν Προγράμματα"
+msgstr ""
+
+msgid "Δεν βρέθηκαν Προγράμματα στον κάδο"
+msgstr ""
+
+msgid "Όλα τα Προγράμματα"
+msgstr ""
+
+msgid "Αρχείο Μεταπτυχιακών"
+msgstr ""
+
+msgid "Προγράμματα Μεταπτυχιακών Σπουδών (Π.Μ.Σ.)."
+msgstr ""
+
+msgid "programs"
+msgstr ""
+
+msgid "Σχολές (φίλτρο)"
+msgstr ""
+
+msgid "Σχολή (φίλτρο)"
+msgstr ""
+
+msgid "Φίλτρο Σχολής"
+msgstr ""
+
+msgid "Προσθήκη Σχολής"
+msgstr ""
+
+msgid "Συνδέει Ανακοινώσεις και Μεταπτυχιακά με μια Σχολή."
+msgstr ""
+
+msgid "faculty"
+msgstr ""
+
+msgid "Κατηγορίες Ανακοινώσεων"
+msgstr ""
+
+msgid "Κατηγορία Ανακοίνωσης"
+msgstr ""
+
+msgid "Κατηγορίες"
+msgstr ""
+
+msgid "Προσθήκη κατηγορίας"
+msgstr ""
+
+msgid "announcement-category"
+msgstr ""
+
+msgid "Τύποι Προγραμμάτων"
+msgstr ""
+
+msgid "Τύπος Προγράμματος"
+msgstr ""
+
+msgid "Τύποι"
+msgstr ""
+
+msgid "Προσθήκη τύπου"
+msgstr ""
+
+msgid "program-type"
+msgstr ""
+
+msgid "Διάρκεια"
+msgstr ""
+
+msgid "Πιστωτικές μονάδες (ECTS)"
+msgstr ""
+
+msgid "Δίδακτρα"
+msgstr ""
+
+msgid "Προθεσμία αιτήσεων"
+msgstr ""
+
+msgid "Διευθυντής/-τρια Προγράμματος"
+msgstr ""
+
+msgid "Σύνδεσμος αίτησης"
+msgstr ""
+
+msgid "Κοσμήτορας"
+msgstr ""
+
+msgid "Τηλέφωνο"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Διεύθυνση"
+msgstr ""
+
+msgid "Ιστοσελίδα Σχολής"
+msgstr ""
+
+msgid "Προθεσμία"
+msgstr ""
+
+msgid "Συνημμένο αρχείο (URL)"
+msgstr ""
+
+msgid "Αποτελέσματα αναζήτησης για: %s"
+msgstr ""
+
+msgid "Card (3:2)"
+msgstr ""
+
+msgid "Hero (16:9)"
+msgstr ""
+
+msgid "Παρουσίαση διαφανειών"
+msgstr ""
+
+msgid "Προηγούμενη διαφάνεια"
+msgstr ""
+
+msgid "Επόμενη διαφάνεια"
+msgstr ""
+
+msgid "Έναρξη αυτόματης εναλλαγής"
+msgstr ""
+
+msgid "Παύση αυτόματης εναλλαγής"
+msgstr ""
+
+msgid "Διαφάνεια %1$s από %2$s"
+msgstr ""
+
+msgid "Μετάβαση στη διαφάνεια %s"
+msgstr ""
+
+msgid "Κοσμητεία"
+msgstr ""
+
+msgid "Ενότητες σελίδας για την ιστοσελίδα της Κοσμητείας."
+msgstr ""
+
+msgid "Κάρτες Κοσμητείας"
+msgstr ""
+
+msgid "Κάρτα με σκιά"
+msgstr ""
+
+msgid "Subfooter 4 στηλών"
+msgstr ""
+
+msgid "Κουμπί κύλισης (scroll)"
+msgstr ""
+
+msgid "Zoom στο hover"
+msgstr ""
+
+msgid "Με υπογράμμιση"
+msgstr ""
+
+msgid "Περισσότερα για: %s"
+msgstr ""
+
+msgid "Πρόσφατες ανακοινώσεις"
+msgstr ""
+
+msgid "Προκηρύξεις, προθεσμίες και νέα της ακαδημαϊκής κοινότητας."
+msgstr ""
+
+msgid "Όλες οι ανακοινώσεις"
+msgstr ""
+
+msgid "Διαβάστε την ανακοίνωση"
+msgstr ""
+
+msgid "Δεν υπάρχουν ανακοινώσεις αυτή τη στιγμή. Προσθέστε την πρώτη από:"
+msgstr ""
+
+msgid "Ανακοινώσεις → Προσθήκη νέας"
+msgstr ""
+
+msgid "Πού θα μας βρείτε"
+msgstr ""
+
+msgid "Η Γραμματεία της Κοσμητείας στεγάζεται στο Κτίριο Διοίκησης της Πανεπιστημιούπολης. Η είσοδος είναι προσβάσιμη σε άτομα με αναπηρία."
+msgstr ""
+
+msgid "Διεύθυνση: Πανεπιστημιούπολη, Κτίριο Διοίκησης"
+msgstr ""
+
+msgid "Ωράριο: Δευτέρα έως Παρασκευή, 09:00-14:00"
+msgstr ""
+
+msgid "Μέσα μεταφοράς: αστικές γραμμές και στάση μετρό στην είσοδο της Πανεπιστημιούπολης"
+msgstr ""
+
+msgid "Κοσμητεία Σχολών"
+msgstr ""
+
+msgid "Πανεπιστημιούπολη, Κτίριο Διοίκησης"
+msgstr ""
+
+msgid "Κεντρική παρουσίαση Κοσμητείας"
+msgstr ""
+
+msgid "Σπουδές, έρευνα και καινοτομία σε τρεις Σχολές. Ανακαλύψτε τα προγράμματα και την ακαδημαϊκή μας κοινότητα."
+msgstr ""
+
+msgid "Οι Σχολές μας"
+msgstr ""
+
+msgid "Αιτήσεις μεταπτυχιακών σπουδών"
+msgstr ""
+
+msgid "Δείτε τις ανοιχτές προκηρύξεις και τις προθεσμίες υποβολής για το νέο ακαδημαϊκό έτος."
+msgstr ""
+
+msgid "Προκηρύξεις"
+msgstr ""
+
+msgid "Έρευνα με αντίκτυπο"
+msgstr ""
+
+msgid "Ερευνητικά εργαστήρια, διεθνείς συνεργασίες και προγράμματα κινητικότητας φοιτητών."
+msgstr ""
+
+msgid "Τα νέα μας"
+msgstr ""
+
+msgid "Συνεχίστε την περιήγηση"
+msgstr ""
+
+msgid "Μεταπτυχιακά προγράμματα"
+msgstr ""
+
+msgid "Προγράμματα Μεταπτυχιακών Σπουδών με ερευνητικό και επαγγελματικό προσανατολισμό."
+msgstr ""
+
+msgid "Όλα τα προγράμματα"
+msgstr ""
+
+msgid "Πληροφορίες προγράμματος"
+msgstr ""
+
+msgid "Δεν έχουν καταχωριστεί ακόμη προγράμματα. Προσθέστε το πρώτο από:"
+msgstr ""
+
+msgid "Μεταπτυχιακά → Προσθήκη νέου"
+msgstr ""
+
+msgid "Τρεις Σχολές με διακριτή ταυτότητα, κοινό στόχο την ποιοτική εκπαίδευση και την έρευνα."
+msgstr ""
+
+msgid "Δείτε τη Σχολή"
+msgstr ""
+
+msgid "Δεν έχουν καταχωριστεί ακόμη Σχολές. Προσθέστε την πρώτη από τον πίνακα ελέγχου:"
+msgstr ""
+
+msgid "Σχολές → Προσθήκη νέας"
+msgstr ""
+
+msgid "Παιδεία, έρευνα και κοινωνική προσφορά. Η Κοσμητεία συντονίζει τις Σχολές, τα προγράμματα σπουδών και την ακαδημαϊκή κοινότητα."
+msgstr ""
+
+msgid "Πλοήγηση"
+msgstr ""
+
+msgid "Μενού υποσέλιδου 1"
+msgstr ""
+
+msgid "Η Κοσμητεία"
+msgstr ""
+
+msgid "Χρήσιμα"
+msgstr ""
+
+msgid "Μενού υποσέλιδου 2"
+msgstr ""
+
+msgid "Φοιτητική μέριμνα"
+msgstr ""
+
+msgid "Κανονισμοί σπουδών"
+msgstr ""
+
+msgid "Προσβασιμότητα"
+msgstr ""
+
+msgid "Πολιτική απορρήτου"
+msgstr ""
+
+msgid "Επικοινωνία"
+msgstr ""
+
+msgid "Τ.Κ. 000 00, Πόλη"
+msgstr ""
+
+msgid "Ακολουθήστε μας"
+msgstr ""
+
+msgid "© {{year}} {{site}}. Με επιφύλαξη παντός δικαιώματος."
+msgstr ""
+
+msgid "Δήλωση προσβασιμότητας"
+msgstr ""
+
+msgid "Χάρτης ιστότοπου"
+msgstr ""
+
+msgid "Πεδίο αναζήτησης"
+msgstr ""
+
+msgid "Φίλτρο κατηγορίας"
+msgstr ""
+
+msgid "Φίλτρο έτους"
+msgstr ""
+
+msgid "Αριθμός αποτελεσμάτων"
+msgstr ""
+
+msgid "Πεδία φίλτρων"
+msgstr ""
+
+msgid "Εμφάνιση"
+msgstr ""
+
+msgid "Σύνδεσμος Αρχικής"
+msgstr ""
+
+msgid "Τρέχουσα σελίδα"
+msgstr ""
+
+msgid "Τετράγωνο (1:1)"
+msgstr ""
+
+msgid "Οριζόντιο (4:3)"
+msgstr ""
+
+msgid "Οριζόντιο (3:2)"
+msgstr ""
+
+msgid "Πανοραμικό (16:9)"
+msgstr ""
+
+msgid "Κατακόρυφο (3:4)"
+msgstr ""
+
+msgid "Φυσικές αναλογίες"
+msgstr ""
+
+msgid "Ενότητα"
+msgstr ""
+
+msgid "Τίτλος ενότητας"
+msgstr ""
+
+msgid "Προαιρετικός· εμφανίζεται μόνο όταν υπάρχουν εικόνες."
+msgstr ""
+
+msgid "Μέγιστο πλήθος εικόνων"
+msgstr ""
+
+msgid "0 = χωρίς όριο."
+msgstr ""
+
+msgid "Διάταξη"
+msgstr ""
+
+msgid "Στήλες σε μεγάλες οθόνες"
+msgstr ""
+
+msgid "Κενό ανάμεσα στις μικρογραφίες (px)"
+msgstr ""
+
+msgid "Ελάχιστο πλάτος μικρογραφίας (px)"
+msgstr ""
+
+msgid "Καθορίζει πόσες μικρογραφίες χωρούν σε μικρές οθόνες."
+msgstr ""
+
+msgid "Αναλογίες μικρογραφίας"
+msgstr ""
+
+msgid "Λεζάντες κάτω από τις μικρογραφίες"
+msgstr ""
+
+msgid "Οι λεζάντες εμφανίζονται πάντα μέσα στο lightbox."
+msgstr ""
+
+msgid "Γκαλερί εικόνων"
+msgstr ""
+
+msgid "Οι φωτογραφίες επιλέγονται στο πεδίο «Φωτογραφίες (γκαλερί)», κάτω από το κείμενο της σελίδας. Εδώ ρυθμίζεται μόνο η εμφάνιση."
+msgstr ""
+
+msgid "Στήλες: %1$s — αναλογίες: %2$s"
+msgstr ""
+
+msgid "Ετικέτες γλωσσών"
+msgstr ""
+
+msgid "Σύντομες (EL / EN)"
+msgstr ""
+
+msgid "Πλήρεις (Ελληνικά / English)"
+msgstr ""
+
+msgid "Θέση στον χάρτη"
+msgstr ""
+
+msgid "Γεωγραφικό πλάτος (latitude)"
+msgstr ""
+
+msgid "Δεξί κλικ σε σημείο του openstreetmap.org και «Show address» δίνει τις συντεταγμένες."
+msgstr ""
+
+msgid "Γεωγραφικό μήκος (longitude)"
+msgstr ""
+
+msgid "Ζουμ"
+msgstr ""
+
+msgid "Ύψος χάρτη (px)"
+msgstr ""
+
+msgid "Πινέζα και συμπεριφορά"
+msgstr ""
+
+msgid "Εμφάνιση πινέζας"
+msgstr ""
+
+msgid "Τίτλος πινέζας"
+msgstr ""
+
+msgid "Εμφανίζεται στην πινέζα και ως εναλλακτικό κείμενο χωρίς JavaScript."
+msgstr ""
+
+msgid "Ζουμ με τη ρόδα του ποντικιού"
+msgstr ""
+
+msgid "Απενεργοποιημένο ώστε η κύλιση της σελίδας να μη «κολλάει» στον χάρτη."
+msgstr ""
+
+msgid "Σύνδεσμος για οδηγίες πρόσβασης"
+msgstr ""
+
+msgid "Χάρτης (Leaflet)"
+msgstr ""
+
+msgid "Ο διαδραστικός χάρτης εμφανίζεται στο front-end. Ρυθμίστε τη θέση από τις ρυθμίσεις του μπλοκ."
+msgstr ""
+
+msgid "Χωρίς τίτλο πινέζας"
+msgstr ""
+
+msgid "Έλεγχος θέσης στο OpenStreetMap"
+msgstr ""
+
+msgid "Τίτλος διαφάνειας"
+msgstr ""
+
+msgid "Σύντομο κείμενο για τη διαφάνεια."
+msgstr ""
+
+msgid "Μάθετε περισσότερα"
+msgstr ""
+
+msgid "Ρυθμίσεις slider"
+msgstr ""
+
+msgid "Αυτόματη εναλλαγή"
+msgstr ""
+
+msgid "Σταματά αυτόματα όταν ο χρήστης κάνει hover ή focus, και όταν έχει ενεργό το \"μειωμένη κίνηση\"."
+msgstr ""
+
+msgid "Διάρκεια διαφάνειας (ms)"
+msgstr ""
+
+msgid "Βέλη πλοήγησης"
+msgstr ""
+
+msgid "Κουκκίδες"
+msgstr ""
+
+msgid "Εφέ εναλλαγής"
+msgstr ""
+
+msgid "Κύλιση"
+msgstr ""
+
+msgid "Σβήσιμο (fade)"
+msgstr ""
+
+msgid "Περιγραφή για αναγνώστες οθόνης"
+msgstr ""
+
+msgid "Προαιρετικό aria-label, π.χ. \"Κεντρική παρουσίαση Κοσμητείας\"."
+msgstr ""
+
+msgid "Slider: κάθε μπλοκ παρακάτω είναι μία διαφάνεια. Στο front-end εμφανίζονται εναλλάξ."
+msgstr ""
+
+msgid "Μετατράπηκε %d αρχείο σε WebP."
+msgid_plural "Μετατράπηκαν %d αρχεία σε WebP."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "%d αρχείο παραλείφθηκε."
+msgid_plural "%d αρχεία παραλείφθηκαν."
+msgstr[0] ""
+msgstr[1] ""

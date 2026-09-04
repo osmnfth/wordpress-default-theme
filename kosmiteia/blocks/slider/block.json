@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "kosmiteia/slider",
+	"title": "Slider (Κοσμητεία)",
+	"category": "media",
+	"icon": "images-alt2",
+	"description": "Προσβάσιμο slider για το hero. Κάθε διαφάνεια είναι ένα κανονικό μπλοκ Cover, οπότε μπορείτε να βάλετε φωτογραφία ή βίντεο φόντου, τίτλο και κουμπιά από το UI.",
+	"textdomain": "kosmiteia",
+	"keywords": [ "slider", "carousel", "hero", "διαφάνειες", "παρουσίαση" ],
+	"supports": {
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"html": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"autoplay": {
+			"type": "boolean",
+			"default": false
+		},
+		"interval": {
+			"type": "number",
+			"default": 6000
+		},
+		"showArrows": {
+			"type": "boolean",
+			"default": true
+		},
+		"showDots": {
+			"type": "boolean",
+			"default": true
+		},
+		"effect": {
+			"type": "string",
+			"default": "slide"
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"editorScript": "kosmiteia-slider-editor"
+}

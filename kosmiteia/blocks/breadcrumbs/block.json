@@ -1,0 +1,38 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "kosmiteia/breadcrumbs",
+	"title": "Διαδρομή πλοήγησης",
+	"category": "theme",
+	"icon": "menu-alt",
+	"description": "Breadcrumbs: Αρχική › ενότητα › τρέχουσα σελίδα. Υπολογίζεται αυτόματα από τη σελίδα που δείχνει το πρότυπο.",
+	"textdomain": "kosmiteia",
+	"keywords": [ "breadcrumbs", "διαδρομή", "πλοήγηση", "navigation" ],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"typography": {
+			"fontSize": true
+		}
+	},
+	"attributes": {
+		"showHome": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCurrent": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"editorScript": "kosmiteia-breadcrumbs-editor"
+}

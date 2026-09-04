@@ -1,0 +1,43 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Σκούρο ακαδημαϊκό / Dark academic",
+	"settings": {
+		"color": {
+			"palette": [
+				{ "slug": "base", "color": "#0b1220", "name": "Βαθύ μπλε / Deep navy" },
+				{ "slug": "contrast", "color": "#f2f5fa", "name": "Ανοιχτό / Light" },
+				{ "slug": "accent-1", "color": "#8fb3ff", "name": "Ακαδημαϊκό μπλε / Academic blue" },
+				{ "slug": "accent-2", "color": "#5f8de0", "name": "Μπλε / Blue" },
+				{ "slug": "accent-3", "color": "#d8b45a", "name": "Χρυσό / Gold" },
+				{ "slug": "accent-4", "color": "#141d31", "name": "Επιφάνεια / Surface" },
+				{ "slug": "accent-5", "color": "#2a3550", "name": "Περίγραμμα / Border" },
+				{ "slug": "accent-6", "color": "#e58a94", "name": "Κόκκινο / Red" }
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--base)",
+			"text": "var(--wp--preset--color--contrast)"
+		},
+		"elements": {
+			"button": {
+				"color": {
+					"background": "var(--wp--preset--color--accent-1)",
+					"text": "var(--wp--preset--color--base)"
+				},
+				":hover": {
+					"color": {
+						"background": "var(--wp--preset--color--accent-3)",
+						"text": "var(--wp--preset--color--base)"
+					}
+				}
+			},
+			"link": {
+				"color": { "text": "var(--wp--preset--color--accent-1)" },
+				":hover": { "color": { "text": "var(--wp--preset--color--accent-3)" } }
+			}
+		}
+	}
+}

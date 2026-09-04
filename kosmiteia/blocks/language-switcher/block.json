@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "kosmiteia/language-switcher",
+	"title": "Επιλογέας γλώσσας",
+	"category": "design",
+	"icon": "translation",
+	"description": "Δυναμικός επιλογέας γλώσσας: οι γλώσσες εμφανίζονται δίπλα-δίπλα (EL / EN), χωρίς αναδυόμενη λίστα. Συνεργάζεται με Polylang ή WPML, ενώ χωρίς plugin αλλάζει τη γλώσσα της διεπαφής.",
+	"textdomain": "kosmiteia",
+	"keywords": [ "language", "γλώσσα", "polylang", "wpml", "switcher" ],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"typography": {
+			"fontSize": true,
+			"__experimentalFontWeight": true,
+			"__experimentalTextTransform": true
+		}
+	},
+	"attributes": {
+		"display": {
+			"type": "string",
+			"default": "short"
+		}
+	},
+	"editorScript": "kosmiteia-language-switcher-editor"
+}

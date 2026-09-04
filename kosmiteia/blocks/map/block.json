@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "kosmiteia/map",
+	"title": "Χάρτης (Leaflet)",
+	"category": "embed",
+	"icon": "location-alt",
+	"description": "Διαδραστικός χάρτης OpenStreetMap με Leaflet, για τη σελίδα Επικοινωνίας. Χωρίς JavaScript ή cookies τρίτων εμφανίζεται η διεύθυνση και σύνδεσμος προς τον χάρτη.",
+	"textdomain": "kosmiteia",
+	"keywords": [ "map", "leaflet", "openstreetmap", "χάρτης", "διεύθυνση", "επικοινωνία" ],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"lat": {
+			"type": "number",
+			"default": 37.9682
+		},
+		"lng": {
+			"type": "number",
+			"default": 23.783
+		},
+		"zoom": {
+			"type": "number",
+			"default": 16
+		},
+		"height": {
+			"type": "number",
+			"default": 420
+		},
+		"markerTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"markerAddress": {
+			"type": "string",
+			"default": ""
+		},
+		"showMarker": {
+			"type": "boolean",
+			"default": true
+		},
+		"scrollWheelZoom": {
+			"type": "boolean",
+			"default": false
+		},
+		"showDirections": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"editorScript": "kosmiteia-map-editor",
+	"style": "kosmiteia-map",
+	"viewScript": "kosmiteia-map-view"
+}

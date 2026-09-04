@@ -1,0 +1,53 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "kosmiteia/gallery",
+	"title": "Γκαλερί εικόνων",
+	"category": "media",
+	"icon": "format-gallery",
+	"description": "Μικρογραφίες σε γραμμή με κενά, responsive, με εφέ στο hover και άνοιγμα σε lightbox. Οι φωτογραφίες ορίζονται στο πεδίο «Φωτογραφίες (γκαλερί)» της σελίδας, όχι μέσα στο μπλοκ.",
+	"textdomain": "kosmiteia",
+	"keywords": [ "gallery", "γκαλερί", "φωτογραφίες", "μικρογραφίες", "thumbnails", "lightbox", "colorbox" ],
+	"usesContext": [ "postId", "postType" ],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"columns": {
+			"type": "number",
+			"default": 4
+		},
+		"gap": {
+			"type": "number",
+			"default": 16
+		},
+		"minWidth": {
+			"type": "number",
+			"default": 160
+		},
+		"aspectRatio": {
+			"type": "string",
+			"default": "1/1"
+		},
+		"showCaptions": {
+			"type": "boolean",
+			"default": false
+		},
+		"limit": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"editorScript": "kosmiteia-gallery-editor",
+	"viewScript": "kosmiteia-lightbox"
+}
