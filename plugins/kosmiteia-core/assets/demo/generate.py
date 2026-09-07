@@ -4,7 +4,7 @@
 
     python generate.py
 
-Δημιουργεί: hero-1..3, school-1..3, program-1..3, announcement-1..2, logo.
+Δημιουργεί: hero-1..3, school-1..3, program-1..3, announcement-1..2, dean, logo.
 Οι εικόνες είναι αφηρημένα ακαδημαϊκά μοτίβα - αντικαταστήστε τις με
 πραγματικές φωτογραφίες από τη Βιβλιοθήκη πολυμέσων.
 """
@@ -103,6 +103,43 @@ def scene(width, height, top, bottom, accent, seed):
     return pixels
 
 
+def portrait(width, height, top, bottom, accent):
+    """Αφηρημένο πορτρέτο: βαθμίδα και σιλουέτα κεφαλιού/ώμων."""
+    pixels = bytearray(width * height * 3)
+    head_x, head_y = 0.5, 0.38
+    head_r = 0.17
+
+    for y in range(height):
+        ty = y / float(height - 1)
+        base = mix(top, bottom, ty)
+        row = y * width * 3
+        for x in range(width):
+            tx = x / float(width - 1)
+            r, g, b = base
+
+            # Απαλός φωτισμός από πάνω αριστερά.
+            r, g, b = mix((r, g, b), accent, max(0.0, 0.35 - (tx + ty) * 0.16))
+
+            dx = (tx - head_x) * width
+            dy = (ty - head_y) * height
+            head = math.sqrt(dx * dx + dy * dy) <= head_r * height
+
+            # Ώμοι: ημι-έλλειψη που ξεκινά κάτω από το κεφάλι.
+            sx = (tx - 0.5) / 0.34
+            sy = (ty - 1.05) / 0.42
+            shoulders = ty > 0.6 and (sx * sx + sy * sy) <= 1.0
+
+            if head or shoulders:
+                r, g, b = mix((r, g, b), NAVY, 0.55)
+
+            index = row + x * 3
+            pixels[index] = r
+            pixels[index + 1] = g
+            pixels[index + 2] = b
+
+    return pixels
+
+
 def logo(width, height):
     """Απλό έμβλημα: κύκλος με στήλες, σε διαφανές φόντο."""
     pixels = bytearray(width * height * 4)
@@ -166,6 +203,10 @@ def main():
         path = os.path.join(HERE, name)
         size = write_png(path, width, height, scene(width, height, top, bottom, accent, seed))
         print('%-22s %5d x %-5d %6.1f KB' % (name, width, height, size / 1024.0))
+
+    path = os.path.join(HERE, 'dean.png')
+    size = write_png(path, 900, 1200, portrait(900, 1200, BLUE_LIGHT, NAVY, (190, 215, 255)))
+    print('%-22s %5d x %-5d %6.1f KB' % ('dean.png', 900, 1200, size / 1024.0))
 
     path = os.path.join(HERE, 'logo.png')
     size = write_png(path, 520, 130, logo(520, 130), alpha=True)

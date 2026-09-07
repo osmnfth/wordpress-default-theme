@@ -614,6 +614,41 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	text-decoration: underline;
 }
 
+/* Στατικές κάρτες (Σχολές): η κάρτα είναι Group με στήλες, οπότε το ύψος
+   ισοφαρίζεται από το flex και η φωτογραφία κάθεται πάνω-πάνω. */
+.wp-block-column > .wp-block-group.is-style-kosmiteia-card {
+	height: 100%;
+}
+
+.wp-block-group.is-style-kosmiteia-card > .wp-block-cover {
+	border-radius: 0;
+}
+
+/* Το κείμενο της κάρτας γεμίζει το ύψος (το ίδιο το μπλοκ είναι κάθετη
+   στοίβα), ώστε οι σύνδεσμοι να ευθυγραμμίζονται μεταξύ των καρτών. */
+.wp-block-group.is-style-kosmiteia-card > .wp-block-group {
+	flex: 1;
+}
+
+/* Ο σύνδεσμος πέφτει στο κάτω μέρος της κάρτας. Χρειάζεται δύο κλάσεις για
+   να υπερισχύσει του μηδενικού margin που δίνει ο πυρήνας στα flex layouts. */
+.is-style-kosmiteia-card .kosmiteia-card__more {
+	margin-top: auto;
+}
+
+.kosmiteia-card__more a {
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.kosmiteia-card__more a::after {
+	content: " →";
+}
+
+.kosmiteia-card__more a:hover {
+	text-decoration: underline;
+}
+
 /* Ετικέτες κατηγοριών ανακοινώσεων */
 .wp-block-post-terms a,
 .wp-block-post-terms .wp-block-post-terms__separator + a {
@@ -634,6 +669,45 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 .wp-block-post-date {
 	color: color-mix(in srgb, var(--wp--preset--color--contrast) 70%, transparent);
 	font-size: var(--wp--preset--font-size--small);
+}
+
+/* -------------------------------------------------------------------------
+ * 4β. Μήνυμα Κοσμήτορα
+ * ---------------------------------------------------------------------- */
+
+/* Κάρτα πλήρους πλάτους: φωτογραφία αριστερά, χαιρετισμός δεξιά. */
+.kosmiteia-dean .wp-block-columns {
+	margin-bottom: 0;
+}
+
+.kosmiteia-dean .kosmiteia-dean__photo {
+	height: 100%;
+}
+
+.kosmiteia-eyebrow {
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	margin-bottom: 0;
+	text-transform: uppercase;
+}
+
+.kosmiteia-dean__name {
+	font-weight: 700;
+	margin-bottom: 0;
+}
+
+.kosmiteia-dean__signature {
+	border-left: 4px solid var(--wp--preset--color--accent-3);
+	padding-left: 1rem;
+}
+
+/* Σε μικρές οθόνες οι στήλες στοιβάζονται: η φωτογραφία χαμηλώνει ώστε να
+   μη σπρώχνει το κείμενο εκτός οθόνης. Το ελάχιστο ύψος του μπλοκ Cover
+   γράφεται inline από τον πυρήνα, οπότε χρειάζεται !important. */
+@media (max-width: 781px) {
+	.kosmiteia-dean .kosmiteia-dean__photo {
+		min-height: 260px !important;
+	}
 }
 
 /* -------------------------------------------------------------------------
@@ -806,10 +880,18 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	border-radius: var(--wp--custom--radius--card, 12px);
 	color: var(--wp--preset--color--contrast);
 	font-family: inherit;
-	font-size: inherit;
+	/* Μικρότερα από το κείμενο της σελίδας (τα πεδία είναι διεπαφή, όχι
+	   περιεχόμενο), αλλά ποτέ κάτω από 1rem: το iOS κάνει ζουμ σε μικρότερα. */
+	font-size: max(1rem, var(--wp--preset--font-size--small));
 	min-height: 44px;
 	padding: 0.5rem 0.75rem;
 	width: 100%;
+}
+
+/* Χώρος για το βελάκι του <select>, ώστε να μην κόβονται μεγάλες επιλογές
+   (π.χ. «Προεπιλογή (σειρά Κοσμητείας)»). */
+.kosmiteia-filters__field select {
+	padding-right: 2rem;
 }
 
 .kosmiteia-filters__actions {

@@ -8,6 +8,8 @@
  *                                   από το UI).
  * - kosmiteia/language-switcher   : δυναμικός επιλογέας γλώσσας.
  * - kosmiteia/announcement-filters: αναζήτηση και φίλτρα στο αρχείο Ανακοινώσεων.
+ * - kosmiteia/program-filters     : αναζήτηση, φίλτρα και ταξινόμηση στο αρχείο
+ *                                   Μεταπτυχιακών.
  * - kosmiteia/breadcrumbs        : διαδρομή πλοήγησης (breadcrumbs).
  * - kosmiteia/map                 : χάρτης Leaflet / OpenStreetMap.
  * - kosmiteia/gallery             : μικρογραφίες σε responsive γραμμή με
@@ -50,6 +52,14 @@ function kosmiteia_register_block_scripts() {
 	);
 
 	wp_register_script(
+		'kosmiteia-program-filters-editor',
+		KOSMITEIA_CORE_URL . '/blocks/program-filters/index.js',
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
+		kosmiteia_core_asset_version( 'blocks/program-filters/index.js' ),
+		true
+	);
+
+	wp_register_script(
 		'kosmiteia-breadcrumbs-editor',
 		KOSMITEIA_CORE_URL . '/blocks/breadcrumbs/index.js',
 		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
@@ -82,6 +92,7 @@ function kosmiteia_register_block_scripts() {
 			'kosmiteia-slider-editor',
 			'kosmiteia-language-switcher-editor',
 			'kosmiteia-announcement-filters-editor',
+			'kosmiteia-program-filters-editor',
 			'kosmiteia-breadcrumbs-editor',
 			'kosmiteia-map-editor',
 			'kosmiteia-gallery-editor',
@@ -247,6 +258,13 @@ function kosmiteia_register_blocks() {
 		KOSMITEIA_CORE_DIR . '/blocks/announcement-filters',
 		array(
 			'render_callback' => 'kosmiteia_render_announcement_filters_block',
+		)
+	);
+
+	register_block_type(
+		KOSMITEIA_CORE_DIR . '/blocks/program-filters',
+		array(
+			'render_callback' => 'kosmiteia_render_program_filters_block',
 		)
 	);
 

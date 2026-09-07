@@ -2,9 +2,11 @@
 /**
  * Custom post types, taxonomies και meta fields.
  *
- * Όλο το περιεχόμενο των ενοτήτων της αρχικής (Σχολές, Ανακοινώσεις,
+ * Το περιεχόμενο των ενοτήτων της αρχικής που αλλάζει συχνά (Ανακοινώσεις,
  * Μεταπτυχιακά) προέρχεται από εδώ - τίποτα δεν είναι γραμμένο στατικά
- * μέσα στα templates.
+ * μέσα στα templates. Οι Σχολές δεν είναι τύπος περιεχομένου: είναι λίγες
+ * και σταθερές, οπότε η ενότητά τους στην αρχική συντάσσεται από τον
+ * Site Editor σαν κανονικές κάρτες.
  *
  * @package Kosmiteia_Core
  */
@@ -15,53 +17,6 @@ defined( 'ABSPATH' ) || exit;
  * Καταχώριση των custom post types.
  */
 function kosmiteia_register_post_types() {
-
-	/* --------------------------------------------------------------------
-	 * Σχολές / Schools
-	 * ----------------------------------------------------------------- */
-	register_post_type(
-		'kosm_school',
-		array(
-			'labels'        => array(
-				'name'               => __( 'Σχολές', 'kosmiteia' ),
-				'singular_name'      => __( 'Σχολή', 'kosmiteia' ),
-				'menu_name'          => __( 'Σχολές', 'kosmiteia' ),
-				'add_new'            => __( 'Προσθήκη νέας', 'kosmiteia' ),
-				'add_new_item'       => __( 'Προσθήκη νέας Σχολής', 'kosmiteia' ),
-				'edit_item'          => __( 'Επεξεργασία Σχολής', 'kosmiteia' ),
-				'new_item'           => __( 'Νέα Σχολή', 'kosmiteia' ),
-				'view_item'          => __( 'Προβολή Σχολής', 'kosmiteia' ),
-				'view_items'         => __( 'Προβολή Σχολών', 'kosmiteia' ),
-				'search_items'       => __( 'Αναζήτηση Σχολών', 'kosmiteia' ),
-				'not_found'          => __( 'Δεν βρέθηκαν Σχολές', 'kosmiteia' ),
-				'not_found_in_trash' => __( 'Δεν βρέθηκαν Σχολές στον κάδο', 'kosmiteia' ),
-				'all_items'          => __( 'Όλες οι Σχολές', 'kosmiteia' ),
-				'archives'           => __( 'Αρχείο Σχολών', 'kosmiteia' ),
-				'featured_image'     => __( 'Φωτογραφία Σχολής', 'kosmiteia' ),
-				'set_featured_image' => __( 'Ορισμός φωτογραφίας Σχολής', 'kosmiteia' ),
-				'item_updated'       => __( 'Η Σχολή ενημερώθηκε.', 'kosmiteia' ),
-				'item_published'     => __( 'Η Σχολή δημοσιεύτηκε.', 'kosmiteia' ),
-			),
-			'description'   => __( 'Οι Σχολές που υπάγονται στην Κοσμητεία.', 'kosmiteia' ),
-			'public'        => true,
-			'has_archive'   => true,
-			'show_in_rest'  => true,
-			'rest_base'     => 'schools',
-			'menu_icon'     => 'dashicons-bank',
-			'menu_position' => 20,
-			'supports'      => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields', 'page-attributes' ),
-			'taxonomies'    => array( 'kosm_faculty' ),
-			'rewrite'       => array(
-				'slug'       => _x( 'schools', 'URL slug για τις Σχολές', 'kosmiteia' ),
-				'with_front' => false,
-			),
-			'template'      => array(
-				array( 'core/paragraph', array( 'placeholder' => __( 'Σύντομη περιγραφή της Σχολής...', 'kosmiteia' ) ) ),
-				array( 'core/heading', array( 'level' => 2, 'placeholder' => __( 'Τμήματα', 'kosmiteia' ) ) ),
-				array( 'core/list', array() ),
-			),
-		)
-	);
 
 	/* --------------------------------------------------------------------
 	 * Ανακοινώσεις / Announcements
@@ -153,7 +108,7 @@ function kosmiteia_register_taxonomies() {
 	// Σχολή: κοινή ταξινομία για φιλτράρισμα ανακοινώσεων και προγραμμάτων.
 	register_taxonomy(
 		'kosm_faculty',
-		array( 'kosm_school', 'kosm_announcement', 'kosm_program' ),
+		array( 'kosm_announcement', 'kosm_program' ),
 		array(
 			'labels'            => array(
 				'name'          => __( 'Σχολές (φίλτρο)', 'kosmiteia' ),
@@ -246,13 +201,6 @@ function kosmiteia_register_meta() {
 			'kosm_director'  => __( 'Διευθυντής/-τρια Προγράμματος', 'kosmiteia' ),
 			'kosm_apply_url' => __( 'Σύνδεσμος αίτησης', 'kosmiteia' ),
 		),
-		'kosm_school'       => array(
-			'kosm_dean'     => __( 'Κοσμήτορας', 'kosmiteia' ),
-			'kosm_phone'    => __( 'Τηλέφωνο', 'kosmiteia' ),
-			'kosm_email'    => __( 'Email', 'kosmiteia' ),
-			'kosm_address'  => __( 'Διεύθυνση', 'kosmiteia' ),
-			'kosm_site_url' => __( 'Ιστοσελίδα Σχολής', 'kosmiteia' ),
-		),
 		'kosm_announcement' => array(
 			'kosm_deadline' => __( 'Προθεσμία', 'kosmiteia' ),
 			'kosm_file_url' => __( 'Συνημμένο αρχείο (URL)', 'kosmiteia' ),
@@ -284,63 +232,6 @@ function kosmiteia_register_meta() {
 	}
 }
 add_action( 'init', 'kosmiteia_register_meta' );
-
-/**
- * Query Loop με κλάση CSS "is-related-to-school" μέσα σε σελίδα Σχολής:
- * φιλτράρεται αυτόματα ώστε να δείχνει μόνο περιεχόμενο της Σχολής αυτής.
- *
- * Η κλάση προστίθεται από το UI: Ρυθμίσεις μπλοκ → Για προχωρημένους →
- * Πρόσθετες κλάσεις CSS. Αν η Σχολή δεν έχει όρο «Σχολή (φίλτρο)», το
- * query μένει ως έχει.
- *
- * @param string|null $pre_render   Προ-αποδοθέν περιεχόμενο (δεν το αλλάζουμε).
- * @param array       $parsed_block Το μπλοκ πριν το render.
- * @return string|null
- */
-function kosmiteia_track_query_block( $pre_render, $parsed_block ) {
-	if ( isset( $parsed_block['blockName'] ) && 'core/query' === $parsed_block['blockName'] ) {
-		$GLOBALS['kosmiteia_query_class'] = isset( $parsed_block['attrs']['className'] )
-			? (string) $parsed_block['attrs']['className']
-			: '';
-	}
-
-	return $pre_render;
-}
-add_filter( 'pre_render_block', 'kosmiteia_track_query_block', 10, 2 );
-
-/**
- * Προσθέτει το φίλτρο Σχολής στο query του σημειωμένου Query Loop.
- *
- * @param array $query Παράμετροι WP_Query.
- * @return array
- */
-function kosmiteia_related_to_school_query( $query ) {
-	$classes = isset( $GLOBALS['kosmiteia_query_class'] ) ? $GLOBALS['kosmiteia_query_class'] : '';
-
-	if ( ! is_singular( 'kosm_school' ) || false === strpos( $classes, 'is-related-to-school' ) ) {
-		return $query;
-	}
-
-	$terms = wp_get_post_terms( get_queried_object_id(), 'kosm_faculty', array( 'fields' => 'ids' ) );
-
-	if ( is_wp_error( $terms ) || empty( $terms ) ) {
-		return $query;
-	}
-
-	$tax_query = isset( $query['tax_query'] ) ? $query['tax_query'] : array();
-
-	$tax_query[] = array(
-		'taxonomy'         => 'kosm_faculty',
-		'field'            => 'term_id',
-		'terms'            => array_map( 'intval', $terms ),
-		'include_children' => false,
-	);
-
-	$query['tax_query'] = $tax_query;
-
-	return $query;
-}
-add_filter( 'query_loop_block_query_vars', 'kosmiteia_related_to_school_query' );
 
 /**
  * Flush rewrite rules μία φορά ανά έκδοση, ώστε να δουλέψουν

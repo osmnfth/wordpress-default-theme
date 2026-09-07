@@ -1,0 +1,209 @@
+/**
+ * Πλωτό κουμπί (κάτω δεξιά) και το παράθυρο μηνύματος.
+ *
+ * Το κουμπί μένει κρυφό μέχρι να τρέξει το JavaScript (χωρίς αυτό δεν θα
+ * άνοιγε τίποτα). Τα χρώματα έρχονται από την παλέτα του θέματος όταν υπάρχει,
+ * αλλιώς από τις εφεδρικές τιμές - έτσι το πρόσθετο δουλεύει και σε άλλο θέμα.
+ */
+
+.kosmiteia-fab,
+.kosmiteia-fab-modal {
+	--kosmiteia-fab-accent: var(--wp--preset--color--accent-1, #0b3d91);
+	--kosmiteia-fab-surface: var(--wp--preset--color--base, #ffffff);
+	--kosmiteia-fab-ink: var(--wp--preset--color--contrast, #0e1a2b);
+	--kosmiteia-fab-border: var(--wp--preset--color--accent-5, #dbe2ec);
+}
+
+/* -------------------------------------------------------------------------
+ * Το κουμπί
+ * ---------------------------------------------------------------------- */
+
+.kosmiteia-fab {
+	align-items: center;
+	background-color: var(--kosmiteia-fab-surface);
+	border: 1px solid var(--kosmiteia-fab-border);
+	border-radius: 50%;
+	bottom: clamp(1rem, 3vw, 1.75rem);
+	box-shadow: 0 10px 30px rgba(14, 26, 43, 0.22);
+	color: var(--kosmiteia-fab-accent);
+	cursor: pointer;
+	display: none;
+	height: 4rem;
+	justify-content: center;
+	overflow: hidden;
+	padding: 0.5rem;
+	position: fixed;
+	right: clamp(1rem, 3vw, 1.75rem);
+	width: 4rem;
+	z-index: 999;
+}
+
+/* Με ενεργό JavaScript το κουμπί υπάρχει, αλλά φαίνεται μόνο όταν πρέπει. */
+.kosmiteia-fab.is-ready {
+	display: flex;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(0.75rem) scale(0.92);
+	transition: opacity 250ms ease, transform 250ms ease, box-shadow 200ms ease;
+}
+
+.kosmiteia-fab.is-ready.is-visible {
+	opacity: 1;
+	pointer-events: auto;
+	transform: none;
+}
+
+.kosmiteia-fab:hover {
+	box-shadow: 0 14px 36px rgba(14, 26, 43, 0.3);
+}
+
+.kosmiteia-fab:focus-visible {
+	outline: 3px solid var(--kosmiteia-fab-accent);
+	outline-offset: 3px;
+}
+
+.kosmiteia-fab__image {
+	display: block;
+	height: 100%;
+	object-fit: contain;
+	width: 100%;
+}
+
+.kosmiteia-fab__mark {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+/* -------------------------------------------------------------------------
+ * Το παράθυρο
+ * ---------------------------------------------------------------------- */
+
+.kosmiteia-fab-modal {
+	align-items: center;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	left: 0;
+	padding: clamp(1rem, 4vw, 2.5rem);
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1000;
+}
+
+.kosmiteia-fab-modal[hidden] {
+	display: none;
+}
+
+.kosmiteia-fab-modal__backdrop {
+	background-color: rgba(14, 26, 43, 0.6);
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.kosmiteia-fab-modal__panel {
+	background-color: var(--kosmiteia-fab-surface);
+	border-radius: 14px;
+	box-shadow: 0 24px 60px rgba(14, 26, 43, 0.35);
+	color: var(--kosmiteia-fab-ink);
+	max-height: 85vh;
+	max-width: 34rem;
+	overflow-y: auto;
+	padding: clamp(1.5rem, 4vw, 2.5rem);
+	position: relative;
+	width: 100%;
+}
+
+.kosmiteia-fab-modal__title {
+	color: var(--kosmiteia-fab-accent);
+	margin: 0 2rem 0.75rem 0;
+}
+
+.kosmiteia-fab-modal__text > :first-child {
+	margin-top: 0;
+}
+
+.kosmiteia-fab-modal__text > :last-child {
+	margin-bottom: 0;
+}
+
+.kosmiteia-fab-modal__close {
+	background: none;
+	border: 0;
+	border-radius: 50%;
+	color: inherit;
+	cursor: pointer;
+	font-size: 1.75rem;
+	height: 2.75rem;
+	line-height: 1;
+	position: absolute;
+	right: 0.5rem;
+	top: 0.5rem;
+	width: 2.75rem;
+}
+
+.kosmiteia-fab-modal__close:hover {
+	background-color: var(--wp--preset--color--accent-4, #f4f6fa);
+}
+
+.kosmiteia-fab-modal__close:focus-visible {
+	outline: 3px solid var(--kosmiteia-fab-accent);
+	outline-offset: 2px;
+}
+
+.kosmiteia-fab-modal__actions {
+	margin-bottom: 0;
+	margin-top: 1.5rem;
+}
+
+.kosmiteia-fab-modal__link {
+	background-color: var(--kosmiteia-fab-accent);
+	border-radius: 8px;
+	color: var(--kosmiteia-fab-surface);
+	display: inline-block;
+	font-weight: 600;
+	padding: 0.6rem 1.25rem;
+	text-decoration: none;
+}
+
+.kosmiteia-fab-modal__link:hover,
+.kosmiteia-fab-modal__link:focus {
+	text-decoration: underline;
+}
+
+/* Όσο το παράθυρο είναι ανοιχτό, η σελίδα από κάτω δεν κυλάει. */
+.kosmiteia-has-modal {
+	overflow: hidden;
+}
+
+/* Κείμενο μόνο για αναγνώστες οθόνης (δεν εξαρτόμαστε από το θέμα). */
+.kosmiteia-fab .screen-reader-text,
+.kosmiteia-fab-modal .screen-reader-text {
+	border: 0;
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kosmiteia-fab.is-ready {
+		transition: none;
+		transform: none;
+	}
+}
+
+@media print {
+	.kosmiteia-fab,
+	.kosmiteia-fab-modal {
+		display: none !important;
+	}
+}

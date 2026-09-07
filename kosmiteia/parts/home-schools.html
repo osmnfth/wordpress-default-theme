@@ -12,28 +12,92 @@
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:query {"query":{"perPage":3,"pages":0,"offset":0,"postType":"kosm_school","order":"asc","orderBy":"title","author":"","search":"","exclude":[],"sticky":"","inherit":false,"taxQuery":null,"parents":[]},"align":"wide","layout":{"type":"default"}} -->
-	<div class="wp-block-query alignwide">
-		<!-- wp:post-template {"className":"is-style-kosmiteia-cards","style":{"spacing":{"blockGap":"var:preset|spacing|40"}},"layout":{"type":"grid","columnCount":3}} -->
-			<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"3/2","className":"is-style-kosmiteia-zoom"} /-->
+	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|40","left":"var:preset|spacing|40"}}}} -->
+	<div class="wp-block-columns alignwide">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"className":"is-style-kosmiteia-card","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+			<div class="wp-block-group is-style-kosmiteia-card">
+				<!-- wp:cover {"overlayColor":"accent-1","dimRatio":100,"isUserOverlayColor":true,"minHeight":220,"minHeightUnit":"px","contentPosition":"bottom left","style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-cover has-custom-content-position is-position-bottom-left" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40);min-height:220px"><span aria-hidden="true" class="wp-block-cover__background has-accent-1-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">
+					<!-- wp:heading {"level":3,"fontSize":"large"} -->
+					<h3 class="wp-block-heading has-large-font-size">Πρώτη Σχολή</h3>
+					<!-- /wp:heading -->
+				</div></div>
+				<!-- /wp:cover -->
 
-			<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
-			<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">
-				<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"large"} /-->
+				<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch"}} -->
+				<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">
+					<!-- wp:paragraph {"fontSize":"small"} -->
+					<p class="has-small-font-size">Σύντομη περιγραφή της πρώτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.</p>
+					<!-- /wp:paragraph -->
 
-				<!-- wp:post-excerpt {"excerptLength":22,"fontSize":"small"} /-->
-
-				<!-- wp:read-more {"content":"Δείτε τη Σχολή","fontSize":"small"} /-->
+					<!-- wp:paragraph {"className":"kosmiteia-card__more","fontSize":"small"} -->
+					<p class="kosmiteia-card__more has-small-font-size"><a href="#">Δείτε τη Σχολή</a></p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
 			</div>
 			<!-- /wp:group -->
-		<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:column -->
 
-		<!-- wp:query-no-results -->
-		<!-- wp:paragraph {"align":"center"} -->
-		<p class="has-text-align-center">Δεν έχουν καταχωριστεί ακόμη Σχολές. Προσθέστε την πρώτη από τον πίνακα ελέγχου: <strong>Σχολές → Προσθήκη νέας</strong>.</p>
-		<!-- /wp:paragraph -->
-		<!-- /wp:query-no-results -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"className":"is-style-kosmiteia-card","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+			<div class="wp-block-group is-style-kosmiteia-card">
+				<!-- wp:cover {"overlayColor":"accent-6","dimRatio":100,"isUserOverlayColor":true,"minHeight":220,"minHeightUnit":"px","contentPosition":"bottom left","style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-cover has-custom-content-position is-position-bottom-left" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40);min-height:220px"><span aria-hidden="true" class="wp-block-cover__background has-accent-6-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">
+					<!-- wp:heading {"level":3,"fontSize":"large"} -->
+					<h3 class="wp-block-heading has-large-font-size">Δεύτερη Σχολή</h3>
+					<!-- /wp:heading -->
+				</div></div>
+				<!-- /wp:cover -->
+
+				<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch"}} -->
+				<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">
+					<!-- wp:paragraph {"fontSize":"small"} -->
+					<p class="has-small-font-size">Σύντομη περιγραφή της δεύτερης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.</p>
+					<!-- /wp:paragraph -->
+
+					<!-- wp:paragraph {"className":"kosmiteia-card__more","fontSize":"small"} -->
+					<p class="kosmiteia-card__more has-small-font-size"><a href="#">Δείτε τη Σχολή</a></p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"className":"is-style-kosmiteia-card","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+			<div class="wp-block-group is-style-kosmiteia-card">
+				<!-- wp:cover {"overlayColor":"contrast","dimRatio":100,"isUserOverlayColor":true,"minHeight":220,"minHeightUnit":"px","contentPosition":"bottom left","style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-cover has-custom-content-position is-position-bottom-left" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40);min-height:220px"><span aria-hidden="true" class="wp-block-cover__background has-contrast-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">
+					<!-- wp:heading {"level":3,"fontSize":"large"} -->
+					<h3 class="wp-block-heading has-large-font-size">Τρίτη Σχολή</h3>
+					<!-- /wp:heading -->
+				</div></div>
+				<!-- /wp:cover -->
+
+				<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch"}} -->
+				<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">
+					<!-- wp:paragraph {"fontSize":"small"} -->
+					<p class="has-small-font-size">Σύντομη περιγραφή της τρίτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.</p>
+					<!-- /wp:paragraph -->
+
+					<!-- wp:paragraph {"className":"kosmiteia-card__more","fontSize":"small"} -->
+					<p class="kosmiteia-card__more has-small-font-size"><a href="#">Δείτε τη Σχολή</a></p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
 	</div>
-	<!-- /wp:query -->
+	<!-- /wp:columns -->
 </section>
 <!-- /wp:group -->

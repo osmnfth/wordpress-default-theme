@@ -242,6 +242,79 @@ EN = {
     u'Δήλωση προσβασιμότητας': u'Accessibility statement',
     u'Χάρτης ιστότοπου': u'Sitemap',
 
+    # Ενότητα «Οι Σχολές μας» (στατικές κάρτες).
+    u'Πρώτη Σχολή': u'First school',
+    u'Δεύτερη Σχολή': u'Second school',
+    u'Τρίτη Σχολή': u'Third school',
+    u'Σύντομη περιγραφή της πρώτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.':
+        u'A short description of the first school: subject areas, departments and research directions.',
+    u'Σύντομη περιγραφή της δεύτερης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.':
+        u'A short description of the second school: subject areas, departments and research directions.',
+    u'Σύντομη περιγραφή της τρίτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.':
+        u'A short description of the third school: subject areas, departments and research directions.',
+
+    # Ενότητα «Μήνυμα Κοσμήτορα».
+    u'Μήνυμα Κοσμήτορα': u'Message from the Dean',
+    u'Καλώς ήρθατε στην Κοσμητεία': u'Welcome to the Deanery',
+    u'Σύντομο απόσπασμα από τον χαιρετισμό του Κοσμήτορα προς τη φοιτητική και την ακαδημαϊκή κοινότητα. Το πλήρες κείμενο βρίσκεται στη σελίδα «Μήνυμα Κοσμήτορα».':
+        u'A short extract from the address of the Dean to students and to the academic community. The full text is on the page "Message from the Dean".',
+    u'Ονοματεπώνυμο Κοσμήτορα': u'Name of the Dean',
+    u'Διαβάστε περισσότερα': u'Read more',
+    u'Σελίδα μηνύματος Κοσμήτορα': u'Dean message page',
+    u'Εκεί οδηγεί το κουμπί «Διαβάστε περισσότερα» της ενότητας στην αρχική, καθώς και το token {{url_dean}}.':
+        u'Where the "Read more" button on the home page - and the {{url_dean}} token - point to.',
+
+    # Πλωτό κουμπί με μήνυμα.
+    u'Πλωτό κουμπί': u'Floating button',
+    u'Εμφάνιση πλωτού κουμπιού': u'Show the floating button',
+    u'Στρογγυλό κουμπί κάτω δεξιά. Φαίνεται στην κορυφή της σελίδας, κρύβεται με το σκρολάρισμα και επανεμφανίζεται στο τέλος της σελίδας.':
+        u'A round button in the bottom right corner. It shows at the top of the page, hides while scrolling and comes back at the end of the page.',
+    u'Εικόνα κουμπιού': u'Button image',
+    u'Συνήθως το λογότυπο. Αν μείνει κενή, χρησιμοποιείται το λογότυπο του ιστότοπου.':
+        u'Usually the logo. If left empty, the site logo is used.',
+    u'Περιγραφή κουμπιού': u'Button description',
+    u'Διαβάζεται από τους αναγνώστες οθόνης και εμφανίζεται ως tooltip.':
+        u'Read out by screen readers and shown as a tooltip.',
+    u'Μήνυμα της Κοσμητείας': u'A message from the Deanery',
+    u'Τίτλος παραθύρου': u'Dialog title',
+    u'Κείμενο παραθύρου': u'Dialog text',
+    u'Χωρίς τίτλο και κείμενο το κουμπί δεν εμφανίζεται.':
+        u'Without a title and text the button is not shown.',
+    u'Σύνδεσμος παραθύρου': u'Dialog link',
+    u'Κείμενο συνδέσμου': u'Link text',
+    u'Περισσότερα': u'More',
+    u'Κλείσιμο': u'Close',
+
+    # Πεδίο εικόνας στις Ρυθμίσεις.
+    u'Επιλογή εικόνας': u'Select image',
+    u'Χρήση αυτής της εικόνας': u'Use this image',
+    u'Αφαίρεση': u'Remove',
+    u'ID εικόνας': u'Image ID',
+
+    # Φίλτρα, αναζήτηση και ταξινόμηση Μεταπτυχιακών.
+    u'Μεταπτυχιακά ανά σελίδα': u'Postgraduate programmes per page',
+    u'Ισχύει στο αρχείο Μεταπτυχιακών και στα φίλτρα του.':
+        u'Applies to the postgraduate archive and its filters.',
+    u'Προεπιλεγμένη σειρά': u'Default order',
+    u'Αλφαβητικά (Α → Ω)': u'Alphabetical (A → Z)',
+    u'Αλφαβητικά (Ω → Α)': u'Alphabetical (Z → A)',
+    u'Νεότερα πρώτα': u'Newest first',
+    u'Παλαιότερα πρώτα': u'Oldest first',
+    u'Λέξη-κλειδί, π.χ. βιοηθική': u'Keyword, e.g. bioethics',
+    u'Τμήμα': u'Department',
+    u'Όλα τα Τμήματα': u'All departments',
+    u'Τύπος': u'Type',
+    u'Όλοι οι τύποι': u'All types',
+    u'Ταξινόμηση': u'Sort by',
+    u'Αναζήτηση και φίλτρα μεταπτυχιακών': u'Postgraduate search and filters',
+    u'Κανένα πρόγραμμα δεν ταιριάζει με τα φίλτρα.': u'No programme matches these filters.',
+    u'Βρέθηκε 1 πρόγραμμα.': u'Found 1 programme.',
+    u'Βρέθηκαν %d προγράμματα.': u'Found %d programmes.',
+    u'Σύνολο: %d προγράμματα.': u'%d programmes in total.',
+    u'Φίλτρο Τμήματος': u'Department filter',
+    u'Φίλτρο τύπου': u'Type filter',
+    u'Επιλογή ταξινόμησης': u'Sort control',
+
     # URL slugs (ίδια σε EL/EN, ώστε τα permalinks να μένουν σταθερά).
     u'schools': u'schools',
     u'announcements': u'announcements',

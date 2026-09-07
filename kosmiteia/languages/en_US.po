@@ -85,6 +85,24 @@ msgstr "Phone"
 msgid "Μέσα μεταφοράς: αστικές γραμμές και στάση μετρό στην είσοδο της Πανεπιστημιούπολης"
 msgstr "Transport: city bus lines and a metro stop at the campus entrance"
 
+msgid "Μήνυμα Κοσμήτορα"
+msgstr "Message from the Dean"
+
+msgid "Καλώς ήρθατε στην Κοσμητεία"
+msgstr "Welcome to the Deanery"
+
+msgid "Σύντομο απόσπασμα από τον χαιρετισμό του Κοσμήτορα προς τη φοιτητική και την ακαδημαϊκή κοινότητα. Το πλήρες κείμενο βρίσκεται στη σελίδα «Μήνυμα Κοσμήτορα»."
+msgstr "A short extract from the address of the Dean to students and to the academic community. The full text is on the page \"Message from the Dean\"."
+
+msgid "Ονοματεπώνυμο Κοσμήτορα"
+msgstr "Name of the Dean"
+
+msgid "Κοσμήτορας"
+msgstr "Dean"
+
+msgid "Διαβάστε περισσότερα"
+msgstr "Read more"
+
 msgid "Κεντρική παρουσίαση Κοσμητείας"
 msgstr "Main Deanery carousel"
 
@@ -142,14 +160,26 @@ msgstr "Postgraduate → Add New"
 msgid "Τρεις Σχολές με διακριτή ταυτότητα, κοινό στόχο την ποιοτική εκπαίδευση και την έρευνα."
 msgstr "Three schools with a distinct identity and a shared commitment to quality education and research."
 
+msgid "Πρώτη Σχολή"
+msgstr "First school"
+
+msgid "Σύντομη περιγραφή της πρώτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις."
+msgstr "A short description of the first school: subject areas, departments and research directions."
+
 msgid "Δείτε τη Σχολή"
 msgstr "Visit the school"
 
-msgid "Δεν έχουν καταχωριστεί ακόμη Σχολές. Προσθέστε την πρώτη από τον πίνακα ελέγχου:"
-msgstr "No schools have been added yet. Add the first one from the dashboard:"
+msgid "Δεύτερη Σχολή"
+msgstr "Second school"
 
-msgid "Σχολές → Προσθήκη νέας"
-msgstr "Schools → Add New"
+msgid "Σύντομη περιγραφή της δεύτερης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις."
+msgstr "A short description of the second school: subject areas, departments and research directions."
+
+msgid "Τρίτη Σχολή"
+msgstr "Third school"
+
+msgid "Σύντομη περιγραφή της τρίτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις."
+msgstr "A short description of the third school: subject areas, departments and research directions."
 
 msgid "Παιδεία, έρευνα και κοινωνική προσφορά. Η Κοσμητεία συντονίζει τις Σχολές, τα προγράμματα σπουδών και την ακαδημαϊκή κοινότητα."
 msgstr "Education, research and public service. The Deanery coordinates the schools, the study programmes and the academic community."
@@ -277,9 +307,6 @@ msgstr "Dry run, without writing to the database"
 msgid "Έναρξη εισαγωγής"
 msgstr "Start import"
 
-msgid "Αναζήτηση"
-msgstr "Search"
-
 msgid "Λέξη-κλειδί, π.χ. υποτροφίες"
 msgstr "Keyword, e.g. scholarships"
 
@@ -297,12 +324,6 @@ msgstr "All years"
 
 msgid "Έτος"
 msgstr "Year"
-
-msgid "Φιλτράρισμα"
-msgstr "Filter"
-
-msgid "Καθαρισμός φίλτρων"
-msgstr "Clear filters"
 
 msgid "Αναζήτηση και φίλτρα ανακοινώσεων"
 msgstr "Announcement search and filters"
@@ -414,6 +435,21 @@ msgstr "The breadcrumb trail appears on inner pages."
 
 msgid "Το αρχικό περιεχόμενο υπάρχει ήδη - δεν έγινε καμία αλλαγή."
 msgstr "Starter content already exists - nothing was changed."
+
+msgid "Αναζήτηση"
+msgstr "Search"
+
+msgid "Φιλτράρισμα"
+msgstr "Filter"
+
+msgid "Καθαρισμός φίλτρων"
+msgstr "Clear filters"
+
+msgid "Μήνυμα της Κοσμητείας"
+msgstr "A message from the Deanery"
+
+msgid "Περισσότερα"
+msgstr "More"
 
 msgid "Φωτογραφίες (γκαλερί)"
 msgstr "Photos (gallery)"
@@ -703,57 +739,6 @@ msgstr "Position"
 msgid "Αρχείο"
 msgstr "File"
 
-msgid "Προσθήκη νέας Σχολής"
-msgstr "Add New School"
-
-msgid "Επεξεργασία Σχολής"
-msgstr "Edit School"
-
-msgid "Νέα Σχολή"
-msgstr "New School"
-
-msgid "Προβολή Σχολής"
-msgstr "View School"
-
-msgid "Προβολή Σχολών"
-msgstr "View Schools"
-
-msgid "Αναζήτηση Σχολών"
-msgstr "Search Schools"
-
-msgid "Δεν βρέθηκαν Σχολές"
-msgstr "No schools found"
-
-msgid "Δεν βρέθηκαν Σχολές στον κάδο"
-msgstr "No schools found in Trash"
-
-msgid "Αρχείο Σχολών"
-msgstr "School Archive"
-
-msgid "Φωτογραφία Σχολής"
-msgstr "School image"
-
-msgid "Ορισμός φωτογραφίας Σχολής"
-msgstr "Set school image"
-
-msgid "Η Σχολή ενημερώθηκε."
-msgstr "School updated."
-
-msgid "Η Σχολή δημοσιεύτηκε."
-msgstr "School published."
-
-msgid "Οι Σχολές που υπάγονται στην Κοσμητεία."
-msgstr "The schools that belong to the Deanery."
-
-msgid "schools"
-msgstr "schools"
-
-msgid "Σύντομη περιγραφή της Σχολής..."
-msgstr "A short description of the school..."
-
-msgid "Τμήματα"
-msgstr "Departments"
-
 msgid "Ανακοίνωση"
 msgstr "Announcement"
 
@@ -892,17 +877,59 @@ msgstr "Programme Director"
 msgid "Σύνδεσμος αίτησης"
 msgstr "Application link"
 
-msgid "Κοσμήτορας"
-msgstr "Dean"
-
-msgid "Ιστοσελίδα Σχολής"
-msgstr "School website"
-
 msgid "Προθεσμία"
 msgstr "Deadline"
 
 msgid "Συνημμένο αρχείο (URL)"
 msgstr "Attached file (URL)"
+
+msgid "Προεπιλεγμένη σειρά"
+msgstr "Default order"
+
+msgid "Αλφαβητικά (Α → Ω)"
+msgstr "Alphabetical (A → Z)"
+
+msgid "Αλφαβητικά (Ω → Α)"
+msgstr "Alphabetical (Z → A)"
+
+msgid "Νεότερα πρώτα"
+msgstr "Newest first"
+
+msgid "Παλαιότερα πρώτα"
+msgstr "Oldest first"
+
+msgid "Λέξη-κλειδί, π.χ. βιοηθική"
+msgstr "Keyword, e.g. bioethics"
+
+msgid "Τμήμα"
+msgstr "Department"
+
+msgid "Όλα τα Τμήματα"
+msgstr "All departments"
+
+msgid "Τύπος"
+msgstr "Type"
+
+msgid "Όλοι οι τύποι"
+msgstr "All types"
+
+msgid "Ταξινόμηση"
+msgstr "Sort by"
+
+msgid "Αναζήτηση και φίλτρα μεταπτυχιακών"
+msgstr "Postgraduate search and filters"
+
+msgid "Κανένα πρόγραμμα δεν ταιριάζει με τα φίλτρα."
+msgstr "No programme matches these filters."
+
+msgid "Βρέθηκε 1 πρόγραμμα."
+msgstr "Found 1 programme."
+
+msgid "Βρέθηκαν %d προγράμματα."
+msgstr "Found %d programmes."
+
+msgid "Σύνολο: %d προγράμματα."
+msgstr "%d programmes in total."
 
 msgid "Συντάκτης Ανακοινώσεων"
 msgstr "Announcements editor"
@@ -927,6 +954,12 @@ msgstr "Dean's title"
 
 msgid "Καθηγητής"
 msgstr "Professor"
+
+msgid "Σελίδα μηνύματος Κοσμήτορα"
+msgstr "Dean message page"
+
+msgid "Εκεί οδηγεί το κουμπί «Διαβάστε περισσότερα» της ενότητας στην αρχική, καθώς και το token {{url_dean}}."
+msgstr "Where the \"Read more\" button on the home page - and the {{url_dean}} token - point to."
 
 msgid "Μότο υποσέλιδου"
 msgstr "Footer tagline"
@@ -991,6 +1024,12 @@ msgstr "Announcements per page"
 msgid "Ισχύει στο αρχείο Ανακοινώσεων και στα φίλτρα του."
 msgstr "Applies to the Announcements archive and its filters."
 
+msgid "Μεταπτυχιακά ανά σελίδα"
+msgstr "Postgraduate programmes per page"
+
+msgid "Ισχύει στο αρχείο Μεταπτυχιακών και στα φίλτρα του."
+msgstr "Applies to the postgraduate archive and its filters."
+
 msgid "Εκδηλώσεις ανά σελίδα"
 msgstr "Events per page"
 
@@ -1003,6 +1042,42 @@ msgstr "Hide past events"
 msgid "Στο αρχείο Εκδηλώσεων εμφανίζονται μόνο οι επόμενες."
 msgstr "Only upcoming events are listed in the Events archive."
 
+msgid "Πλωτό κουμπί"
+msgstr "Floating button"
+
+msgid "Εμφάνιση πλωτού κουμπιού"
+msgstr "Show the floating button"
+
+msgid "Στρογγυλό κουμπί κάτω δεξιά. Φαίνεται στην κορυφή της σελίδας, κρύβεται με το σκρολάρισμα και επανεμφανίζεται στο τέλος της σελίδας."
+msgstr "A round button in the bottom right corner. It shows at the top of the page, hides while scrolling and comes back at the end of the page."
+
+msgid "Εικόνα κουμπιού"
+msgstr "Button image"
+
+msgid "Συνήθως το λογότυπο. Αν μείνει κενή, χρησιμοποιείται το λογότυπο του ιστότοπου."
+msgstr "Usually the logo. If left empty, the site logo is used."
+
+msgid "Περιγραφή κουμπιού"
+msgstr "Button description"
+
+msgid "Διαβάζεται από τους αναγνώστες οθόνης και εμφανίζεται ως tooltip."
+msgstr "Read out by screen readers and shown as a tooltip."
+
+msgid "Τίτλος παραθύρου"
+msgstr "Dialog title"
+
+msgid "Κείμενο παραθύρου"
+msgstr "Dialog text"
+
+msgid "Χωρίς τίτλο και κείμενο το κουμπί δεν εμφανίζεται."
+msgstr "Without a title and text the button is not shown."
+
+msgid "Σύνδεσμος παραθύρου"
+msgstr "Dialog link"
+
+msgid "Κείμενο συνδέσμου"
+msgstr "Link text"
+
 msgid "Γλώσσες"
 msgstr "Languages"
 
@@ -1014,6 +1089,18 @@ msgstr "Enables the language switcher and the English template parts (?lang=en).
 
 msgid "Ναι"
 msgstr "Yes"
+
+msgid "Επιλογή εικόνας"
+msgstr "Select image"
+
+msgid "Αφαίρεση"
+msgstr "Remove"
+
+msgid "ID εικόνας"
+msgstr "Image ID"
+
+msgid "Χρήση αυτής της εικόνας"
+msgstr "Use this image"
 
 msgid "Τα στοιχεία αυτά τροφοδοτούν το υποσέλιδο, τη σελίδα επικοινωνίας, τον χάρτη και τα δομημένα δεδομένα. Δεν χρειάζεται επέμβαση σε templates."
 msgstr "These details feed the footer, the contact page, the map and the structured data. No template editing needed."
@@ -1164,6 +1251,15 @@ msgstr "No marker title"
 
 msgid "Έλεγχος θέσης στο OpenStreetMap"
 msgstr "Check the position on OpenStreetMap"
+
+msgid "Φίλτρο Τμήματος"
+msgstr "Department filter"
+
+msgid "Φίλτρο τύπου"
+msgstr "Type filter"
+
+msgid "Επιλογή ταξινόμησης"
+msgstr "Sort control"
 
 msgid "Τίτλος διαφάνειας"
 msgstr "Slide title"

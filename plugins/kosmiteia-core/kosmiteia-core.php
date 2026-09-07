@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Κοσμητεία Core
  * Plugin URI:        https://health.duth.gr/
- * Description:       Το «μηχανοστάσιο» του ιστότοπου της Κοσμητείας: τύποι περιεχομένου (Σχολές, Ανακοινώσεις, Μεταπτυχιακά, Εκδηλώσεις, Προσωπικό, Έγγραφα), ταξινομίες, πεδία, μπλοκ, φίλτρα, χάρτης, γκαλερί, δίγλωσση λειτουργία, SEO και εργαλεία εισαγωγής περιεχομένου. Δουλεύει ανεξάρτητα από το ενεργό θέμα.
+ * Description:       Το «μηχανοστάσιο» του ιστότοπου της Κοσμητείας: τύποι περιεχομένου (Ανακοινώσεις, Μεταπτυχιακά, Εκδηλώσεις, Προσωπικό, Έγγραφα), ταξινομίες, πεδία, μπλοκ, φίλτρα, χάρτης, γκαλερί, πλωτό κουμπί με μήνυμα, δίγλωσση λειτουργία, SEO και εργαλεία εισαγωγής περιεχομένου. Δουλεύει ανεξάρτητα από το ενεργό θέμα.
  * Version:           1.0.0
  * Requires at least: 6.5
  * Requires PHP:      8.0
@@ -58,10 +58,13 @@ require_once KOSMITEIA_CORE_DIR . 'includes/post-types-academic.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/roles.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/bindings.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/multilingual.php';
+require_once KOSMITEIA_CORE_DIR . 'includes/filters.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/announcements.php';
+require_once KOSMITEIA_CORE_DIR . 'includes/programs.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/breadcrumbs.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/blocks.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/gallery.php';
+require_once KOSMITEIA_CORE_DIR . 'includes/floating-button.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/media.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/seo.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/importer-announcements.php';
@@ -74,7 +77,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 /**
  * Ενεργοποίηση: καταχώριση των τύπων περιεχομένου και ανανέωση των permalinks,
- * ώστε τα αρχεία (/schools, /announcements, ...) να δουλεύουν αμέσως.
+ * ώστε τα αρχεία (/announcements, /programs, ...) να δουλεύουν αμέσως.
  */
 function kosmiteia_core_activate() {
 	kosmiteia_register_post_types();

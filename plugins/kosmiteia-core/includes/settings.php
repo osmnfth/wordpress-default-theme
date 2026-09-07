@@ -21,8 +21,8 @@ const KOSMITEIA_SETTINGS_GROUP  = 'kosmiteia_settings_group';
 /**
  * Οι ενότητες και τα πεδία των ρυθμίσεων.
  *
- * Κάθε πεδίο: label, type (text|textarea|email|url|tel|number|checkbox),
- * default και προαιρετικά description / step / min / max.
+ * Κάθε πεδίο: label, type (text|textarea|richtext|email|url|tel|number|
+ * checkbox|image|page), default και προαιρετικά description / step / min / max.
  *
  * @return array
  */
@@ -47,6 +47,12 @@ function kosmiteia_settings_schema() {
 					'label'   => __( 'Ιδιότητα Κοσμήτορα', 'kosmiteia' ),
 					'type'    => 'text',
 					'default' => __( 'Καθηγητής', 'kosmiteia' ),
+				),
+				'dean_page'     => array(
+					'label'       => __( 'Σελίδα μηνύματος Κοσμήτορα', 'kosmiteia' ),
+					'type'        => 'page',
+					'default'     => 0,
+					'description' => __( 'Εκεί οδηγεί το κουμπί «Διαβάστε περισσότερα» της ενότητας στην αρχική, καθώς και το token {{url_dean}}.', 'kosmiteia' ),
 				),
 				'tagline'       => array(
 					'label'       => __( 'Μότο υποσέλιδου', 'kosmiteia' ),
@@ -166,6 +172,14 @@ function kosmiteia_settings_schema() {
 					'default'     => 10,
 					'description' => __( 'Ισχύει στο αρχείο Ανακοινώσεων και στα φίλτρα του.', 'kosmiteia' ),
 				),
+				'programs_per_page'      => array(
+					'label'       => __( 'Μεταπτυχιακά ανά σελίδα', 'kosmiteia' ),
+					'type'        => 'number',
+					'min'         => 1,
+					'max'         => 100,
+					'default'     => 12,
+					'description' => __( 'Ισχύει στο αρχείο Μεταπτυχιακών και στα φίλτρα του.', 'kosmiteia' ),
+				),
 				'events_per_page'        => array(
 					'label'   => __( 'Εκδηλώσεις ανά σελίδα', 'kosmiteia' ),
 					'type'    => 'number',
@@ -185,6 +199,51 @@ function kosmiteia_settings_schema() {
 					'type'        => 'checkbox',
 					'default'     => 1,
 					'description' => __( 'Στο αρχείο Εκδηλώσεων εμφανίζονται μόνο οι επόμενες.', 'kosmiteia' ),
+				),
+			),
+		),
+
+		'floating' => array(
+			'title'  => __( 'Πλωτό κουμπί', 'kosmiteia' ),
+			'fields' => array(
+				'floating_enable'     => array(
+					'label'       => __( 'Εμφάνιση πλωτού κουμπιού', 'kosmiteia' ),
+					'type'        => 'checkbox',
+					'default'     => 1,
+					'description' => __( 'Στρογγυλό κουμπί κάτω δεξιά. Φαίνεται στην κορυφή της σελίδας, κρύβεται με το σκρολάρισμα και επανεμφανίζεται στο τέλος της σελίδας.', 'kosmiteia' ),
+				),
+				'floating_image'      => array(
+					'label'       => __( 'Εικόνα κουμπιού', 'kosmiteia' ),
+					'type'        => 'image',
+					'default'     => 0,
+					'description' => __( 'Συνήθως το λογότυπο. Αν μείνει κενή, χρησιμοποιείται το λογότυπο του ιστότοπου.', 'kosmiteia' ),
+				),
+				'floating_label'      => array(
+					'label'       => __( 'Περιγραφή κουμπιού', 'kosmiteia' ),
+					'type'        => 'text',
+					'default'     => __( 'Μήνυμα της Κοσμητείας', 'kosmiteia' ),
+					'description' => __( 'Διαβάζεται από τους αναγνώστες οθόνης και εμφανίζεται ως tooltip.', 'kosmiteia' ),
+				),
+				'floating_title'      => array(
+					'label'   => __( 'Τίτλος παραθύρου', 'kosmiteia' ),
+					'type'    => 'text',
+					'default' => '',
+				),
+				'floating_text'       => array(
+					'label'       => __( 'Κείμενο παραθύρου', 'kosmiteia' ),
+					'type'        => 'richtext',
+					'default'     => '',
+					'description' => __( 'Χωρίς τίτλο και κείμενο το κουμπί δεν εμφανίζεται.', 'kosmiteia' ),
+				),
+				'floating_link'       => array(
+					'label'   => __( 'Σύνδεσμος παραθύρου', 'kosmiteia' ),
+					'type'    => 'url',
+					'default' => '',
+				),
+				'floating_link_label' => array(
+					'label'   => __( 'Κείμενο συνδέσμου', 'kosmiteia' ),
+					'type'    => 'text',
+					'default' => __( 'Περισσότερα', 'kosmiteia' ),
 				),
 			),
 		),
@@ -352,6 +411,17 @@ function kosmiteia_settings_sanitize( $input ) {
 					$clean[ $key ] = sanitize_textarea_field( $value );
 					break;
 
+				case 'richtext':
+					// Επιτρέπεται ό,τι και σε ένα άρθρο (σύνδεσμοι, έντονα,
+					// λίστες) - τίποτα εκτελέσιμο.
+					$clean[ $key ] = wp_kses_post( $value );
+					break;
+
+				case 'image':
+				case 'page':
+					$clean[ $key ] = absint( $value );
+					break;
+
 				default:
 					$clean[ $key ] = sanitize_text_field( $value );
 					break;
@@ -416,7 +486,10 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 	$id   = 'kosmiteia-' . str_replace( '_', '-', $key );
 	$type = isset( $field['type'] ) ? $field['type'] : 'text';
 
-	echo '<tr><th scope="row"><label for="' . esc_attr( $id ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
+	// Ο editor του WordPress δέχεται id μόνο με πεζά και κάτω παύλες.
+	$label_for = ( 'richtext' === $type ) ? str_replace( '-', '_', $id ) : $id;
+
+	echo '<tr><th scope="row"><label for="' . esc_attr( $label_for ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
 
 	if ( 'textarea' === $type ) {
 		printf(
@@ -424,6 +497,29 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 			esc_attr( $id ),
 			esc_attr( $name ),
 			esc_textarea( (string) $value )
+		);
+	} elseif ( 'richtext' === $type ) {
+		wp_editor(
+			(string) $value,
+			$label_for,
+			array(
+				'textarea_name' => $name,
+				'textarea_rows' => 6,
+				'media_buttons' => false,
+				'teeny'         => true,
+			)
+		);
+	} elseif ( 'image' === $type ) {
+		kosmiteia_settings_image_field( $id, $name, (int) $value );
+	} elseif ( 'page' === $type ) {
+		wp_dropdown_pages(
+			array(
+				'name'              => $name,
+				'id'                => $id,
+				'selected'          => (int) $value,
+				'show_option_none'  => __( '— καμία —', 'kosmiteia' ),
+				'option_none_value' => 0,
+			)
 		);
 	} elseif ( 'checkbox' === $type ) {
 		printf(
@@ -458,6 +554,73 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 
 	echo '</td></tr>';
 }
+
+/**
+ * Πεδίο επιλογής εικόνας από τη Βιβλιοθήκη πολυμέσων.
+ *
+ * Χωρίς JavaScript παραμένει χρησιμοποιήσιμο: το ID της εικόνας φαίνεται και
+ * γράφεται με το χέρι στο πεδίο κειμένου.
+ *
+ * @param string $id    HTML id.
+ * @param string $name  Όνομα πεδίου.
+ * @param int    $value Το ID της εικόνας.
+ */
+function kosmiteia_settings_image_field( $id, $name, $value ) {
+	$image = $value ? wp_get_attachment_image( $value, 'medium', false, array( 'style' => 'max-width:180px;height:auto' ) ) : '';
+
+	printf(
+		'<div class="kosmiteia-image-field" data-kosmiteia-image-field><div class="kosmiteia-image-field__preview" data-preview>%1$s</div>'
+		. '<p><button type="button" class="button" data-action="select">%2$s</button> '
+		. '<button type="button" class="button-link" data-action="remove"%3$s>%4$s</button></p>'
+		. '<p><label>%5$s <input type="number" min="0" step="1" id="%6$s" name="%7$s" value="%8$d" class="small-text" data-input></label></p></div>',
+		$image, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- έξοδος του wp_get_attachment_image().
+		esc_html__( 'Επιλογή εικόνας', 'kosmiteia' ),
+		$value ? '' : ' hidden',
+		esc_html__( 'Αφαίρεση', 'kosmiteia' ),
+		esc_html__( 'ID εικόνας', 'kosmiteia' ),
+		esc_attr( $id ),
+		esc_attr( $name ),
+		(int) $value
+	);
+}
+
+/**
+ * Assets της σελίδας ρυθμίσεων: Βιβλιοθήκη πολυμέσων για το πεδίο εικόνας.
+ *
+ * @param string $hook Το τρέχον admin screen.
+ */
+function kosmiteia_settings_admin_assets( $hook ) {
+	if ( 'toplevel_page_kosmiteia-settings' !== $hook ) {
+		return;
+	}
+
+	wp_enqueue_media();
+
+	wp_enqueue_style(
+		'kosmiteia-admin',
+		KOSMITEIA_CORE_URL . '/assets/css/admin.css',
+		array(),
+		kosmiteia_core_asset_version( 'assets/css/admin.css' )
+	);
+
+	wp_enqueue_script(
+		'kosmiteia-admin-media',
+		KOSMITEIA_CORE_URL . '/assets/js/admin-media.js',
+		array( 'jquery' ),
+		kosmiteia_core_asset_version( 'assets/js/admin-media.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'kosmiteia-admin-media',
+		'kosmiteiaMediaFieldL10n',
+		array(
+			'title'  => __( 'Επιλογή εικόνας', 'kosmiteia' ),
+			'button' => __( 'Χρήση αυτής της εικόνας', 'kosmiteia' ),
+		)
+	);
+}
+add_action( 'admin_enqueue_scripts', 'kosmiteia_settings_admin_assets' );
 
 /**
  * Η σελίδα ρυθμίσεων.

@@ -2,9 +2,10 @@
 /**
  * Αρχικό / δοκιμαστικό περιεχόμενο του ιστότοπου της Κοσμητείας.
  *
- * Στήνει έναν πλήρη ιστότοπο με ένα κλικ: εικόνες, όρους ταξινομιών, Τμήματα,
+ * Στήνει έναν πλήρη ιστότοπο με ένα κλικ: εικόνες, όρους ταξινομιών,
  * Ανακοινώσεις, Μεταπτυχιακά, σελίδες, μενού (EL/EN) και τα template parts
- * της αρχικής από τα patterns του ενεργού θέματος.
+ * της αρχικής (hero, μήνυμα Κοσμήτορα, Τμήματα, ανακοινώσεις, μεταπτυχιακά)
+ * από τα patterns του ενεργού θέματος.
  *
  * Εκτέλεση:
  *   - Διαχείριση:  Κοσμητεία → Εργαλεία → «Δημιουργία αρχικού περιεχομένου»
@@ -19,7 +20,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'KOSM_ASSETS', KOSMITEIA_CORE_DIR . 'assets/demo' );
-define( 'KOSM_DEMO_VERSION', '2.0.0' );
+define( 'KOSM_DEMO_VERSION', '3.0.0' );
 
 /**
  * Καταγραφή προόδου: στη γραμμή εντολών πάει στο WP-CLI, στη διαχείριση
@@ -182,6 +183,22 @@ function kosm_post( $post_type, $slug, $args ) {
 }
 
 /**
+ * Γράφει μία ρύθμιση Κοσμητείας (χρήσιμο όταν η τιμή γίνεται γνωστή αργότερα,
+ * π.χ. το ID μιας σελίδας που μόλις δημιουργήθηκε).
+ */
+function kosm_setting( $key, $value ) {
+	$settings = get_option( KOSMITEIA_SETTINGS_OPTION, array() );
+
+	if ( ! is_array( $settings ) ) {
+		$settings = array();
+	}
+
+	$settings[ $key ] = $value;
+
+	update_option( KOSMITEIA_SETTINGS_OPTION, $settings );
+}
+
+/**
  * Δημιουργεί (ή βρίσκει) template part στη βάση - ό,τι θα έφτιαχνε ο
  * χρήστης από τον Site Editor.
  */
@@ -237,17 +254,63 @@ function kosm_template_part( $slug, $title, $area, $content ) {
 }
 
 /**
+ * Αν η αρχική έχει αποθηκευμένο (προσαρμοσμένο) πρότυπο στη βάση, προσθέτει
+ * σε αυτό την ενότητα «Μήνυμα Κοσμήτορα» αμέσως μετά το hero.
+ *
+ * Χωρίς αυτό, μια αρχική που έχει ανοιχτεί έστω μία φορά στον Site Editor
+ * θα αγνοούσε το νέο part του θέματος. Ό,τι άλλο έχει προσθέσει ο χρήστης
+ * μένει ανέπαφο.
+ */
+function kosm_front_page_add_dean() {
+	$existing = get_posts(
+		array(
+			'post_type'   => 'wp_template',
+			'post_status' => 'any',
+			'name'        => 'front-page',
+			'numberposts' => 1,
+		)
+	);
+
+	if ( ! $existing ) {
+		return;
+	}
+
+	$template = $existing[0];
+	$content  = (string) $template->post_content;
+
+	if ( false !== strpos( $content, '"home-dean"' ) || false === strpos( $content, '"home-hero"' ) ) {
+		return;
+	}
+
+	$updated = preg_replace(
+		'/(<!-- wp:template-part \{"slug":"home-hero"[^}]*\} \/-->)/',
+		'$1' . "\n\n" . '<!-- wp:template-part {"slug":"home-dean","theme":"' . get_stylesheet() . '"} /-->',
+		$content,
+		1
+	);
+
+	if ( ! $updated || $updated === $content ) {
+		return;
+	}
+
+	wp_update_post(
+		array(
+			'ID'           => $template->ID,
+			'post_content' => $updated,
+		)
+	);
+
+	kosmiteia_demo_log( '    Η ενότητα «Μήνυμα Κοσμήτορα» προστέθηκε στο αποθηκευμένο πρότυπο της αρχικής.' );
+}
+
+/**
  * Δημιουργεί μενού πλοήγησης (wp_navigation) από λίστα συνδέσμων.
  */
 function kosm_navigation( $slug, $title, $links ) {
 	$blocks = '';
 
 	foreach ( $links as $link ) {
-		$blocks .= sprintf(
-			'<!-- wp:navigation-link {"label":"%s","url":"%s","kind":"custom","isTopLevelLink":true} /-->' . "\n",
-			esc_attr( $link['label'] ),
-			esc_url( $link['url'] )
-		);
+		$blocks .= kosm_navigation_item( $link );
 	}
 
 	$existing = get_posts(
@@ -287,6 +350,38 @@ function kosm_navigation( $slug, $title, $links ) {
 }
 
 /**
+ * Ένα στοιχείο μενού. Με «children» γίνεται υπομενού - π.χ. «Η Κοσμητεία»
+ * με υποσέλιδα το «Μήνυμα Κοσμήτορα».
+ */
+function kosm_navigation_item( $link ) {
+	$children = isset( $link['children'] ) ? (array) $link['children'] : array();
+
+	if ( ! $children ) {
+		return sprintf(
+			'<!-- wp:navigation-link {"label":"%s","url":"%s","kind":"custom","isTopLevelLink":true} /-->' . "\n",
+			esc_attr( $link['label'] ),
+			esc_url( $link['url'] )
+		);
+	}
+
+	$html = sprintf(
+		'<!-- wp:navigation-submenu {"label":"%s","url":"%s","kind":"custom","isTopLevelItem":true} -->' . "\n",
+		esc_attr( $link['label'] ),
+		esc_url( $link['url'] )
+	);
+
+	foreach ( $children as $child ) {
+		$html .= sprintf(
+			'<!-- wp:navigation-link {"label":"%s","url":"%s","kind":"custom"} /-->' . "\n",
+			esc_attr( $child['label'] ),
+			esc_url( $child['url'] )
+		);
+	}
+
+	return $html . '<!-- /wp:navigation-submenu -->' . "\n";
+}
+
+/**
  * Αποδίδει ένα pattern του theme σε συγκεκριμένη γλώσσα.
  */
 function kosm_pattern( $file, $locale = null ) {
@@ -315,9 +410,22 @@ function kosm_pattern( $file, $locale = null ) {
 }
 
 /**
- * Βάζει φωτογραφίες φόντου στις διαφάνειες του hero.
+ * Βάζει φωτογραφίες φόντου σε μπλοκ Cover (hero, κάρτες Σχολών, φωτογραφία
+ * Κοσμήτορα) - με τη σειρά που εμφανίζονται στο markup.
+ *
+ * @param string $markup    Το HTML του template part ή του pattern.
+ * @param int[]  $image_ids Τα IDs των εικόνων, με τη σειρά.
+ * @param int    $dim       Σκοτείνιασμα 10-100. Το core δεν βγάζει κλάση για
+ *                          τα 0 και τα 50, οπότε τα αποφεύγουμε.
+ * @return string
  */
-function kosm_hero_with_images( $markup, $image_ids ) {
+function kosm_hero_with_images( $markup, $image_ids, $dim = 60 ) {
+	$dim = max( 10, min( 100, 10 * (int) round( $dim / 10 ) ) );
+
+	if ( 50 === $dim ) {
+		$dim = 60;
+	}
+
 	$index = 0;
 
 	// 1. Attributes του μπλοκ Cover. Το dimRatio πρέπει να είναι πολλαπλάσιο
@@ -325,7 +433,7 @@ function kosm_hero_with_images( $markup, $image_ids ) {
 	// και οποιαδήποτε άλλη τιμή σπάει την επικύρωση του μπλοκ στον editor.
 	$markup = preg_replace_callback(
 		'/<!-- wp:cover \{"overlayColor":"([a-z0-9-]+)","dimRatio":100,/',
-		function ( $matches ) use ( $image_ids, &$index ) {
+		function ( $matches ) use ( $image_ids, $dim, &$index ) {
 			$id  = isset( $image_ids[ $index ] ) ? $image_ids[ $index ] : 0;
 			$url = $id ? wp_get_attachment_image_url( $id, 'full' ) : '';
 			++$index;
@@ -335,10 +443,11 @@ function kosm_hero_with_images( $markup, $image_ids ) {
 			}
 
 			return sprintf(
-				'<!-- wp:cover {"url":"%s","id":%d,"alt":"","overlayColor":"%s","dimRatio":60,',
+				'<!-- wp:cover {"url":"%s","id":%d,"alt":"","overlayColor":"%s","dimRatio":%d,',
 				esc_url( $url ),
 				$id,
-				$matches[1]
+				$matches[1],
+				$dim
 			);
 		},
 		$markup
@@ -348,7 +457,7 @@ function kosm_hero_with_images( $markup, $image_ids ) {
 	$index  = 0;
 	$markup = preg_replace_callback(
 		'/<span aria-hidden="true" class="wp-block-cover__background has-([a-z0-9-]+)-background-color has-background-dim-100 has-background-dim"><\/span>/',
-		function ( $matches ) use ( $image_ids, &$index ) {
+		function ( $matches ) use ( $image_ids, $dim, &$index ) {
 			$id  = isset( $image_ids[ $index ] ) ? $image_ids[ $index ] : 0;
 			$url = $id ? wp_get_attachment_image_url( $id, 'full' ) : '';
 			++$index;
@@ -358,16 +467,40 @@ function kosm_hero_with_images( $markup, $image_ids ) {
 			}
 
 			return sprintf(
-				'<span aria-hidden="true" class="wp-block-cover__background has-%1$s-background-color has-background-dim-60 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-%2$d" alt="" src="%3$s" data-object-fit="cover"/>',
+				'<span aria-hidden="true" class="wp-block-cover__background has-%1$s-background-color has-background-dim-%4$d has-background-dim"></span><img class="wp-block-cover__image-background wp-image-%2$d" alt="" src="%3$s" data-object-fit="cover"/>',
 				$matches[1],
 				$id,
-				esc_url( $url )
+				esc_url( $url ),
+				$dim
 			);
 		},
 		$markup
 	);
 
 	return $markup;
+}
+
+/**
+ * Δίνει διευθύνσεις στους συνδέσμους-κρατήσεις (href="#") ενός part, με τη
+ * σειρά που εμφανίζονται - π.χ. στις κάρτες των Σχολών.
+ *
+ * @param string   $markup Το HTML.
+ * @param string[] $urls   Οι διευθύνσεις, με τη σειρά.
+ * @return string
+ */
+function kosm_links_in_order( $markup, $urls ) {
+	$index = 0;
+
+	return preg_replace_callback(
+		'/href="#"/',
+		function () use ( $urls, &$index ) {
+			$url = isset( $urls[ $index ] ) ? $urls[ $index ] : '';
+			++$index;
+
+			return $url ? 'href="' . esc_url( $url ) . '"' : 'href="#"';
+		},
+		$markup
+	);
 }
 
 /**
@@ -474,7 +607,12 @@ function kosmiteia_install_demo_content( $force = false ) {
 			get_option( KOSMITEIA_SETTINGS_OPTION, array() ),
 			array(
 				'institution'     => 'Δημοκρίτειο Πανεπιστήμιο Θράκης',
-				'dean_name'       => 'Καθηγητής Κωνσταντίνος Βαδικόλιας',
+				'dean_name'       => 'Θεόδωρος Κωνσταντινίδης',
+				'dean_title'      => 'Κοσμήτορας, Καθηγητής Ιατρικής',
+				'floating_enable' => 1,
+				'floating_label'  => 'Μήνυμα της Κοσμητείας',
+				'floating_title'  => 'Καλώς ήρθατε στην Κοσμητεία',
+				'floating_text'   => '<p>Η Κοσμητεία της Σχολής Επιστημών Υγείας στηρίζει τους φοιτητές και τα μέλη της ακαδημαϊκής κοινότητας. Για κάθε ερώτημα ή αίτημα, η Γραμματεία είναι στη διάθεσή σας.</p>',
 				'contact_address' => 'Πανεπιστημιούπολη Αλεξανδρούπολης, Δραγάνα, Τ.Κ. 68100',
 				'contact_phone'   => '25510 30953',
 				'contact_email'   => 'secr@health.duth.gr',
@@ -505,6 +643,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 		'program4' => kosm_image( 'program-4.png', 'Βιοϊατρική Μηχανική', 'Εργαστήριο βιοϊατρικής μηχανικής' ),
 		'ann1'     => kosm_image( 'announcement-1.png', 'Προκήρυξη', 'Προκήρυξη μεταπτυχιακών σπουδών' ),
 		'ann2'     => kosm_image( 'announcement-2.png', 'Ορκωμοσία', 'Τελετή ορκωμοσίας' ),
+		'dean'     => kosm_image( 'dean.png', 'Ο Κοσμήτορας', 'Φωτογραφία του Κοσμήτορα' ),
 		'logo'     => kosm_image( 'logo.png', 'Λογότυπο Κοσμητείας', 'Λογότυπο Κοσμητείας Σχολών' ),
 	);
 
@@ -523,109 +662,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 	kosmiteia_demo_log( '  Εικόνες: ' . count( array_filter( $images ) ) );
 
 	/* =========================================================================
-	 * 3. Σχολές
-	 * ====================================================================== */
-
-	$schools = array(
-		array(
-			'slug'        => 'tmima-iatrikis',
-			'title'       => 'Τμήμα Ιατρικής',
-			'excerpt'     => 'Ιδρύθηκε το 1977 και λειτουργεί από το ακαδημαϊκό έτος 1984-1985 στην Αλεξανδρούπολη, με κλινικές και εργαστήρια στο Πανεπιστημιακό Γενικό Νοσοκομείο Έβρου.',
-			'image'       => $images['school1'],
-			'departments' => array(
-				'Προπτυχιακό Πρόγραμμα Σπουδών Ιατρικής, εξαετούς φοίτησης',
-				'Προγράμματα Μεταπτυχιακών Σπουδών και εκπόνηση διδακτορικών διατριβών',
-				'Κλινικές και εργαστήρια στο Πανεπιστημιακό Γενικό Νοσοκομείο Έβρου',
-			),
-			'meta'        => array(
-				'kosm_dean'     => 'Πρόεδρος: Καθηγητής Κωνσταντίνος Βαδικόλιας',
-				'kosm_phone'    => '25510 30953',
-				'kosm_email'    => 'secr@health.duth.gr',
-				'kosm_address'  => 'Πανεπιστημιούπολη Αλεξανδρούπολης, Δραγάνα, Τ.Κ. 68100',
-				'kosm_site_url' => 'https://www.med.duth.gr/',
-			),
-			'intro'       => 'Το Τμήμα Ιατρικής συνδυάζει την προπτυχιακή εκπαίδευση με τη μεταπτυχιακή εξειδίκευση και τη διεθνή ερευνητική παρουσία, σε στενή σύνδεση με το Πανεπιστημιακό Γενικό Νοσοκομείο Έβρου.',
-		),
-		array(
-			'slug'        => 'tmima-moriakis-viologias-genetikis',
-			'title'       => 'Τμήμα Μοριακής Βιολογίας και Γενετικής',
-			'excerpt'     => 'Ιδρύθηκε το 1999 και είναι το μοναδικό Τμήμα του είδους του στην Ελλάδα. Έγινε αυτοδύναμο το 2012 και σήμερα αριθμεί 21 μέλη ΔΕΠ.',
-			'image'       => $images['school2'],
-			'departments' => array(
-				'Προπτυχιακό Πρόγραμμα Σπουδών στη Μοριακή Βιολογία και Γενετική',
-				'Ερευνητικά εργαστήρια μοριακής βιολογίας, γενετικής και βιοπληροφορικής',
-				'Συμμετοχή σε Π.Μ.Σ. της Σχολής και σε διεθνή ερευνητικά δίκτυα',
-			),
-			'meta'        => array(
-				'kosm_dean'     => 'Πρόεδρος: Αναπληρωτής Καθηγητής Νικόλαος Γλυκός',
-				'kosm_phone'    => '25510 30953',
-				'kosm_email'    => 'secr@health.duth.gr',
-				'kosm_address'  => 'Πανεπιστημιούπολη Αλεξανδρούπολης, Δραγάνα, Τ.Κ. 68100',
-				'kosm_site_url' => 'https://mbg.duth.gr/',
-			),
-			'intro'       => 'Το Τμήμα Μοριακής Βιολογίας και Γενετικής καλύπτει ένα γνωστικό αντικείμενο αιχμής, με ισχυρή εργαστηριακή υποδομή και συμμετοχή σε εθνικά και ευρωπαϊκά ερευνητικά προγράμματα.',
-		),
-		array(
-			'slug'        => 'tmima-nosileftikis',
-			'title'       => 'Τμήμα Νοσηλευτικής',
-			'excerpt'     => 'Το τρίτο Τμήμα της Σχολής Επιστημών Υγείας, με έμφαση στην κλινική άσκηση και στη φροντίδα υγείας στην Περιφέρεια Ανατολικής Μακεδονίας και Θράκης.',
-			'image'       => $images['school3'],
-			'departments' => array(
-				'Προπτυχιακό Πρόγραμμα Σπουδών Νοσηλευτικής',
-				'Κλινική άσκηση σε νοσοκομεία και δομές υγείας της Περιφέρειας',
-				'Συμμετοχή στα διατμηματικά Π.Μ.Σ. της Σχολής',
-			),
-			'meta'        => array(
-				'kosm_dean'     => 'Πρόεδρος: Καθηγητής Νικόλαος Πολύζος',
-				'kosm_phone'    => '25510 30953',
-				'kosm_email'    => 'secr@health.duth.gr',
-				'kosm_address'  => 'Πανεπιστημιούπολη Αλεξανδρούπολης, Δραγάνα, Τ.Κ. 68100',
-				'kosm_site_url' => 'https://health.duth.gr/',
-			),
-			'intro'       => 'Το Τμήμα Νοσηλευτικής εκπαιδεύει νοσηλευτές και νοσηλεύτριες με σύγχρονο πρόγραμμα σπουδών και εκτεταμένη κλινική άσκηση σε συνεργασία με τις δομές υγείας της περιοχής.',
-		),
-	);
-
-	$school_ids = array();
-
-	foreach ( $schools as $school ) {
-		$content  = kosm_p( $school['intro'] );
-		$content .= kosm_h( 'Σπουδές και δομές', 2 );
-		$content .= kosm_list( $school['departments'] );
-		$content .= kosm_h( 'Σπουδές και έρευνα', 2 );
-		$content .= kosm_p( 'Το Τμήμα προσφέρει προπτυχιακές και μεταπτυχιακές σπουδές, εκπονεί ερευνητικά έργα με εθνική και ευρωπαϊκή χρηματοδότηση και συμμετέχει σε προγράμματα κινητικότητας φοιτητών.' );
-
-		$post_id = kosm_post(
-			'kosm_school',
-			$school['slug'],
-			array(
-				'post_title'   => $school['title'],
-				'post_excerpt' => $school['excerpt'],
-				'post_content' => $content,
-			)
-		);
-
-		if ( ! $post_id ) {
-			continue;
-		}
-
-		$school_ids[ $school['slug'] ] = $post_id;
-
-		if ( $school['image'] && ! has_post_thumbnail( $post_id ) ) {
-			set_post_thumbnail( $post_id, $school['image'] );
-		}
-
-		foreach ( $school['meta'] as $key => $value ) {
-			update_post_meta( $post_id, $key, $value );
-		}
-
-		wp_set_object_terms( $post_id, array( $school['title'] ), 'kosm_faculty' );
-	}
-
-	kosmiteia_demo_log( '  Τμήματα: ' . count( $school_ids ) );
-
-	/* =========================================================================
-	 * 4. Ανακοινώσεις
+	 * 3. Ανακοινώσεις
 	 * ====================================================================== */
 
 	$announcements = array(
@@ -739,7 +776,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 	kosmiteia_demo_log( '  Ανακοινώσεις: ' . $announcement_count );
 
 	/* =========================================================================
-	 * 5. Μεταπτυχιακά προγράμματα
+	 * 4. Μεταπτυχιακά προγράμματα
 	 * ====================================================================== */
 
 	$programs = array(
@@ -857,7 +894,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 	kosmiteia_demo_log( '  Μεταπτυχιακά: ' . $program_count );
 
 	/* =========================================================================
-	 * 6. Σελίδες
+	 * 5. Σελίδες
 	 * ====================================================================== */
 
 	$about  = kosm_p( 'Η Σχολή Επιστημών Υγείας (Σ.Ε.Υ.) ιδρύθηκε στο Δημοκρίτειο Πανεπιστήμιο Θράκης τον Ιούνιο του 2013 και απαρτίζεται από το Τμήμα Ιατρικής, το Τμήμα Μοριακής Βιολογίας και Γενετικής και το Τμήμα Νοσηλευτικής.' );
@@ -1015,24 +1052,43 @@ function kosmiteia_install_demo_content( $force = false ) {
 		}
 	}
 
+	// Η σελίδα του Κοσμήτορα τροφοδοτεί το κουμπί της αρχικής και το
+	// {{url_dean}}, ενώ το πλωτό κουμπί οδηγεί στην Επικοινωνία.
+	if ( $dean_id ) {
+		kosm_setting( 'dean_page', $dean_id );
+	}
+
+	if ( $contact_id ) {
+		kosm_setting( 'floating_link', get_permalink( $contact_id ) );
+		kosm_setting( 'floating_link_label', 'Επικοινωνία' );
+	}
+
 	kosmiteia_demo_log( '  Σελίδες: 4' );
 
 	/* =========================================================================
-	 * 7. Μενού πλοήγησης (EL + EN)
+	 * 6. Μενού πλοήγησης (EL + EN)
 	 * ====================================================================== */
 
 	$home       = home_url( '/' );
-	$url_school = get_post_type_archive_link( 'kosm_school' );
+	$url_school = $home . '#sxoles';
 	$url_ann    = get_post_type_archive_link( 'kosm_announcement' );
 	$url_prog   = get_post_type_archive_link( 'kosm_program' );
+	$url_dean   = $dean_id ? get_permalink( $dean_id ) : $home;
+	$url_about  = $about_id ? get_permalink( $about_id ) : $home;
 
 	$menu_el = kosm_navigation(
 		'main',
 		'Κύριο μενού',
 		array(
 			array( 'label' => 'Αρχική', 'url' => $home ),
-			array( 'label' => 'Η Κοσμητεία', 'url' => $about_id ? get_permalink( $about_id ) : $home ),
-			array( 'label' => 'Μήνυμα Κοσμήτορα', 'url' => $dean_id ? get_permalink( $dean_id ) : $home ),
+			array(
+				'label'    => 'Η Κοσμητεία',
+				'url'      => $url_about,
+				'children' => array(
+					array( 'label' => 'Η Κοσμητεία', 'url' => $url_about ),
+					array( 'label' => 'Μήνυμα Κοσμήτορα', 'url' => $url_dean ),
+				),
+			),
 			array( 'label' => 'Τμήματα', 'url' => $url_school ),
 			array( 'label' => 'Μεταπτυχιακά', 'url' => $url_prog ),
 			array( 'label' => 'Ανακοινώσεις', 'url' => $url_ann ),
@@ -1046,9 +1102,15 @@ function kosmiteia_install_demo_content( $force = false ) {
 		'Main menu (EN)',
 		array(
 			array( 'label' => 'Home', 'url' => add_query_arg( 'lang', 'en', $home ) ),
-			array( 'label' => 'The Deanery', 'url' => $about_id ? add_query_arg( 'lang', 'en', get_permalink( $about_id ) ) : $home ),
-			array( 'label' => "Dean's message", 'url' => $dean_id ? add_query_arg( 'lang', 'en', get_permalink( $dean_id ) ) : $home ),
-			array( 'label' => 'Departments', 'url' => add_query_arg( 'lang', 'en', $url_school ) ),
+			array(
+				'label'    => 'The Deanery',
+				'url'      => add_query_arg( 'lang', 'en', $url_about ),
+				'children' => array(
+					array( 'label' => 'The Deanery', 'url' => add_query_arg( 'lang', 'en', $url_about ) ),
+					array( 'label' => "Dean's message", 'url' => add_query_arg( 'lang', 'en', $url_dean ) ),
+				),
+			),
+			array( 'label' => 'Departments', 'url' => add_query_arg( 'lang', 'en', $home ) . '#sxoles' ),
 			array( 'label' => 'Postgraduate', 'url' => add_query_arg( 'lang', 'en', $url_prog ) ),
 			array( 'label' => 'Announcements', 'url' => add_query_arg( 'lang', 'en', $url_ann ) ),
 			array( 'label' => 'Access', 'url' => $access_id ? add_query_arg( 'lang', 'en', get_permalink( $access_id ) ) : $home ),
@@ -1059,7 +1121,7 @@ function kosmiteia_install_demo_content( $force = false ) {
 	kosmiteia_demo_log( '  Μενού: 2 (main, main-en)' );
 
 	/* =========================================================================
-	 * 8. Template parts: κεφαλίδα με μενού + αγγλικές εκδόσεις
+	 * 7. Template parts: κεφαλίδα με μενού + αγγλικές εκδόσεις
 	 * ====================================================================== */
 
 	$theme_dir = get_stylesheet_directory();
@@ -1083,6 +1145,15 @@ function kosmiteia_install_demo_content( $force = false ) {
 				'Σπουδές, έρευνα και καινοτομία σε τρεις Σχολές. Ανακαλύψτε τα προγράμματα και την ακαδημαϊκή μας κοινότητα.',
 				'Οι Σχολές μας',
 				'Τρεις Σχολές με διακριτή ταυτότητα, κοινό στόχο την ποιοτική εκπαίδευση και την έρευνα.',
+				'Πρώτη Σχολή',
+				'Δεύτερη Σχολή',
+				'Τρίτη Σχολή',
+				'Σύντομη περιγραφή της πρώτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.',
+				'Σύντομη περιγραφή της δεύτερης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.',
+				'Σύντομη περιγραφή της τρίτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.',
+				'Δείτε τη Σχολή',
+				'Σύντομο απόσπασμα από τον χαιρετισμό του Κοσμήτορα προς τη φοιτητική και την ακαδημαϊκή κοινότητα. Το πλήρες κείμενο βρίσκεται στη σελίδα «Μήνυμα Κοσμήτορα».',
+				'Ονοματεπώνυμο Κοσμήτορα',
 				'Πανεπιστημιούπολη, Κτίριο Διοίκησης',
 				'Τ.Κ. 000 00, Πόλη',
 				'+30 210 000 0000',
@@ -1094,6 +1165,15 @@ function kosmiteia_install_demo_content( $force = false ) {
 				'Η Κοσμητεία καλωσορίζει τους/τις φοιτητές/φοιτήτριες στην ιστοσελίδα μας.',
 				'Τα Τμήματα της Σχολής',
 				'Τρία Τμήματα με κοινό στόχο την εκπαίδευση, την έρευνα και τη φροντίδα υγείας.',
+				'Τμήμα Ιατρικής',
+				'Τμήμα Μοριακής Βιολογίας και Γενετικής',
+				'Τμήμα Νοσηλευτικής',
+				'Ιδρύθηκε το 1977 και λειτουργεί από το ακαδημαϊκό έτος 1984-1985 στην Αλεξανδρούπολη, με κλινικές και εργαστήρια στο Πανεπιστημιακό Γενικό Νοσοκομείο Έβρου.',
+				'Ιδρύθηκε το 1999 και είναι το μοναδικό Τμήμα του είδους του στην Ελλάδα, με ισχυρή εργαστηριακή υποδομή και διεθνείς ερευνητικές συνεργασίες.',
+				'Το τρίτο Τμήμα της Σχολής, με έμφαση στην κλινική άσκηση και στη φροντίδα υγείας στην Περιφέρεια Ανατολικής Μακεδονίας και Θράκης.',
+				'Δείτε το Τμήμα',
+				'Η Σχολή Επιστημών Υγείας του Δ.Π.Θ. έχει ως στόχο την προαγωγή της εκπαίδευσης και της έρευνας στην υγεία, την πρόληψη και τη θεραπεία των νόσων και την προαγωγή της υγείας και της ευεξίας.',
+				'Θεόδωρος Κωνσταντινίδης',
 				'Πανεπιστημιούπολη Αλεξανδρούπολης, Κτίριο Διοίκησης',
 				'6ο χλμ. Αλεξανδρούπολης - Μάκρης, Τ.Κ. 68100',
 				'25510 30953',
@@ -1104,6 +1184,48 @@ function kosmiteia_install_demo_content( $force = false ) {
 		);
 	};
 
+	/**
+	 * Το ίδιο για τα αγγλικά patterns.
+	 *
+	 * @param string $markup Το HTML του pattern.
+	 * @return string
+	 */
+	$to_departments_en = static function ( $markup ) {
+		return str_replace(
+			array(
+				'Our schools',
+				'Three schools with a distinct identity and a shared commitment to quality education and research.',
+				'First school',
+				'Second school',
+				'Third school',
+				'A short description of the first school: subject areas, departments and research directions.',
+				'A short description of the second school: subject areas, departments and research directions.',
+				'A short description of the third school: subject areas, departments and research directions.',
+				'Visit the school',
+				'A short extract from the address of the Dean to students and to the academic community. The full text is on the page "Message from the Dean".',
+				'Name of the Dean',
+			),
+			array(
+				'The departments of the School',
+				'Three departments with a shared commitment to education, research and health care.',
+				'Department of Medicine',
+				'Department of Molecular Biology and Genetics',
+				'Department of Nursing',
+				'Founded in 1977 and running since the 1984-1985 academic year in Alexandroupolis, with clinics and laboratories at the University General Hospital of Evros.',
+				'Founded in 1999, the only department of its kind in Greece, with strong laboratory facilities and international research partnerships.',
+				'The third department of the School, focused on clinical practice and health care across Eastern Macedonia and Thrace.',
+				'Visit the department',
+				'The School of Health Sciences of the Democritus University of Thrace works to advance education and research in health, the prevention and treatment of disease, and the promotion of health and well-being.',
+				'Theodoros Konstantinidis',
+			),
+			$markup
+		);
+	};
+
+	// Οι φωτογραφίες και οι ιστότοποι των Τμημάτων, με τη σειρά των καρτών.
+	$department_images = array( $images['school1'], $images['school2'], $images['school3'] );
+	$department_urls   = array( 'https://www.med.duth.gr/', 'https://mbg.duth.gr/', 'https://health.duth.gr/' );
+
 	// Hero EL: με φωτογραφίες φόντου.
 	$hero_el = kosm_hero_with_images(
 		$to_departments( file_get_contents( $theme_dir . '/parts/home-hero.html' ) ),
@@ -1111,12 +1233,32 @@ function kosmiteia_install_demo_content( $force = false ) {
 	);
 	kosm_template_part( 'home-hero', 'Αρχική: Hero slider', 'uncategorized', $hero_el );
 
-	// Ενότητα «Τα Τμήματα της Σχολής» στην αρχική.
+	// Μήνυμα Κοσμήτορα: η φωτογραφία μπαίνει με ελαφρύ σκοτείνιασμα, ώστε το
+	// πορτρέτο να μένει ευανάγνωστο.
+	kosm_template_part(
+		'home-dean',
+		'Αρχική: Μήνυμα Κοσμήτορα',
+		'uncategorized',
+		kosm_hero_with_images(
+			$to_departments( file_get_contents( $theme_dir . '/parts/home-dean.html' ) ),
+			array( $images['dean'] ),
+			20
+		)
+	);
+
+	// Ενότητα «Τα Τμήματα της Σχολής» στην αρχική: φωτογραφίες στις κάρτες
+	// και σύνδεσμοι προς τους ιστότοπους των Τμημάτων.
 	kosm_template_part(
 		'home-schools',
 		'Αρχική: Σχολές',
 		'uncategorized',
-		$to_departments( file_get_contents( $theme_dir . '/parts/home-schools.html' ) )
+		kosm_links_in_order(
+			kosm_hero_with_images(
+				$to_departments( file_get_contents( $theme_dir . '/parts/home-schools.html' ) ),
+				$department_images
+			),
+			$department_urls
+		)
 	);
 
 	// Υποσέλιδο EL: ίδιο με του theme, με τα στοιχεία της Κοσμητείας.
@@ -1139,14 +1281,31 @@ function kosmiteia_install_demo_content( $force = false ) {
 	);
 	kosm_template_part( 'home-hero-en', 'Home: Hero slider (EN)', 'uncategorized', $hero_en );
 
-	kosm_template_part( 'home-schools-en', 'Home: Schools (EN)', 'uncategorized', kosm_pattern( 'schools-cards.php', 'en_US' ) );
+	kosm_template_part(
+		'home-dean-en',
+		"Home: Dean's message (EN)",
+		'uncategorized',
+		kosm_hero_with_images( $to_departments_en( kosm_pattern( 'dean-message.php', 'en_US' ) ), array( $images['dean'] ), 20 )
+	);
+
+	kosm_template_part(
+		'home-schools-en',
+		'Home: Schools (EN)',
+		'uncategorized',
+		kosm_links_in_order(
+			kosm_hero_with_images( $to_departments_en( kosm_pattern( 'schools-cards.php', 'en_US' ) ), $department_images ),
+			$department_urls
+		)
+	);
 	kosm_template_part( 'home-announcements-en', 'Home: Announcements (EN)', 'uncategorized', kosm_pattern( 'announcements-latest.php', 'en_US' ) );
 	kosm_template_part( 'home-programs-en', 'Home: Programmes (EN)', 'uncategorized', kosm_pattern( 'programs-grid.php', 'en_US' ) );
 
-	kosmiteia_demo_log( '  Template parts: header, footer, home-hero, home-schools + 6 αγγλικά' );
+	kosm_front_page_add_dean();
+
+	kosmiteia_demo_log( '  Template parts: header, footer, home-hero, home-dean, home-schools + 7 αγγλικά' );
 
 	/* =========================================================================
-	 * 9. Τελείωμα
+	 * 8. Τελείωμα
 	 * ====================================================================== */
 
 	flush_rewrite_rules( false );

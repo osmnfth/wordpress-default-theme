@@ -182,6 +182,7 @@
 		{ "name": "footer", "title": "Υποσέλιδο (EL)", "area": "footer" },
 		{ "name": "footer-en", "title": "Footer (EN)", "area": "footer" },
 		{ "name": "home-hero", "title": "Αρχική: Hero slider", "area": "uncategorized" },
+		{ "name": "home-dean", "title": "Αρχική: Μήνυμα Κοσμήτορα", "area": "uncategorized" },
 		{ "name": "home-schools", "title": "Αρχική: Σχολές", "area": "uncategorized" },
 		{ "name": "home-announcements", "title": "Αρχική: Ανακοινώσεις", "area": "uncategorized" },
 		{ "name": "home-programs", "title": "Αρχική: Μεταπτυχιακά", "area": "uncategorized" }

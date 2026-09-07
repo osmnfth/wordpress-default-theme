@@ -11,10 +11,10 @@
  *   ?kosm_fac=politexniki      - Σχολή (slug του kosm_faculty)
  *   ?kosm_year=2026            - έτος δημοσίευσης
  *
- * Τα ονόματα των παραμέτρων είναι επίτηδες «δικά μας»: το ?kosm_school θα το
- * ερμήνευε το WordPress ως μεμονωμένη Σχολή (query var του post type) και το
- * ?kosm_faculty ως αρχείο ταξινομίας - και στις δύο περιπτώσεις θα άλλαζε το
- * πρότυπο της σελίδας.
+ * Τα ονόματα των παραμέτρων είναι επίτηδες «δικά μας»: το ?kosm_announcement
+ * θα το ερμήνευε το WordPress ως μεμονωμένη Ανακοίνωση (query var του post
+ * type) και το ?kosm_faculty ως αρχείο ταξινομίας - και στις δύο περιπτώσεις
+ * θα άλλαζε το πρότυπο της σελίδας.
  *
  * Τα φίλτρα εφαρμόζονται στο κύριο query (pre_get_posts), οπότε το Query Loop
  * του template δουλεύει με «Κληρονομιά ερωτήματος» και η σελιδοποίηση του
@@ -68,23 +68,6 @@ function kosmiteia_announcement_filters_state() {
  */
 function kosmiteia_announcement_filters_active( $state ) {
 	return ( '' !== $state['q'] || '' !== $state['cat'] || '' !== $state['school'] || 0 !== $state['year'] );
-}
-
-/**
- * Η τρέχουσα γλώσσα ως παράμετρος, ώστε τα φίλτρα να μη «ρίχνουν» το ?lang=en.
- *
- * @return array Κενός πίνακας ή array( 'lang' => 'en' ).
- */
-function kosmiteia_announcement_filters_lang_arg() {
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Ανάγνωση δημόσιας παραμέτρου γλώσσας.
-	if ( ! isset( $_GET['lang'] ) || ! is_scalar( $_GET['lang'] ) ) {
-		return array();
-	}
-
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$lang = sanitize_key( wp_unslash( $_GET['lang'] ) );
-
-	return $lang ? array( 'lang' => $lang ) : array();
 }
 
 /**
@@ -189,85 +172,6 @@ add_action( 'save_post', 'kosmiteia_flush_announcement_years' );
 add_action( 'deleted_post', 'kosmiteia_flush_announcement_years' );
 
 /**
- * Κρυφά πεδία ώστε η φόρμα (method="get") να μη χάνει παραμέτρους που δεν
- * ελέγχει η ίδια: το ?lang=en της δίγλωσσης λειτουργίας και το ?post_type=...
- * όταν ο ιστότοπος τρέχει με απλούς (μη «όμορφους») μόνιμους συνδέσμους.
- *
- * @param string $action URL δράσης της φόρμας. Επιστρέφεται χωρίς query string.
- * @return string HTML με τα hidden inputs.
- */
-function kosmiteia_announcement_filters_hidden_fields( &$action ) {
-	$carry = array();
-	$parts = wp_parse_url( $action );
-
-	if ( ! empty( $parts['query'] ) ) {
-		parse_str( $parts['query'], $carry );
-		$action = strtok( $action, '?' );
-	}
-
-	$carry = array_merge( $carry, kosmiteia_announcement_filters_lang_arg() );
-
-	$html = '';
-
-	foreach ( $carry as $key => $value ) {
-		if ( ! is_scalar( $value ) ) {
-			continue;
-		}
-
-		$html .= sprintf(
-			'<input type="hidden" name="%1$s" value="%2$s" />',
-			esc_attr( $key ),
-			esc_attr( (string) $value )
-		);
-	}
-
-	return $html;
-}
-
-/**
- * Ένα <select> με τους όρους μιας ταξινομίας.
- *
- * @param string $id       ID στοιχείου.
- * @param string $name     Όνομα παραμέτρου.
- * @param string $label    Ετικέτα.
- * @param string $taxonomy Ταξινομία.
- * @param string $all      Κείμενο της επιλογής «όλα».
- * @param string $current  Τρέχουσα τιμή (slug).
- * @return string HTML, ή κενό αν δεν υπάρχουν όροι.
- */
-function kosmiteia_announcement_filters_term_select( $id, $name, $label, $taxonomy, $all, $current ) {
-	$terms = get_terms(
-		array(
-			'taxonomy'   => $taxonomy,
-			'hide_empty' => true,
-		)
-	);
-
-	if ( is_wp_error( $terms ) || empty( $terms ) ) {
-		return '';
-	}
-
-	$options = sprintf( '<option value="">%s</option>', esc_html( $all ) );
-
-	foreach ( $terms as $term ) {
-		$options .= sprintf(
-			'<option value="%1$s"%2$s>%3$s</option>',
-			esc_attr( $term->slug ),
-			selected( $current, $term->slug, false ),
-			esc_html( $term->name )
-		);
-	}
-
-	return sprintf(
-		'<p class="kosmiteia-filters__field"><label for="%1$s">%2$s</label><select id="%1$s" name="%3$s">%4$s</select></p>',
-		esc_attr( $id ),
-		esc_html( $label ),
-		esc_attr( $name ),
-		$options
-	);
-}
-
-/**
  * Η φόρμα φίλτρων σε HTML.
  *
  * @param array $attributes Attributes του μπλοκ.
@@ -296,39 +200,40 @@ function kosmiteia_announcement_filters_html( $attributes = array() ) {
 
 	$state  = kosmiteia_announcement_filters_state();
 	$action = $archive;
-	$hidden = kosmiteia_announcement_filters_hidden_fields( $action );
+	$hidden = kosmiteia_filters_hidden_fields( $action );
 	$prefix = 'kosmiteia-filter-' . $instance;
 	$fields = '';
 
 	if ( $attributes['showSearch'] ) {
-		$fields .= sprintf(
-			'<p class="kosmiteia-filters__field kosmiteia-filters__field--search"><label for="%1$s-q">%2$s</label><input type="search" id="%1$s-q" name="kosm_q" value="%3$s" placeholder="%4$s" /></p>',
-			esc_attr( $prefix ),
-			esc_html__( 'Αναζήτηση', 'kosmiteia' ),
-			esc_attr( $state['q'] ),
-			esc_attr__( 'Λέξη-κλειδί, π.χ. υποτροφίες', 'kosmiteia' )
+		$fields .= kosmiteia_filters_search_field(
+			$prefix . '-q',
+			'kosm_q',
+			$state['q'],
+			__( 'Λέξη-κλειδί, π.χ. υποτροφίες', 'kosmiteia' )
 		);
 	}
 
 	if ( $attributes['showCategory'] ) {
-		$fields .= kosmiteia_announcement_filters_term_select(
+		$fields .= kosmiteia_filters_term_select(
 			$prefix . '-cat',
 			'kosm_cat',
 			__( 'Κατηγορία', 'kosmiteia' ),
 			'kosm_ann_category',
 			__( 'Όλες οι κατηγορίες', 'kosmiteia' ),
-			$state['cat']
+			$state['cat'],
+			'kosm_announcement'
 		);
 	}
 
 	if ( $attributes['showFaculty'] ) {
-		$fields .= kosmiteia_announcement_filters_term_select(
+		$fields .= kosmiteia_filters_term_select(
 			$prefix . '-school',
 			'kosm_fac',
 			__( 'Σχολή', 'kosmiteia' ),
 			'kosm_faculty',
 			__( 'Όλες οι Σχολές', 'kosmiteia' ),
-			$state['school']
+			$state['school'],
+			'kosm_announcement'
 		);
 	}
 
@@ -346,28 +251,16 @@ function kosmiteia_announcement_filters_html( $attributes = array() ) {
 				);
 			}
 
-			$fields .= sprintf(
-				'<p class="kosmiteia-filters__field"><label for="%1$s-year">%2$s</label><select id="%1$s-year" name="kosm_year">%3$s</select></p>',
-				esc_attr( $prefix ),
-				esc_html__( 'Έτος', 'kosmiteia' ),
+			$fields .= kosmiteia_filters_select(
+				$prefix . '-year',
+				'kosm_year',
+				__( 'Έτος', 'kosmiteia' ),
 				$options
 			);
 		}
 	}
 
-	$actions = sprintf(
-		'<button type="submit" class="wp-element-button kosmiteia-filters__submit">%s</button>',
-		esc_html__( 'Φιλτράρισμα', 'kosmiteia' )
-	);
-
-	if ( kosmiteia_announcement_filters_active( $state ) ) {
-		$reset     = add_query_arg( kosmiteia_announcement_filters_lang_arg(), $archive );
-		$actions .= sprintf(
-			'<a class="kosmiteia-filters__reset" href="%s">%s</a>',
-			esc_url( $reset ),
-			esc_html__( 'Καθαρισμός φίλτρων', 'kosmiteia' )
-		);
-	}
+	$actions = kosmiteia_filters_actions( $archive, kosmiteia_announcement_filters_active( $state ) );
 
 	$count = '';
 
@@ -378,10 +271,9 @@ function kosmiteia_announcement_filters_html( $attributes = array() ) {
 		);
 	}
 
-	return sprintf(
-		'<form class="kosmiteia-filters" method="get" action="%1$s" role="search" aria-label="%2$s">%3$s<div class="kosmiteia-filters__fields">%4$s<p class="kosmiteia-filters__actions">%5$s</p></div>%6$s</form>',
-		esc_url( $action ),
-		esc_attr__( 'Αναζήτηση και φίλτρα ανακοινώσεων', 'kosmiteia' ),
+	return kosmiteia_filters_form(
+		$action,
+		__( 'Αναζήτηση και φίλτρα ανακοινώσεων', 'kosmiteia' ),
 		$hidden,
 		$fields,
 		$actions,

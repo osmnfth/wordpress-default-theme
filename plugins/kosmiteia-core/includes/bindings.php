@@ -112,14 +112,36 @@ function kosmiteia_register_bindings() {
 add_action( 'init', 'kosmiteia_register_bindings' );
 
 /**
+ * Η διεύθυνση της σελίδας «Μήνυμα Κοσμήτορα».
+ *
+ * Ορίζεται στις Ρυθμίσεις Κοσμητείας. Αν δεν έχει επιλεγεί σελίδα (ή έχει
+ * διαγραφεί), επιστρέφουμε την αρχική, ώστε ο σύνδεσμος να μη «σπάει».
+ *
+ * @return string
+ */
+function kosmiteia_dean_page_url() {
+	$page_id = (int) kosmiteia_option( 'dean_page', 0 );
+
+	if ( $page_id && 'publish' === get_post_status( $page_id ) ) {
+		return (string) get_permalink( $page_id );
+	}
+
+	return home_url( '/' );
+}
+
+/**
  * Δυναμικά tokens σε κείμενα και συνδέσμους.
  *
  * Γράψτε το token μέσα σε οποιοδήποτε μπλοκ κειμένου ή στο πεδίο URL ενός
  * κουμπιού / στοιχείου μενού:
  *
  *   {{year}} {{site}} {{institution}} {{phone}} {{email}} {{address}} {{hours}}
- *   {{url_home}} {{url_schools}} {{url_announcements}} {{url_programs}}
+ *   {{url_home}} {{url_schools}} {{url_dean}} {{url_announcements}} {{url_programs}}
  *   {{url_events}} {{url_people}} {{url_documents}}
+ *
+ * Το {{url_schools}} δείχνει στην ενότητα «Οι Σχολές μας» της αρχικής (οι
+ * Σχολές δεν είναι πλέον τύπος περιεχομένου) και το {{url_dean}} στη σελίδα
+ * που έχει οριστεί στις Ρυθμίσεις ως «Σελίδα μηνύματος Κοσμήτορα».
  *
  * Έτσι οι σύνδεσμοι παραμένουν σωστοί ακόμη κι αν αλλάξουν τα permalinks.
  *
@@ -148,7 +170,8 @@ function kosmiteia_render_dynamic_tokens( $block_content ) {
 			'{{address}}'           => esc_html( kosmiteia_option( 'contact_address' ) ),
 			'{{hours}}'             => esc_html( kosmiteia_option( 'contact_hours' ) ),
 			'{{url_home}}'          => esc_url( home_url( '/' ) ),
-			'{{url_schools}}'       => esc_url( $archive( 'kosm_school' ) ),
+			'{{url_schools}}'       => esc_url( home_url( '/#sxoles' ) ),
+			'{{url_dean}}'          => esc_url( kosmiteia_dean_page_url() ),
 			'{{url_announcements}}' => esc_url( $archive( 'kosm_announcement' ) ),
 			'{{url_programs}}'      => esc_url( $archive( 'kosm_program' ) ),
 			'{{url_events}}'        => esc_url( $archive( 'kosm_event' ) ),

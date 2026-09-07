@@ -51,11 +51,11 @@ CDN, npm/Node build. Όλα με πυρήνα WordPress, ώστε το site να
 
 | Δεδομένο | Αποθήκευση | Πώς φτάνει στη σελίδα |
 |---|---|---|
-| Ανακοινώσεις, Σχολές, Εκδηλώσεις… | πίνακας `posts` (CPT) | Query Loop στα templates |
+| Ανακοινώσεις, Μεταπτυχιακά, Εκδηλώσεις… | πίνακας `posts` (CPT) | Query Loop στα templates |
 | Κατηγορίες, Σχολή (φίλτρο) | taxonomies | `post-terms`, φίλτρα αρχείου |
 | Προθεσμία, συνημμένο, τόπος… | `postmeta` (`register_post_meta`) | Block Bindings `core/post-meta` |
 | Τηλέφωνο, διεύθυνση, χάρτης, social | option `kosmiteia_settings` | Block Bindings `kosmiteia/option` |
-| Κεφαλίδα, υποσέλιδο, ενότητες αρχικής | αρχεία `parts/` **ή** βάση αν επεξεργαστούν | template parts |
+| Κεφαλίδα, υποσέλιδο, ενότητες αρχικής (Σχολές, μήνυμα Κοσμήτορα) | αρχεία `parts/` **ή** βάση αν επεξεργαστούν | template parts |
 | Λογότυπο, μενού | theme mods / `wp_navigation` | μπλοκ site-logo / navigation |
 
 ---
@@ -69,15 +69,18 @@ plugins/kosmiteia-core/
 ├─ readme.txt
 ├─ includes/
 │  ├─ settings.php             σχήμα ρυθμίσεων, σελίδα, kosmiteia_option()
-│  ├─ post-types.php           Σχολές, Ανακοινώσεις, Μεταπτυχιακά + taxonomies + meta
+│  ├─ post-types.php           Ανακοινώσεις, Μεταπτυχιακά + taxonomies + meta
 │  ├─ post-types-academic.php  Εκδηλώσεις, Προσωπικό, Έγγραφα
 │  ├─ roles.php                ρόλος «Συντάκτης Ανακοινώσεων»
 │  ├─ bindings.php             πηγή kosmiteia/option, tokens {{...}}, excerpt
-│  ├─ announcements.php        φίλτρα/αναζήτηση αρχείου (pre_get_posts)
+│  ├─ filters.php              κοινά εξαρτήματα φορμών φίλτρων
+│  ├─ announcements.php        φίλτρα/αναζήτηση Ανακοινώσεων (pre_get_posts)
+│  ├─ programs.php             φίλτρα/αναζήτηση/ταξινόμηση Μεταπτυχιακών
 │  ├─ multilingual.php         ?lang=en, template parts, hreflang
 │  ├─ breadcrumbs.php          διαδρομή πλοήγησης
-│  ├─ blocks.php               καταχώριση 6 μπλοκ + assets
+│  ├─ blocks.php               καταχώριση 7 μπλοκ + assets
 │  ├─ gallery.php              πεδίο γκαλερί + lightbox
+│  ├─ floating-button.php      πλωτό κουμπί + modal (wp_footer)
 │  ├─ media.php                μεγέθη/χειρισμός αρχείων
 │  ├─ seo.php                  meta tags, Open Graph, JSON-LD schema
 │  ├─ demo-content.php         αρχικό περιεχόμενο (admin + CLI)
@@ -85,8 +88,10 @@ plugins/kosmiteia-core/
 │  ├─ admin.php                σελίδα «Εργαλεία»
 │  └─ cli.php                  wp kosmiteia seed | import-announcements | info
 ├─ blocks/                     slider, language-switcher, announcement-filters,
-│                              breadcrumbs, map, gallery  (block.json + index.js)
-└─ assets/                     admin.css, slider/map/lightbox/admin-gallery.js,
+│                              program-filters, breadcrumbs, map, gallery
+│                              (block.json + index.js)
+└─ assets/                     admin.css, floating.css, slider/map/lightbox/
+                               admin-gallery/admin-media/floating.js,
                                vendor/leaflet, demo/ (εικόνες seed)
 
 kosmiteia/
@@ -94,7 +99,7 @@ kosmiteia/
 ├─ functions.php + inc/        assets, block styles, pattern categories, dependency notice
 ├─ templates/                  front-page, page, archive/single ανά CPT
 ├─ parts/                      header, footer, home-*
-├─ patterns/                   7 μοτίβα κατηγορίας «Κοσμητεία»
+├─ patterns/                   8 μοτίβα κατηγορίας «Κοσμητεία»
 ├─ assets/css/theme.css        όλα τα στυλ (και των μπλοκ)
 ├─ build-translations.py       παράγει .pot/.po/.mo για θέμα + πρόσθετο
 └─ languages/
@@ -112,13 +117,43 @@ tools/build-zips.py            παράγει dist/*.zip για εγκατάστ
 και τα εφαρμόζει στο *κύριο* query. Έτσι το Query Loop του template μένει
 `inherit: true` και η σελιδοποίηση κρατά αυτόματα τις παραμέτρους.
 
+**Φίλτρα και ταξινόμηση μεταπτυχιακών** — `kosmiteia_filter_program_archive()`,
+με τον ίδιο μηχανισμό: `kosm_q`, `kosm_fac`, `kosm_ptype` και `kosm_sort`
+(`title`, `title-desc`, `newest`, `oldest`). Χωρίς `kosm_sort` η σειρά είναι
+`menu_order` και μετά τίτλος, δηλαδή ό,τι ορίζει ο διαχειριστής στα
+Χαρακτηριστικά σελίδας. Τα κοινά κομμάτια των δύο φορμών (κρυφά πεδία, διατήρηση
+του `?lang=`, `<select>` ταξινομιών, κουμπιά) ζουν στο `includes/filters.php`.
+Οι λίστες όρων περιορίζονται στον τύπο περιεχομένου του αρχείου
+(`kosmiteia_filters_terms()`, με transient), ώστε η κοινή ταξινομία
+`kosm_faculty` να μη δείχνει επιλογές χωρίς αποτελέσματα.
+
 **Δίγλωσσο** — χωρίς plugin: `?lang=en` → φίλτρο `locale` → φορτώνονται τα
 αγγλικά `.mo` και αντικαθίστανται τα template parts με τα `*-en`. Τα αγγλικά
 κείμενα των μοτίβων παράγονται από τα ίδια αρχεία με `switch_to_locale()`.
 
 **SEO** — `seo.php`: title/description, Open Graph, canonical και JSON-LD graph
-(`CollegeOrUniversity`, `EducationalOrganization`, `NewsArticle`, `Course`,
-`Event`, `Person`, `DigitalDocument`, `BreadcrumbList`).
+(`CollegeOrUniversity`, `NewsArticle`, `Course`, `Event`, `Person`,
+`DigitalDocument`, `BreadcrumbList`).
+
+**Οι Σχολές ως περιεχόμενο μπλοκ** — δεν υπάρχει CPT «Σχολές»: είναι λίγες και
+σταθερές, οπότε η ενότητα `parts/home-schools.html` έχει τρεις κάρτες φτιαγμένες
+με μπλοκ πυρήνα (Cover + κείμενο + σύνδεσμος), επεξεργάσιμες από τον Site Editor.
+Η ταξινομία `kosm_faculty` παραμένει για το φιλτράρισμα ανακοινώσεων και
+προγραμμάτων, και το token `{{url_schools}}` δείχνει πλέον στο `/#sxoles`.
+
+**Μήνυμα Κοσμήτορα** — `parts/home-dean.html` (και το μοτίβο `dean-message.php`
+για την αγγλική έκδοση): κάρτα πλήρους πλάτους με φωτογραφία σε μπλοκ Cover.
+Το όνομα και η ιδιότητα δένονται με τις ρυθμίσεις `dean_name` / `dean_title` μέσω
+`kosmiteia/option`, ενώ το κουμπί χρησιμοποιεί το token `{{url_dean}}`, που
+διαβάζει τη ρύθμιση `dean_page`.
+
+**Πλωτό κουμπί** — `includes/floating-button.php`: αν οι ρυθμίσεις έχουν τίτλο ή
+κείμενο, τυπώνει στο `wp_footer` το κουμπί και ένα modal και φορτώνει
+`assets/css/floating.css` + `assets/js/floating.js`. Το script δείχνει το κουμπί
+μόνο στην κορυφή και στο τέλος της σελίδας (scroll, resize και `ResizeObserver`,
+γιατί το ύψος αλλάζει όταν φορτώνουν εικόνες) και κρατά το focus μέσα στο modal.
+Χωρίς JavaScript δεν εμφανίζεται τίποτα. Απενεργοποίηση με το φίλτρο
+`kosmiteia_floating_button` (επιστροφή κενού πίνακα).
 
 **Ασφάλεια της εισαγωγής** — το περιεχόμενο του παλιού ιστότοπου είναι *ξένο*
 περιεχόμενο, ακόμη κι αν ο ιστότοπος είναι γνωστός. Ο `importer-announcements.php`

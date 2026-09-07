@@ -74,3 +74,30 @@
 .kosmiteia-gallery-field__actions {
 	margin: 12px 0 4px;
 }
+
+/* -------------------------------------------------------------------------
+ * Πεδίο «Εικόνα» στις Ρυθμίσεις
+ * ---------------------------------------------------------------------- */
+
+.kosmiteia-image-field__preview:not(:empty) {
+	background-color: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	display: inline-block;
+	line-height: 0;
+	margin-bottom: 8px;
+	padding: 6px;
+}
+
+.kosmiteia-image-field p {
+	margin: 0 0 6px;
+}
+
+.kosmiteia-image-field .button-link {
+	color: #b32d2e;
+	margin-left: 6px;
+}
+
+.kosmiteia-image-field .button-link:hover {
+	color: #8a2424;
+}
