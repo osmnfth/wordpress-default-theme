@@ -242,17 +242,6 @@ EN = {
     u'Δήλωση προσβασιμότητας': u'Accessibility statement',
     u'Χάρτης ιστότοπου': u'Sitemap',
 
-    # Ενότητα «Οι Σχολές μας» (στατικές κάρτες).
-    u'Πρώτη Σχολή': u'First school',
-    u'Δεύτερη Σχολή': u'Second school',
-    u'Τρίτη Σχολή': u'Third school',
-    u'Σύντομη περιγραφή της πρώτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.':
-        u'A short description of the first school: subject areas, departments and research directions.',
-    u'Σύντομη περιγραφή της δεύτερης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.':
-        u'A short description of the second school: subject areas, departments and research directions.',
-    u'Σύντομη περιγραφή της τρίτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις.':
-        u'A short description of the third school: subject areas, departments and research directions.',
-
     # Ενότητα «Μήνυμα Κοσμήτορα».
     u'Μήνυμα Κοσμήτορα': u'Message from the Dean',
     u'Καλώς ήρθατε στην Κοσμητεία': u'Welcome to the Deanery',
@@ -314,6 +303,21 @@ EN = {
     u'Φίλτρο Τμήματος': u'Department filter',
     u'Φίλτρο τύπου': u'Type filter',
     u'Επιλογή ταξινόμησης': u'Sort control',
+
+    # Οθόνη φόρτωσης.
+    u'Οθόνη φόρτωσης': u'Loading screen',
+    u'Εμφάνιση οθόνης φόρτωσης': u'Show the loading screen',
+    u'Λευκή οθόνη με το λογότυπο στο κέντρο, όσο φορτώνει η επόμενη σελίδα σε αργή σύνδεση.':
+        u'A white screen with the logo in the middle while the next page loads on a slow connection.',
+    u'Πού εμφανίζεται': u'Where it appears',
+    u'Μόνο σε κινητά και tablet': u'On phones and tablets only',
+    u'Σε όλες τις συσκευές': u'On every device',
+    u'Λογότυπο οθόνης φόρτωσης': u'Loading screen logo',
+    u'Αν μείνει κενό, χρησιμοποιείται το λογότυπο του ιστότοπου.':
+        u'If left empty, the site logo is used.',
+    u'Καθυστέρηση εμφάνισης (ms)': u'Delay before it appears (ms)',
+    u'Σε γρήγορη σύνδεση η σελίδα προλαβαίνει να φορτώσει και η οθόνη δεν εμφανίζεται καθόλου.':
+        u'On a fast connection the page arrives first and the screen never appears.',
 
     # URL slugs (ίδια σε EL/EN, ώστε τα permalinks να μένουν σταθερά).
     u'schools': u'schools',

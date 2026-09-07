@@ -160,26 +160,14 @@ msgstr "Postgraduate → Add New"
 msgid "Τρεις Σχολές με διακριτή ταυτότητα, κοινό στόχο την ποιοτική εκπαίδευση και την έρευνα."
 msgstr "Three schools with a distinct identity and a shared commitment to quality education and research."
 
-msgid "Πρώτη Σχολή"
-msgstr "First school"
-
-msgid "Σύντομη περιγραφή της πρώτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις."
-msgstr "A short description of the first school: subject areas, departments and research directions."
-
 msgid "Δείτε τη Σχολή"
 msgstr "Visit the school"
 
-msgid "Δεύτερη Σχολή"
-msgstr "Second school"
+msgid "Δεν έχουν καταχωριστεί ακόμη Σχολές. Προσθέστε την πρώτη από τον πίνακα ελέγχου:"
+msgstr "No schools have been added yet. Add the first one from the dashboard:"
 
-msgid "Σύντομη περιγραφή της δεύτερης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις."
-msgstr "A short description of the second school: subject areas, departments and research directions."
-
-msgid "Τρίτη Σχολή"
-msgstr "Third school"
-
-msgid "Σύντομη περιγραφή της τρίτης Σχολής: αντικείμενο σπουδών, τμήματα και ερευνητικές κατευθύνσεις."
-msgstr "A short description of the third school: subject areas, departments and research directions."
+msgid "Σχολές → Προσθήκη νέας"
+msgstr "Schools → Add New"
 
 msgid "Παιδεία, έρευνα και κοινωνική προσφορά. Η Κοσμητεία συντονίζει τις Σχολές, τα προγράμματα σπουδών και την ακαδημαϊκή κοινότητα."
 msgstr "Education, research and public service. The Deanery coordinates the schools, the study programmes and the academic community."
@@ -739,6 +727,57 @@ msgstr "Position"
 msgid "Αρχείο"
 msgstr "File"
 
+msgid "Προσθήκη νέας Σχολής"
+msgstr "Add New School"
+
+msgid "Επεξεργασία Σχολής"
+msgstr "Edit School"
+
+msgid "Νέα Σχολή"
+msgstr "New School"
+
+msgid "Προβολή Σχολής"
+msgstr "View School"
+
+msgid "Προβολή Σχολών"
+msgstr "View Schools"
+
+msgid "Αναζήτηση Σχολών"
+msgstr "Search Schools"
+
+msgid "Δεν βρέθηκαν Σχολές"
+msgstr "No schools found"
+
+msgid "Δεν βρέθηκαν Σχολές στον κάδο"
+msgstr "No schools found in Trash"
+
+msgid "Αρχείο Σχολών"
+msgstr "School Archive"
+
+msgid "Φωτογραφία Σχολής"
+msgstr "School image"
+
+msgid "Ορισμός φωτογραφίας Σχολής"
+msgstr "Set school image"
+
+msgid "Η Σχολή ενημερώθηκε."
+msgstr "School updated."
+
+msgid "Η Σχολή δημοσιεύτηκε."
+msgstr "School published."
+
+msgid "Οι Σχολές που υπάγονται στην Κοσμητεία."
+msgstr "The schools that belong to the Deanery."
+
+msgid "schools"
+msgstr "schools"
+
+msgid "Σύντομη περιγραφή της Σχολής..."
+msgstr "A short description of the school..."
+
+msgid "Τμήματα"
+msgstr "Departments"
+
 msgid "Ανακοίνωση"
 msgstr "Announcement"
 
@@ -876,6 +915,9 @@ msgstr "Programme Director"
 
 msgid "Σύνδεσμος αίτησης"
 msgstr "Application link"
+
+msgid "Ιστοσελίδα Σχολής"
+msgstr "School website"
 
 msgid "Προθεσμία"
 msgstr "Deadline"
@@ -1077,6 +1119,36 @@ msgstr "Dialog link"
 
 msgid "Κείμενο συνδέσμου"
 msgstr "Link text"
+
+msgid "Οθόνη φόρτωσης"
+msgstr "Loading screen"
+
+msgid "Εμφάνιση οθόνης φόρτωσης"
+msgstr "Show the loading screen"
+
+msgid "Λευκή οθόνη με το λογότυπο στο κέντρο, όσο φορτώνει η επόμενη σελίδα σε αργή σύνδεση."
+msgstr "A white screen with the logo in the middle while the next page loads on a slow connection."
+
+msgid "Πού εμφανίζεται"
+msgstr "Where it appears"
+
+msgid "Μόνο σε κινητά και tablet"
+msgstr "On phones and tablets only"
+
+msgid "Σε όλες τις συσκευές"
+msgstr "On every device"
+
+msgid "Λογότυπο οθόνης φόρτωσης"
+msgstr "Loading screen logo"
+
+msgid "Αν μείνει κενό, χρησιμοποιείται το λογότυπο του ιστότοπου."
+msgstr "If left empty, the site logo is used."
+
+msgid "Καθυστέρηση εμφάνισης (ms)"
+msgstr "Delay before it appears (ms)"
+
+msgid "Σε γρήγορη σύνδεση η σελίδα προλαβαίνει να φορτώσει και η οθόνη δεν εμφανίζεται καθόλου."
+msgstr "On a fast connection the page arrives first and the screen never appears."
 
 msgid "Γλώσσες"
 msgstr "Languages"

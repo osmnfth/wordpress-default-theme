@@ -308,6 +308,23 @@ function kosmiteia_json_ld() {
 			if ( $file ) {
 				$node['url'] = $file;
 			}
+		} elseif ( 'kosm_school' === $type ) {
+			$node['@type']         = 'EducationalOrganization';
+			$node['parentOrganization'] = array( '@id' => $home . '#organization' );
+
+			$email   = get_post_meta( $post_id, 'kosm_email', true );
+			$phone   = get_post_meta( $post_id, 'kosm_phone', true );
+			$address = get_post_meta( $post_id, 'kosm_address', true );
+
+			if ( $email ) {
+				$node['email'] = $email;
+			}
+			if ( $phone ) {
+				$node['telephone'] = $phone;
+			}
+			if ( $address ) {
+				$node['address'] = $address;
+			}
 		} else {
 			$node['@type'] = is_page() ? 'WebPage' : 'Article';
 		}
@@ -369,7 +386,7 @@ add_action( 'wp_head', 'kosmiteia_json_ld', 7 );
  * @return array
  */
 function kosmiteia_document_title_parts( $parts ) {
-	if ( is_post_type_archive( array( 'kosm_announcement', 'kosm_program', 'kosm_event', 'kosm_person', 'kosm_document' ) ) ) {
+	if ( is_post_type_archive( array( 'kosm_school', 'kosm_announcement', 'kosm_program', 'kosm_event', 'kosm_person', 'kosm_document' ) ) ) {
 		$object = get_queried_object();
 
 		if ( $object && isset( $object->labels->name ) ) {

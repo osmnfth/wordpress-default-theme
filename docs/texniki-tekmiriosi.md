@@ -51,11 +51,11 @@ CDN, npm/Node build. Όλα με πυρήνα WordPress, ώστε το site να
 
 | Δεδομένο | Αποθήκευση | Πώς φτάνει στη σελίδα |
 |---|---|---|
-| Ανακοινώσεις, Μεταπτυχιακά, Εκδηλώσεις… | πίνακας `posts` (CPT) | Query Loop στα templates |
+| Ανακοινώσεις, Σχολές, Εκδηλώσεις… | πίνακας `posts` (CPT) | Query Loop στα templates |
 | Κατηγορίες, Σχολή (φίλτρο) | taxonomies | `post-terms`, φίλτρα αρχείου |
 | Προθεσμία, συνημμένο, τόπος… | `postmeta` (`register_post_meta`) | Block Bindings `core/post-meta` |
 | Τηλέφωνο, διεύθυνση, χάρτης, social | option `kosmiteia_settings` | Block Bindings `kosmiteia/option` |
-| Κεφαλίδα, υποσέλιδο, ενότητες αρχικής (Σχολές, μήνυμα Κοσμήτορα) | αρχεία `parts/` **ή** βάση αν επεξεργαστούν | template parts |
+| Κεφαλίδα, υποσέλιδο, ενότητες αρχικής (και το μήνυμα Κοσμήτορα) | αρχεία `parts/` **ή** βάση αν επεξεργαστούν | template parts |
 | Λογότυπο, μενού | theme mods / `wp_navigation` | μπλοκ site-logo / navigation |
 
 ---
@@ -69,7 +69,7 @@ plugins/kosmiteia-core/
 ├─ readme.txt
 ├─ includes/
 │  ├─ settings.php             σχήμα ρυθμίσεων, σελίδα, kosmiteia_option()
-│  ├─ post-types.php           Ανακοινώσεις, Μεταπτυχιακά + taxonomies + meta
+│  ├─ post-types.php           Σχολές, Ανακοινώσεις, Μεταπτυχιακά + taxonomies + meta
 │  ├─ post-types-academic.php  Εκδηλώσεις, Προσωπικό, Έγγραφα
 │  ├─ roles.php                ρόλος «Συντάκτης Ανακοινώσεων»
 │  ├─ bindings.php             πηγή kosmiteia/option, tokens {{...}}, excerpt
@@ -81,6 +81,7 @@ plugins/kosmiteia-core/
 │  ├─ blocks.php               καταχώριση 7 μπλοκ + assets
 │  ├─ gallery.php              πεδίο γκαλερί + lightbox
 │  ├─ floating-button.php      πλωτό κουμπί + modal (wp_footer)
+│  ├─ page-loader.php          οθόνη φόρτωσης (wp_head + wp_body_open)
 │  ├─ media.php                μεγέθη/χειρισμός αρχείων
 │  ├─ seo.php                  meta tags, Open Graph, JSON-LD schema
 │  ├─ demo-content.php         αρχικό περιεχόμενο (admin + CLI)
@@ -132,14 +133,8 @@ tools/build-zips.py            παράγει dist/*.zip για εγκατάστ
 κείμενα των μοτίβων παράγονται από τα ίδια αρχεία με `switch_to_locale()`.
 
 **SEO** — `seo.php`: title/description, Open Graph, canonical και JSON-LD graph
-(`CollegeOrUniversity`, `NewsArticle`, `Course`, `Event`, `Person`,
-`DigitalDocument`, `BreadcrumbList`).
-
-**Οι Σχολές ως περιεχόμενο μπλοκ** — δεν υπάρχει CPT «Σχολές»: είναι λίγες και
-σταθερές, οπότε η ενότητα `parts/home-schools.html` έχει τρεις κάρτες φτιαγμένες
-με μπλοκ πυρήνα (Cover + κείμενο + σύνδεσμος), επεξεργάσιμες από τον Site Editor.
-Η ταξινομία `kosm_faculty` παραμένει για το φιλτράρισμα ανακοινώσεων και
-προγραμμάτων, και το token `{{url_schools}}` δείχνει πλέον στο `/#sxoles`.
+(`CollegeOrUniversity`, `EducationalOrganization`, `NewsArticle`, `Course`,
+`Event`, `Person`, `DigitalDocument`, `BreadcrumbList`).
 
 **Μήνυμα Κοσμήτορα** — `parts/home-dean.html` (και το μοτίβο `dean-message.php`
 για την αγγλική έκδοση): κάρτα πλήρους πλάτους με φωτογραφία σε μπλοκ Cover.
@@ -154,6 +149,15 @@ tools/build-zips.py            παράγει dist/*.zip για εγκατάστ
 γιατί το ύψος αλλάζει όταν φορτώνουν εικόνες) και κρατά το focus μέσα στο modal.
 Χωρίς JavaScript δεν εμφανίζεται τίποτα. Απενεργοποίηση με το φίλτρο
 `kosmiteia_floating_button` (επιστροφή κενού πίνακα).
+
+**Οθόνη φόρτωσης** — `includes/page-loader.php`: το markup μπαίνει στο
+`wp_body_open` και το CSS στο `wp_head`, **inline**, γιατί σε αργή σύνδεση ένα
+ξεχωριστό αρχείο θα έφτανε αργότερα από τη σελίδα που θέλει να καλύψει. Το script
+οπλίζει έναν χρονοδιακόπτη (προεπιλογή 350 ms) στην αρχική φόρτωση, σε κάθε κλικ
+σε εσωτερικό σύνδεσμο και σε κάθε υποβολή φόρμας· η οθόνη κλείνει στο
+`DOMContentLoaded`, στο `load`, στην επιστροφή από bfcache (`pageshow`) και - ό,τι
+κι αν γίνει - το αργότερο σε 10 δευτερόλεπτα. Χωρίς JavaScript μένει κρυφή.
+Απενεργοποίηση με το φίλτρο `kosmiteia_page_loader`.
 
 **Ασφάλεια της εισαγωγής** — το περιεχόμενο του παλιού ιστότοπου είναι *ξένο*
 περιεχόμενο, ακόμη κι αν ο ιστότοπος είναι γνωστός. Ο `importer-announcements.php`

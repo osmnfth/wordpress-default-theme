@@ -22,7 +22,8 @@ const KOSMITEIA_SETTINGS_GROUP  = 'kosmiteia_settings_group';
  * Οι ενότητες και τα πεδία των ρυθμίσεων.
  *
  * Κάθε πεδίο: label, type (text|textarea|richtext|email|url|tel|number|
- * checkbox|image|page), default και προαιρετικά description / step / min / max.
+ * checkbox|image|page|select), default και προαιρετικά description / options /
+ * step / min / max.
  *
  * @return array
  */
@@ -248,6 +249,41 @@ function kosmiteia_settings_schema() {
 			),
 		),
 
+		'loader'   => array(
+			'title'  => __( 'Οθόνη φόρτωσης', 'kosmiteia' ),
+			'fields' => array(
+				'loader_enable' => array(
+					'label'       => __( 'Εμφάνιση οθόνης φόρτωσης', 'kosmiteia' ),
+					'type'        => 'checkbox',
+					'default'     => 1,
+					'description' => __( 'Λευκή οθόνη με το λογότυπο στο κέντρο, όσο φορτώνει η επόμενη σελίδα σε αργή σύνδεση.', 'kosmiteia' ),
+				),
+				'loader_scope'  => array(
+					'label'   => __( 'Πού εμφανίζεται', 'kosmiteia' ),
+					'type'    => 'select',
+					'default' => 'mobile',
+					'options' => array(
+						'mobile' => __( 'Μόνο σε κινητά και tablet', 'kosmiteia' ),
+						'all'    => __( 'Σε όλες τις συσκευές', 'kosmiteia' ),
+					),
+				),
+				'loader_image'  => array(
+					'label'       => __( 'Λογότυπο οθόνης φόρτωσης', 'kosmiteia' ),
+					'type'        => 'image',
+					'default'     => 0,
+					'description' => __( 'Αν μείνει κενό, χρησιμοποιείται το λογότυπο του ιστότοπου.', 'kosmiteia' ),
+				),
+				'loader_delay'  => array(
+					'label'       => __( 'Καθυστέρηση εμφάνισης (ms)', 'kosmiteia' ),
+					'type'        => 'number',
+					'min'         => 0,
+					'max'         => 3000,
+					'default'     => 350,
+					'description' => __( 'Σε γρήγορη σύνδεση η σελίδα προλαβαίνει να φορτώσει και η οθόνη δεν εμφανίζεται καθόλου.', 'kosmiteia' ),
+				),
+			),
+		),
+
 		'language' => array(
 			'title'  => __( 'Γλώσσες', 'kosmiteia' ),
 			'fields' => array(
@@ -422,6 +458,12 @@ function kosmiteia_settings_sanitize( $input ) {
 					$clean[ $key ] = absint( $value );
 					break;
 
+				case 'select':
+					$options       = isset( $field['options'] ) ? $field['options'] : array();
+					$value         = sanitize_key( $value );
+					$clean[ $key ] = isset( $options[ $value ] ) ? $value : (string) $field['default'];
+					break;
+
 				default:
 					$clean[ $key ] = sanitize_text_field( $value );
 					break;
@@ -511,6 +553,24 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 		);
 	} elseif ( 'image' === $type ) {
 		kosmiteia_settings_image_field( $id, $name, (int) $value );
+	} elseif ( 'select' === $type ) {
+		$options = '';
+
+		foreach ( (array) $field['options'] as $option_value => $option_label ) {
+			$options .= sprintf(
+				'<option value="%1$s"%2$s>%3$s</option>',
+				esc_attr( $option_value ),
+				selected( (string) $value, (string) $option_value, false ),
+				esc_html( $option_label )
+			);
+		}
+
+		printf(
+			'<select id="%1$s" name="%2$s">%3$s</select>',
+			esc_attr( $id ),
+			esc_attr( $name ),
+			$options // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Τα μέρη του έχουν ήδη περάσει από esc_attr()/esc_html().
+		);
 	} elseif ( 'page' === $type ) {
 		wp_dropdown_pages(
 			array(

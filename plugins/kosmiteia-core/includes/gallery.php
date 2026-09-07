@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 function kosmiteia_gallery_post_types() {
 	return (array) apply_filters(
 		'kosmiteia_gallery_post_types',
-		array( 'kosm_program', 'kosm_announcement', 'page', 'post' )
+		array( 'kosm_school', 'kosm_program', 'kosm_announcement', 'page', 'post' )
 	);
 }
 

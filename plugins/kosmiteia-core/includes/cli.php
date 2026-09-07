@@ -101,7 +101,7 @@ WP_CLI::add_command( 'kosmiteia import-announcements', 'kosmiteia_cli_import_ann
  * Σύνοψη του περιεχομένου του ιστότοπου.
  */
 function kosmiteia_cli_info() {
-	$types = array( 'kosm_announcement', 'kosm_program', 'kosm_event', 'kosm_person', 'kosm_document' );
+	$types = array( 'kosm_school', 'kosm_announcement', 'kosm_program', 'kosm_event', 'kosm_person', 'kosm_document' );
 	$rows  = array();
 
 	foreach ( $types as $type ) {
