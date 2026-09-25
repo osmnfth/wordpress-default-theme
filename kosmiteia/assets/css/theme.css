@@ -87,7 +87,7 @@ html {
 }
 
 .entry-content.wp-block-post-content.is-layout-constrained > p,
-.entry-content.wp-block-post-content.is-layout-constrained > .wp-block-paragraph,
+.entry-content.wp-block-post-content.is-layout-constrained > .wp-block-paragraph, .wp-block-heading, .wp-block-list,
 .editor-styles-wrapper .wp-block-post-content.is-layout-constrained > p,
 .editor-styles-wrapper .wp-block-post-content.is-layout-constrained > .wp-block-paragraph {
 	max-width: var(--kosmiteia-content-width);
