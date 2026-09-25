@@ -1,23 +1,6 @@
 <?php
-/**
- * Σελίδα «Κοσμητεία → Εργαλεία».
- *
- * Δύο εργασίες που παλιότερα έτρεχαν μόνο από το docker/WP-CLI:
- *
- *   1. Δημιουργία αρχικού περιεχομένου (Τμήματα, ανακοινώσεις, σελίδες, μενού,
- *      template parts της αρχικής).
- *   2. Εισαγωγή ανακοινώσεων από τον παλιό ιστότοπο μέσω RSS.
- *
- * Και οι δύο είναι διαθέσιμες και από τη γραμμή εντολών (includes/cli.php).
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Καταχώριση της σελίδας στο μενού «Κοσμητεία».
- */
 function kosmiteia_tools_menu() {
 	add_submenu_page(
 		'kosmiteia-settings',
@@ -30,11 +13,6 @@ function kosmiteia_tools_menu() {
 }
 add_action( 'admin_menu', 'kosmiteia_tools_menu' );
 
-/**
- * Εμφάνιση των μηνυμάτων μιας εργασίας.
- *
- * @param array $messages Λίστα από array( type, message ).
- */
 function kosmiteia_tools_render_log( $messages ) {
 	if ( ! $messages ) {
 		return;
@@ -57,9 +35,6 @@ function kosmiteia_tools_render_log( $messages ) {
 	echo '</ul></div>';
 }
 
-/**
- * Η σελίδα Εργαλείων.
- */
 function kosmiteia_tools_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
@@ -101,9 +76,6 @@ function kosmiteia_tools_page() {
 
 	kosmiteia_tools_render_log( $messages );
 
-	/* ------------------------------------------------------------------
-	 * Αρχικό περιεχόμενο
-	 * --------------------------------------------------------------- */
 	echo '<div class="card" style="max-width:46rem"><h2>' . esc_html__( 'Αρχικό περιεχόμενο', 'kosmiteia' ) . '</h2>';
 	echo '<p>' . esc_html__( 'Δημιουργεί Τμήματα, Ανακοινώσεις, Μεταπτυχιακά, σελίδες, μενού (EL/EN) και τα template parts της αρχικής, αντλώντας τα patterns από το ενεργό θέμα. Δεν αγγίζει ό,τι έχετε ήδη επεξεργαστεί.', 'kosmiteia' ) . '</p>';
 	echo '<form method="post">';
@@ -113,9 +85,6 @@ function kosmiteia_tools_page() {
 	submit_button( __( 'Δημιουργία αρχικού περιεχομένου', 'kosmiteia' ), 'primary', 'submit', false );
 	echo '</form></div>';
 
-	/* ------------------------------------------------------------------
-	 * Εισαγωγή από παλιό ιστότοπο
-	 * --------------------------------------------------------------- */
 	echo '<div class="card" style="max-width:46rem;margin-top:1.5rem"><h2>' . esc_html__( 'Εισαγωγή ανακοινώσεων από παλιό ιστότοπο', 'kosmiteia' ) . '</h2>';
 	echo '<p>' . esc_html__( 'Διαβάζει το RSS feed του παλιού ιστότοπου και δημιουργεί Ανακοινώσεις με τις αρχικές ημερομηνίες, τις κατηγορίες τους και τα συνημμένα PDF. Ξανατρέξιμο δεν δημιουργεί διπλότυπα.', 'kosmiteia' ) . '</p>';
 	echo '<form method="post"><table class="form-table" role="presentation"><tbody>';

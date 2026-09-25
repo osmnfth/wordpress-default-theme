@@ -1,14 +1,3 @@
-/**
- * Kosmiteia - πλωτό κουμπί με παράθυρο μηνύματος.
- *
- * Εμφάνιση: το κουμπί φαίνεται όσο ο επισκέπτης είναι στην κορυφή της σελίδας,
- * κρύβεται μόλις αρχίσει το σκρολάρισμα και ξαναεμφανίζεται όταν φτάσει στο
- * τέλος. Σε σελίδες που δεν κυλούν μένει μόνιμα ορατό.
- *
- * Παράθυρο: ανοίγει με κλικ, κλείνει με Esc, με το «×» ή με κλικ έξω από το
- * πλαίσιο. Όσο είναι ανοιχτό το focus παραμένει μέσα του και επιστρέφει στο
- * κουμπί με το κλείσιμο.
- */
 ( function () {
 	'use strict';
 
@@ -27,16 +16,11 @@
 	var lastFocused = null;
 	var ticking = false;
 
-	/* ---------------------------------------------------------------------
-	 * Εμφάνιση / απόκρυψη με το σκρολάρισμα
-	 * ------------------------------------------------------------------ */
-
 	function isVisible() {
 		var doc = document.documentElement;
 		var scrolled = window.scrollY || doc.scrollTop || 0;
 		var height = doc.scrollHeight;
 
-		// Σελίδα που δεν κυλάει: το κουμπί μένει ορατό.
 		if ( height - window.innerHeight <= TOP_OFFSET + BOTTOM_OFFSET ) {
 			return true;
 		}
@@ -59,10 +43,6 @@
 			ticking = true;
 		}
 	}
-
-	/* ---------------------------------------------------------------------
-	 * Το παράθυρο
-	 * ------------------------------------------------------------------ */
 
 	function focusable() {
 		return Array.prototype.filter.call(
@@ -97,7 +77,6 @@
 		button.setAttribute( 'aria-expanded', 'false' );
 		document.documentElement.classList.remove( 'kosmiteia-has-modal' );
 
-		// Το focus γυρίζει εκεί που ήταν - συνήθως στο ίδιο το κουμπί.
 		var back = ( lastFocused && document.body !== lastFocused && 'function' === typeof lastFocused.focus )
 			? lastFocused
 			: button;
@@ -126,10 +105,6 @@
 		}
 	}
 
-	/* ---------------------------------------------------------------------
-	 * Σύνδεση
-	 * ------------------------------------------------------------------ */
-
 	button.classList.add( 'is-ready' );
 	button.addEventListener( 'click', open );
 
@@ -151,8 +126,6 @@
 	window.addEventListener( 'scroll', onScroll, { passive: true } );
 	window.addEventListener( 'resize', onScroll, { passive: true } );
 
-	// Το ύψος της σελίδας αλλάζει και χωρίς σκρολάρισμα (εικόνες που φορτώνουν
-	// αργότερα, ενσωματώσεις): αλλιώς το κουμπί θα έμενε κρυμμένο στο τέλος.
 	if ( 'ResizeObserver' in window ) {
 		new ResizeObserver( onScroll ).observe( document.documentElement );
 	}

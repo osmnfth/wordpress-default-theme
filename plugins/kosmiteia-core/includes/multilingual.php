@@ -1,27 +1,6 @@
 <?php
-/**
- * Πολυγλωσσία (Ελληνικά / Αγγλικά).
- *
- * Το theme δουλεύει σε τρία επίπεδα:
- *
- * 1. Polylang ή WPML εγκατεστημένο -> οι γλώσσες, τα URL και το φιλτράρισμα
- *    περιεχομένου έρχονται από το plugin (πλήρης μετάφραση περιεχομένου).
- * 2. Χωρίς plugin -> ενσωματωμένο fallback: ?lang=en αλλάζει το locale,
- *    άρα όλα τα κείμενα του theme, οι ημερομηνίες, το lang attribute και
- *    (αν υπάρχουν) τα αγγλικά template parts / μενού.
- * 3. Σε κάθε περίπτωση: template part ή μενού με κατάληξη "-en"
- *    χρησιμοποιείται αυτόματα όταν η τρέχουσα γλώσσα είναι τα Αγγλικά.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Οι γλώσσες του site όταν δεν υπάρχει plugin πολυγλωσσίας.
- *
- * @return array
- */
 function kosmiteia_default_languages() {
 	$languages = array(
 		'el' => array(
@@ -32,8 +11,6 @@ function kosmiteia_default_languages() {
 		),
 	);
 
-	// Η αγγλική έκδοση ανοιγοκλείνει από τις Ρυθμίσεις Κοσμητείας. Διαβάζεται
-	// «ωμά», γιατί η συνάρτηση τρέχει μέσα από το φίλτρο locale, πολύ πριν το init.
 	if ( kosmiteia_option_raw( 'enable_en', 1 ) ) {
 		$languages['en'] = array(
 			'name'   => 'English',
@@ -46,11 +23,6 @@ function kosmiteia_default_languages() {
 	return apply_filters( 'kosmiteia_languages', $languages );
 }
 
-/**
- * Ενεργό plugin πολυγλωσσίας, αν υπάρχει.
- *
- * @return string 'polylang' | 'wpml' | ''
- */
 function kosmiteia_multilingual_plugin() {
 	if ( function_exists( 'pll_the_languages' ) ) {
 		return 'polylang';
@@ -63,11 +35,6 @@ function kosmiteia_multilingual_plugin() {
 	return '';
 }
 
-/**
- * Ο κωδικός της τρέχουσας γλώσσας (π.χ. "el" ή "en").
- *
- * @return string
- */
 function kosmiteia_current_language() {
 	$plugin = kosmiteia_multilingual_plugin();
 
@@ -91,7 +58,7 @@ function kosmiteia_current_language() {
 	$languages = kosmiteia_default_languages();
 	$default   = key( $languages );
 
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- απλή επιλογή γλώσσας.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$requested = isset( $_GET['lang'] ) ? sanitize_key( wp_unslash( $_GET['lang'] ) ) : '';
 
 	if ( ! $requested && isset( $_COOKIE['kosmiteia_lang'] ) ) {
@@ -103,11 +70,6 @@ function kosmiteia_current_language() {
 	return $fallback;
 }
 
-/**
- * Λίστα γλωσσών με URL, για τον language switcher.
- *
- * @return array Πίνακας από array( slug, name, short, url, current, hreflang ).
- */
 function kosmiteia_get_languages() {
 	$plugin = kosmiteia_multilingual_plugin();
 	$list   = array();
@@ -150,7 +112,6 @@ function kosmiteia_get_languages() {
 		return $list;
 	}
 
-	// Fallback χωρίς plugin.
 	$current = kosmiteia_current_language();
 
 	foreach ( kosmiteia_default_languages() as $slug => $language ) {
@@ -168,40 +129,16 @@ function kosmiteia_get_languages() {
 	return $list;
 }
 
-/**
- * Τίτλοι αρχείων στη γλώσσα της σελίδας.
- *
- * Τα labels των custom post types «παγώνουν» τη στιγμή της καταχώρισης (init),
- * δηλαδή πριν αλλάξει η γλώσσα από το ?lang=en. Εδώ ξαναπερνούν από τον
- * κατάλογο μεταφράσεων, ώστε το αρχείο Ανακοινώσεων να λέει «Announcements»
- * και όχι «Ανακοινώσεις» στην αγγλική έκδοση.
- *
- * @param string $name Το όνομα του αρχείου.
- * @return string
- */
 function kosmiteia_translate_archive_title( $name ) {
 	if ( 'el' === kosmiteia_current_language() || '' === (string) $name ) {
 		return $name;
 	}
 
-	// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Το string υπάρχει ήδη στον κατάλογο· εδώ απλώς ξαναμεταφράζεται μετά την αλλαγή γλώσσας.
+	// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 	return translate( $name, 'kosmiteia' );
 }
 add_filter( 'post_type_archive_title', 'kosmiteia_translate_archive_title' );
 
-/**
- * URL της τρέχουσας σελίδας για συγκεκριμένη γλώσσα (fallback mode).
- *
- * Η προεπιλεγμένη γλώσσα ζει σε «καθαρό» URL, χωρίς παράμετρο. Ο επιλογέας
- * γλώσσας όμως χρειάζεται ρητό ?lang=el: αλλιώς, με αποθηκευμένη προτίμηση
- * «en» στο cookie, το κλικ στα Ελληνικά οδηγούσε στο ίδιο καθαρό URL και το
- * cookie ξανάδινε Αγγλικά. Με $explicit = true το URL δηλώνει πρόθεση, το
- * cookie ενημερώνεται και μετά γίνεται redirect πίσω στο καθαρό URL.
- *
- * @param string $slug     Κωδικός γλώσσας.
- * @param bool   $explicit Να μπει η παράμετρος και στην προεπιλεγμένη γλώσσα.
- * @return string
- */
 function kosmiteia_language_url( $slug, $explicit = false ) {
 	$languages = kosmiteia_default_languages();
 	$default   = key( $languages );
@@ -219,12 +156,6 @@ function kosmiteia_language_url( $slug, $explicit = false ) {
 	return remove_query_arg( 'lang', $url );
 }
 
-/**
- * Fallback mode: αλλαγή locale ώστε να μεταφράζονται τα κείμενα του theme.
- *
- * @param string $locale Τρέχον locale.
- * @return string
- */
 function kosmiteia_filter_locale( $locale ) {
 	if ( is_admin() || kosmiteia_multilingual_plugin() ) {
 		return $locale;
@@ -233,7 +164,6 @@ function kosmiteia_filter_locale( $locale ) {
 	$languages = kosmiteia_default_languages();
 	$current   = kosmiteia_current_language();
 
-	// Η προεπιλεγμένη γλώσσα κρατά το locale του ιστότοπου (Ρυθμίσεις → Γενικά).
 	if ( $current === key( $languages ) ) {
 		return $locale;
 	}
@@ -242,9 +172,6 @@ function kosmiteia_filter_locale( $locale ) {
 }
 add_filter( 'locale', 'kosmiteia_filter_locale' );
 
-/**
- * Θυμάται την επιλογή γλώσσας (fallback mode) για ένα έτος.
- */
 function kosmiteia_remember_language() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( is_admin() || kosmiteia_multilingual_plugin() || ! isset( $_GET['lang'] ) || headers_sent() ) {
@@ -262,9 +189,6 @@ function kosmiteia_remember_language() {
 	setcookie( 'kosmiteia_lang', $requested, time() + YEAR_IN_SECONDS, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, is_ssl(), true );
 	$_COOKIE['kosmiteia_lang'] = $requested;
 
-	// Η προεπιλεγμένη γλώσσα δεν χρειάζεται παράμετρο στο URL: αφού η επιλογή
-	// αποθηκεύτηκε, γυρνάμε στο καθαρό URL, ώστε να μη μένουν δύο διευθύνσεις
-	// για το ίδιο περιεχόμενο.
 	if ( $requested === key( $languages ) ) {
 		wp_safe_redirect( kosmiteia_language_url( $requested ), 302 );
 		exit;
@@ -272,12 +196,6 @@ function kosmiteia_remember_language() {
 }
 add_action( 'template_redirect', 'kosmiteia_remember_language' );
 
-/**
- * Κλάση γλώσσας στο body, για CSS αν χρειαστεί.
- *
- * @param array $classes Κλάσεις.
- * @return array
- */
 function kosmiteia_language_body_class( $classes ) {
 	$classes[] = 'kosmiteia-lang-' . kosmiteia_current_language();
 
@@ -285,16 +203,6 @@ function kosmiteia_language_body_class( $classes ) {
 }
 add_filter( 'body_class', 'kosmiteia_language_body_class' );
 
-/**
- * Χρησιμοποιεί αυτόματα το template part "<slug>-<γλώσσα>" όταν υπάρχει.
- *
- * Παράδειγμα: με ενεργή τη γλώσσα EN και υπαρκτό part "header-en",
- * το "header" αντικαθίσταται από το "header-en". Δημιουργήστε το
- * αγγλικό part από τον Site Editor -> Patterns -> Template parts.
- *
- * @param array $parsed_block Το μπλοκ.
- * @return array
- */
 function kosmiteia_localize_template_part( $parsed_block ) {
 	if ( empty( $parsed_block['blockName'] ) || 'core/template-part' !== $parsed_block['blockName'] ) {
 		return $parsed_block;
@@ -319,14 +227,6 @@ function kosmiteia_localize_template_part( $parsed_block ) {
 }
 add_filter( 'render_block_data', 'kosmiteia_localize_template_part' );
 
-/**
- * Χρησιμοποιεί αυτόματα το μενού "<slug>-<γλώσσα>" όταν υπάρχει.
- *
- * Παράδειγμα: μενού πλοήγησης με slug "main-en" για τα Αγγλικά.
- *
- * @param array $parsed_block Το μπλοκ.
- * @return array
- */
 function kosmiteia_localize_navigation( $parsed_block ) {
 	if ( empty( $parsed_block['blockName'] ) || 'core/navigation' !== $parsed_block['blockName'] ) {
 		return $parsed_block;
@@ -355,12 +255,6 @@ function kosmiteia_localize_navigation( $parsed_block ) {
 }
 add_filter( 'render_block_data', 'kosmiteia_localize_navigation' );
 
-/**
- * HTML του language switcher (χρησιμοποιείται από το ομώνυμο μπλοκ).
- *
- * @param array $args Ρυθμίσεις εμφάνισης.
- * @return string
- */
 function kosmiteia_language_switcher_html( $args = array() ) {
 	$args = wp_parse_args(
 		$args,
@@ -400,9 +294,6 @@ function kosmiteia_language_switcher_html( $args = array() ) {
 	);
 }
 
-/**
- * hreflang links στο <head> για SEO.
- */
 function kosmiteia_hreflang_tags() {
 	$languages = kosmiteia_get_languages();
 

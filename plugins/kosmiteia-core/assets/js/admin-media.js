@@ -1,9 +1,3 @@
-/**
- * Kosmiteia - πεδίο «Εικόνα» στις Ρυθμίσεις.
- *
- * Ανοίγει τη Βιβλιοθήκη πολυμέσων και γράφει το ID της εικόνας στο πεδίο.
- * Η αποθήκευση γίνεται με το κανονικό κουμπί «Αποθήκευση αλλαγών».
- */
 ( function ( $ ) {
 	'use strict';
 
@@ -17,11 +11,6 @@
 			var remove = field.find( '[data-action="remove"]' );
 			var frame = null;
 
-			/**
-			 * Δείχνει την επιλεγμένη εικόνα (ή τίποτα).
-			 *
-			 * @param {string} url Η διεύθυνση της εικόνας.
-			 */
 			function render( url ) {
 				preview.empty();
 
@@ -66,7 +55,6 @@
 				render( '' );
 			} );
 
-			// Αν το ID γραφτεί με το χέρι, η προεπισκόπηση δεν παραπλανά.
 			input.on( 'change', function () {
 				if ( ! parseInt( input.val(), 10 ) ) {
 					render( '' );

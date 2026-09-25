@@ -1,6 +1,3 @@
-/**
- * Μπλοκ "Επιλογέας γλώσσας" (δυναμικό - render από PHP).
- */
 ( function ( blocks, blockEditor, components, element, i18n, serverSideRender ) {
 	'use strict';
 

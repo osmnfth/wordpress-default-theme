@@ -1,21 +1,6 @@
 <?php
-/**
- * SEO: meta description, Open Graph, Twitter cards και structured data (JSON-LD).
- *
- * Όλα παράγονται δυναμικά από το περιεχόμενο. Αν υπάρχει ενεργό SEO plugin
- * (Yoast, Rank Math, SEOPress, AIOSEO) το theme κάνει στην άκρη και δεν
- * τυπώνει διπλά meta tags.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Υπάρχει ενεργό SEO plugin;
- *
- * @return bool
- */
 function kosmiteia_seo_plugin_active() {
 	return (
 		defined( 'WPSEO_VERSION' ) ||
@@ -25,11 +10,6 @@ function kosmiteia_seo_plugin_active() {
 	);
 }
 
-/**
- * Περιγραφή της τρέχουσας σελίδας.
- *
- * @return string
- */
 function kosmiteia_meta_description() {
 	$description = '';
 
@@ -59,11 +39,6 @@ function kosmiteia_meta_description() {
 	return trim( wp_strip_all_tags( $description ) );
 }
 
-/**
- * Η εικόνα που αντιπροσωπεύει τη σελίδα (για OG / Twitter).
- *
- * @return string URL ή κενό.
- */
 function kosmiteia_share_image() {
 	if ( is_singular() && has_post_thumbnail() ) {
 		$image = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
@@ -86,9 +61,6 @@ function kosmiteia_share_image() {
 	return '';
 }
 
-/**
- * Meta tags στο <head>.
- */
 function kosmiteia_head_meta() {
 	if ( kosmiteia_seo_plugin_active() ) {
 		return;
@@ -134,9 +106,6 @@ function kosmiteia_head_meta() {
 }
 add_action( 'wp_head', 'kosmiteia_head_meta', 6 );
 
-/**
- * Structured data (schema.org) σε JSON-LD.
- */
 function kosmiteia_json_ld() {
 	if ( kosmiteia_seo_plugin_active() ) {
 		return;
@@ -146,7 +115,6 @@ function kosmiteia_json_ld() {
 	$home  = home_url( '/' );
 	$logo  = kosmiteia_share_image();
 
-	// Ο οργανισμός (Κοσμητεία / Σχολή).
 	$organization = array(
 		'@type'  => 'CollegeOrUniversity',
 		'@id'    => $home . '#organization',
@@ -162,7 +130,6 @@ function kosmiteia_json_ld() {
 		$organization['logo'] = $logo;
 	}
 
-	// Στοιχεία επικοινωνίας από τις Ρυθμίσεις Κοσμητείας.
 	$address = kosmiteia_option( 'contact_address' );
 	$phone   = kosmiteia_option( 'contact_phone' );
 	$email   = kosmiteia_option( 'contact_email' );
@@ -205,7 +172,6 @@ function kosmiteia_json_ld() {
 
 	$graph[] = $organization;
 
-	// Το website + εσωτερική αναζήτηση.
 	$graph[] = array(
 		'@type'           => 'WebSite',
 		'@id'             => $home . '#website',
@@ -379,12 +345,6 @@ function kosmiteia_json_ld() {
 }
 add_action( 'wp_head', 'kosmiteia_json_ld', 7 );
 
-/**
- * Καθαρά, περιγραφικά titles για τα αρχεία των CPT.
- *
- * @param array $parts Τμήματα του τίτλου.
- * @return array
- */
 function kosmiteia_document_title_parts( $parts ) {
 	if ( is_post_type_archive( array( 'kosm_school', 'kosm_announcement', 'kosm_program', 'kosm_event', 'kosm_person', 'kosm_document' ) ) ) {
 		$object = get_queried_object();

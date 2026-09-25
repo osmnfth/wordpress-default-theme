@@ -1,22 +1,6 @@
 <?php
-/**
- * Breadcrumbs (διαδρομή πλοήγησης).
- *
- * Μία συνάρτηση χτίζει τη διαδρομή και τη χρησιμοποιούν και το μπλοκ
- * kosmiteia/breadcrumbs (ορατή διαδρομή) και το JSON-LD του inc/seo.php,
- * ώστε τα δύο να μη διαφωνούν ποτέ.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Η διαδρομή της τρέχουσας σελίδας.
- *
- * @return array Λίστα από array( 'name' => string, 'url' => string ). Το
- *               τελευταίο στοιχείο (τρέχουσα σελίδα) έχει κενό url.
- */
 function kosmiteia_breadcrumb_trail() {
 	$trail = array();
 
@@ -58,7 +42,6 @@ function kosmiteia_breadcrumb_trail() {
 		} else {
 			$add_post_type_archive( $post_type );
 
-			// Για τις ανακοινώσεις προσθέτουμε και την κατηγορία τους.
 			if ( 'kosm_announcement' === $post_type ) {
 				$terms = get_the_terms( $post_id, 'kosm_ann_category' );
 
@@ -139,12 +122,6 @@ function kosmiteia_breadcrumb_trail() {
 	return $trail;
 }
 
-/**
- * Η διαδρομή σε HTML.
- *
- * @param array $attributes Attributes του μπλοκ.
- * @return string
- */
 function kosmiteia_breadcrumbs_html( $attributes = array() ) {
 	$attributes = wp_parse_args(
 		$attributes,
@@ -198,12 +175,6 @@ function kosmiteia_breadcrumbs_html( $attributes = array() ) {
 	);
 }
 
-/**
- * Render callback του μπλοκ «Διαδρομή πλοήγησης».
- *
- * @param array $attributes Attributes του μπλοκ.
- * @return string
- */
 function kosmiteia_render_breadcrumbs_block( $attributes ) {
 	$html = kosmiteia_breadcrumbs_html( $attributes );
 

@@ -1,23 +1,8 @@
-/**
- * Χάρτης Leaflet για το μπλοκ kosmiteia/map.
- *
- * - Ο χάρτης στήνεται μόλις πλησιάσει στο viewport, ώστε να μη ζητούνται
- *   πλακίδια από το OpenStreetMap αν ο επισκέπτης δεν φτάσει ποτέ σε αυτόν.
- * - Αν λείπει η Leaflet ή το JavaScript, μένει ορατή η εναλλακτική εμφάνιση
- *   (διεύθυνση + σύνδεσμος προς τον χάρτη) που έχει ήδη τυπώσει η PHP.
- */
 ( function () {
 	'use strict';
 
 	var settings = window.kosmiteiaMapL10n || {};
 
-	/**
-	 * Το περιεχόμενο της πινέζας ως DOM (χωρίς innerHTML).
-	 *
-	 * @param {string} title   Τίτλος.
-	 * @param {string} address Διεύθυνση.
-	 * @return {HTMLElement} Στοιχείο για το popup.
-	 */
 	function popupContent( title, address ) {
 		var wrapper = document.createElement( 'div' );
 		wrapper.className = 'kosmiteia-map__popup';
@@ -37,11 +22,6 @@
 		return wrapper;
 	}
 
-	/**
-	 * Στήσιμο ενός χάρτη.
-	 *
-	 * @param {HTMLElement} node Το wrapper του μπλοκ.
-	 */
 	function init( node ) {
 		if ( node.dataset.kosmiteiaReady || ! window.L ) {
 			return;
@@ -62,8 +42,6 @@
 			window.L.Icon.Default.imagePath = settings.imagePath;
 		}
 
-		// Πρώτα εμφανίζεται ο καμβάς και μετά στήνεται ο χάρτης: η Leaflet
-		// χρειάζεται δοχείο με πραγματικές διαστάσεις τη στιγμή της αρχικοποίησης.
 		node.classList.add( 'is-ready' );
 
 		var map = window.L.map( canvas, {
@@ -95,15 +73,11 @@
 			canvas.setAttribute( 'role', 'region' );
 		}
 
-		// Ο χάρτης μπορεί να στηθεί ενώ το δοχείο αλλάζει μέγεθος (π.χ. σε στήλες).
 		window.setTimeout( function () {
 			map.invalidateSize();
 		}, 200 );
 	}
 
-	/**
-	 * Παρακολούθηση όλων των χαρτών της σελίδας.
-	 */
 	function boot() {
 		var maps = document.querySelectorAll( '.kosmiteia-map' );
 

@@ -97,9 +97,6 @@ function kosmiteia_enqueue_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'kosmiteia_enqueue_assets' );
 
-/**
- * Κατηγορίες patterns ώστε τα έτοιμα μπλοκ να βρίσκονται εύκολα στον inserter.
- */
 function kosmiteia_register_pattern_categories() {
 	if ( ! function_exists( 'register_block_pattern_category' ) ) {
 		return;
@@ -115,9 +112,6 @@ function kosmiteia_register_pattern_categories() {
 }
 add_action( 'init', 'kosmiteia_register_pattern_categories' );
 
-/**
- * Block styles (εναλλακτικές εμφανίσεις που επιλέγονται από το UI).
- */
 function kosmiteia_register_block_styles() {
 	register_block_style( 'core/post-template', array(
 		'name'  => 'kosmiteia-cards',
@@ -151,13 +145,6 @@ function kosmiteia_register_block_styles() {
 }
 add_action( 'init', 'kosmiteia_register_block_styles' );
 
-/**
- * Προσβασιμότητα: το "Read more" των query loops παίρνει το όνομα του άρθρου.
- *
- * @param string $content Περιεχόμενο μπλοκ.
- * @param array  $block   Δεδομένα μπλοκ.
- * @return string
- */
 function kosmiteia_accessible_read_more( $content, $block ) {
 	$blocks = array( 'core/read-more', 'core/post-excerpt' );
 

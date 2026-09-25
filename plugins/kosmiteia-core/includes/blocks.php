@@ -1,31 +1,6 @@
 <?php
-/**
- * Custom blocks του theme.
- *
- * - kosmiteia/slider              : προσβάσιμο hero slider με InnerBlocks
- *                                   (κάθε διαφάνεια είναι κανονικό Cover/Group,
- *                                   άρα φωτογραφία ή βίντεο και κουμπιά μπαίνουν
- *                                   από το UI).
- * - kosmiteia/language-switcher   : δυναμικός επιλογέας γλώσσας.
- * - kosmiteia/announcement-filters: αναζήτηση και φίλτρα στο αρχείο Ανακοινώσεων.
- * - kosmiteia/program-filters     : αναζήτηση, φίλτρα και ταξινόμηση στο αρχείο
- *                                   Μεταπτυχιακών.
- * - kosmiteia/breadcrumbs        : διαδρομή πλοήγησης (breadcrumbs).
- * - kosmiteia/map                 : χάρτης Leaflet / OpenStreetMap.
- * - kosmiteia/gallery             : μικρογραφίες σε responsive γραμμή με
- *                                   lightbox (χωρίς jQuery/Colorbox).
- *
- * Τα scripts του editor είναι γραμμένα σε καθαρή JavaScript (χωρίς JSX),
- * οπότε το theme δεν χρειάζεται build step (npm/webpack).
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Καταχώριση των editor scripts με τα σωστά dependencies.
- */
 function kosmiteia_register_block_scripts() {
 	wp_register_script(
 		'kosmiteia-slider-editor',
@@ -105,13 +80,6 @@ function kosmiteia_register_block_scripts() {
 }
 add_action( 'init', 'kosmiteia_register_block_scripts', 5 );
 
-/**
- * Leaflet + το δικό μας script/στυλ χάρτη.
- *
- * Η Leaflet συνοδεύει το theme (assets/vendor/leaflet), οπότε δεν φορτώνεται
- * τίποτα από CDN. Τα αρχεία μπαίνουν στη σελίδα μόνο όταν υπάρχει μπλοκ χάρτη,
- * μέσω των πεδίων "style"/"viewScript" του block.json.
- */
 function kosmiteia_register_map_assets() {
 	wp_register_style(
 		'kosmiteia-leaflet',
@@ -155,12 +123,6 @@ function kosmiteia_register_map_assets() {
 	);
 }
 
-/**
- * Το script του slider.
- *
- * Φορτώνεται μόνο όπου υπάρχει μπλοκ slider (πεδίο "viewScript" του
- * block.json) - όχι σε κάθε σελίδα. Τα στυλ του είναι στο θέμα.
- */
 function kosmiteia_register_slider_assets() {
 	wp_register_script(
 		'kosmiteia-slider-view',
@@ -170,7 +132,6 @@ function kosmiteia_register_slider_assets() {
 		true
 	);
 
-	// Μεταφρασμένα labels για την προσβασιμότητα του slider (aria-label κ.λπ.).
 	wp_localize_script(
 		'kosmiteia-slider-view',
 		'kosmiteiaSliderL10n',
@@ -188,12 +149,6 @@ function kosmiteia_register_slider_assets() {
 	);
 }
 
-/**
- * Το script του lightbox.
- *
- * Φορτώνεται μόνο στις σελίδες που έχουν μπλοκ γκαλερί (πεδίο "viewScript"
- * του block.json). Τα στυλ του βρίσκονται στο assets/css/theme.css.
- */
 function kosmiteia_register_lightbox_assets() {
 	wp_register_script(
 		'kosmiteia-lightbox',
@@ -217,23 +172,10 @@ function kosmiteia_register_lightbox_assets() {
 	);
 }
 
-/**
- * Το URL των πλακιδίων (tiles).
- *
- * Αλλάξτε το αν το Ίδρυμα διαθέτει δικό του tile server:
- *   add_filter( 'kosmiteia_map_tile_url', function () { return 'https://.../{z}/{x}/{y}.png'; } );
- *
- * @return string
- */
 function kosmiteia_map_tile_url() {
 	return (string) apply_filters( 'kosmiteia_map_tile_url', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png' );
 }
 
-/**
- * Η απαιτούμενη απόδοση πηγής των πλακιδίων.
- *
- * @return string
- */
 function kosmiteia_map_attribution() {
 	return (string) apply_filters(
 		'kosmiteia_map_attribution',
@@ -241,9 +183,6 @@ function kosmiteia_map_attribution() {
 	);
 }
 
-/**
- * Καταχώριση των μπλοκ από τα block.json.
- */
 function kosmiteia_register_blocks() {
 	register_block_type( KOSMITEIA_CORE_DIR . '/blocks/slider' );
 
@@ -291,12 +230,6 @@ function kosmiteia_register_blocks() {
 }
 add_action( 'init', 'kosmiteia_register_blocks' );
 
-/**
- * Render callback του language switcher.
- *
- * @param array $attributes Attributes του μπλοκ.
- * @return string
- */
 function kosmiteia_render_language_switcher_block( $attributes ) {
 	$html = kosmiteia_language_switcher_html(
 		array(
@@ -319,16 +252,6 @@ function kosmiteia_render_language_switcher_block( $attributes ) {
 	);
 }
 
-/**
- * Render callback του χάρτη.
- *
- * Τυπώνει τα δεδομένα ως data attributes και μια πλήρη εναλλακτική εμφάνιση
- * (διεύθυνση + σύνδεσμοι). Το JavaScript απλώς «ανεβάζει» τον χάρτη από πάνω,
- * οπότε χωρίς JS ή χωρίς δίκτυο η πληροφορία παραμένει προσβάσιμη.
- *
- * @param array $attributes Attributes του μπλοκ.
- * @return string
- */
 function kosmiteia_render_map_block( $attributes ) {
 	$attributes = wp_parse_args(
 		$attributes,
@@ -413,16 +336,6 @@ function kosmiteia_render_map_block( $attributes ) {
 	);
 }
 
-/**
- * Οι εικόνες που θα δείξει η γκαλερί.
- *
- * Πηγή είναι αποκλειστικά το πεδίο «Φωτογραφίες (γκαλερί)» της σελίδας
- * (inc/gallery.php) - ποτέ οι εικόνες του κειμένου ή η επιλεγμένη εικόνα.
- *
- * @param array $attributes Attributes του μπλοκ.
- * @param int   $post_id    Η σελίδα στην οποία ανήκει το μπλοκ.
- * @return int[] IDs συνημμένων, με τη σειρά που όρισε ο συντάκτης.
- */
 function kosmiteia_gallery_image_ids( $attributes, $post_id ) {
 	if ( ! $post_id ) {
 		return array();
@@ -438,18 +351,6 @@ function kosmiteia_gallery_image_ids( $attributes, $post_id ) {
 	return $ids;
 }
 
-/**
- * Render callback της γκαλερί.
- *
- * Κάθε μικρογραφία είναι σύνδεσμος προς το πλήρες αρχείο: χωρίς JavaScript η
- * εικόνα ανοίγει κανονικά σε νέα προβολή, ενώ με JavaScript την αναλαμβάνει το
- * lightbox (assets/js/lightbox.js).
- *
- * @param array    $attributes Attributes του μπλοκ.
- * @param string   $content    Περιεχόμενο (δεν χρησιμοποιείται).
- * @param WP_Block $block      Το instance του μπλοκ, για το context της σελίδας.
- * @return string
- */
 function kosmiteia_render_gallery_block( $attributes, $content = '', $block = null ) {
 	static $instance = 0;
 

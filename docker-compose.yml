@@ -1,14 +1,6 @@
 name: kosmiteia
 
-# Πλήρες περιβάλλον ανάπτυξης για το theme "Κοσμητεία":
-#   docker compose up -d      -> WordPress στο ${KOSMITEIA_URL:-http://localhost:8090}
-#                                (στοιχεία διαχειριστή: δείτε το .env)
-#   docker compose down       -> σταματά (κρατά τη βάση)
-#   docker compose down -v    -> σβήνει τα πάντα και ξαναστήνει από την αρχή
 #
-# Οι φάκελοι ./kosmiteia (θέμα) και ./plugins/kosmiteia-core (πρόσθετο) είναι
-# mounted μέσα στο container: ό,τι αλλάζετε τοπικά φαίνεται αμέσως στο site.
-# Το πρόσθετο εμφανίζεται κανονικά στα Πρόσθετα της διαχείρισης.
 
 services:
   db:
@@ -52,12 +44,8 @@ services:
       - ./kosmiteia:/var/www/html/wp-content/themes/kosmiteia
       - ./plugins/kosmiteia-core:/var/www/html/wp-content/plugins/kosmiteia-core
 
-  # Τρέχει μία φορά στο "up": εγκαθιστά το WordPress, ενεργοποιεί το theme
-  # και δημιουργεί δοκιμαστικό περιεχόμενο, μενού και αγγλικά template parts.
   provision:
     image: wordpress:cli-php8.3
-    # Ίδιο uid με τον Apache (www-data), ώστε τα αρχεία που δημιουργούνται
-    # (uploads, thumbnails) να ανήκουν στον σωστό χρήστη.
     user: "33:33"
     depends_on:
       db:

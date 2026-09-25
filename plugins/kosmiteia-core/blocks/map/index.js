@@ -1,10 +1,3 @@
-/**
- * Μπλοκ «Χάρτης (Leaflet)».
- *
- * Στον editor δείχνει σύνοψη (συντεταγμένες, τίτλος, διεύθυνση) αντί για ζωντανό
- * χάρτη: έτσι ο Site Editor δεν φορτώνει πλακίδια από το δίκτυο σε κάθε αλλαγή
- * και η επεξεργασία παραμένει γρήγορη. Ο χάρτης εμφανίζεται στο front-end.
- */
 ( function ( blocks, blockEditor, components, element, i18n ) {
 	'use strict';
 
@@ -21,13 +14,6 @@
 	var Placeholder = components.Placeholder;
 	var ExternalLink = components.ExternalLink;
 
-	/**
-	 * Μετατρέπει το κείμενο του πεδίου σε αριθμό, δεχόμενο και κόμμα ως υποδιαστολή.
-	 *
-	 * @param {string} value Τιμή πεδίου.
-	 * @param {number} fallback Τιμή αν το κείμενο δεν είναι αριθμός.
-	 * @return {number} Ο αριθμός.
-	 */
 	function toNumber( value, fallback ) {
 		var parsed = parseFloat( String( value ).replace( ',', '.' ) );
 
@@ -154,9 +140,6 @@
 							( attributes.markerTitle || __( 'Χωρίς τίτλο πινέζας', 'kosmiteia' ) ) +
 								( attributes.markerAddress ? ' — ' + attributes.markerAddress : '' )
 						),
-						// Τα ίδια πεδία υπάρχουν και στις ρυθμίσεις του μπλοκ. Εδώ
-						// είναι πάντα ορατά, ώστε να μπαίνουν οι συντεταγμένες
-						// χωρίς να χρειάζεται να ανοίξει η πλαϊνή στήλη.
 						el(
 							'div',
 							{ className: 'kosmiteia-map-editor__coords' },

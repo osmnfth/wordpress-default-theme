@@ -1,32 +1,9 @@
 <?php
-/**
- * Ρυθμίσεις ιστότοπου (Κοσμητεία → Ρυθμίσεις).
- *
- * Ό,τι αλλάζει από ίδρυμα σε ίδρυμα - διεύθυνση, τηλέφωνα, ωράριο, χάρτης,
- * κοινωνικά δίκτυα, αριθμός ανακοινώσεων ανά σελίδα - ζει εδώ και όχι μέσα
- * στα templates ή στα patterns. Τα κείμενα διαβάζονται στη σελίδα μέσω των
- * Block Bindings (δείτε includes/bindings.php), οπότε μια αλλαγή εδώ
- * ενημερώνει αυτόματα κάθε σημείο που τα εμφανίζει.
- *
- * Ανάγνωση από κώδικα:  kosmiteia_option( 'contact_email' )
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
 const KOSMITEIA_SETTINGS_OPTION = 'kosmiteia_settings';
 const KOSMITEIA_SETTINGS_GROUP  = 'kosmiteia_settings_group';
 
-/**
- * Οι ενότητες και τα πεδία των ρυθμίσεων.
- *
- * Κάθε πεδίο: label, type (text|textarea|richtext|email|url|tel|number|
- * checkbox|image|page|select), default και προαιρετικά description / options /
- * step / min / max.
- *
- * @return array
- */
 function kosmiteia_settings_schema() {
 	$schema = array(
 
@@ -297,19 +274,9 @@ function kosmiteia_settings_schema() {
 		),
 	);
 
-	/**
-	 * Φίλτρο για προσθήκη/αφαίρεση πεδίων από child theme ή plugin.
-	 *
-	 * @param array $schema Οι ενότητες και τα πεδία.
-	 */
 	return apply_filters( 'kosmiteia_settings_schema', $schema );
 }
 
-/**
- * Οι προεπιλεγμένες τιμές όλων των πεδίων.
- *
- * @return array
- */
 function kosmiteia_settings_defaults() {
 	$defaults = array();
 
@@ -322,9 +289,6 @@ function kosmiteia_settings_defaults() {
 	return $defaults;
 }
 
-/**
- * Συμπληρώνει όσες προεπιλογές λείπουν (κατά την ενεργοποίηση).
- */
 function kosmiteia_settings_add_defaults() {
 	$saved = get_option( KOSMITEIA_SETTINGS_OPTION, array() );
 
@@ -335,11 +299,6 @@ function kosmiteia_settings_add_defaults() {
 	update_option( KOSMITEIA_SETTINGS_OPTION, array_merge( kosmiteia_settings_defaults(), $saved ) );
 }
 
-/**
- * Όλες οι ρυθμίσεις, με τις προεπιλογές συμπληρωμένες.
- *
- * @return array
- */
 function kosmiteia_settings() {
 	static $cache   = null;
 	static $loading = false;
@@ -348,10 +307,6 @@ function kosmiteia_settings() {
 		return $cache;
 	}
 
-	// Οι προεπιλογές περνούν από __(), δηλαδή από τον μηχανισμό μετάφρασης· αν
-	// κάποιο φίλτρο γλώσσας ζητήσει ρύθμιση εκείνη τη στιγμή, θα ξαναμπαίναμε
-	// εδώ. Στην περίπτωση αυτή επιστρέφουμε ό,τι είναι αποθηκευμένο, χωρίς
-	// προεπιλογές, ώστε να μη δημιουργηθεί ατέρμονη αναδρομή.
 	if ( $loading ) {
 		$saved = get_option( KOSMITEIA_SETTINGS_OPTION, array() );
 
@@ -367,13 +322,6 @@ function kosmiteia_settings() {
 	return $cache;
 }
 
-/**
- * Μία ρύθμιση.
- *
- * @param string $key     Κλειδί πεδίου.
- * @param mixed  $default Τιμή αν λείπει.
- * @return mixed
- */
 function kosmiteia_option( $key, $default = '' ) {
 	$settings = kosmiteia_settings();
 
@@ -381,27 +329,9 @@ function kosmiteia_option( $key, $default = '' ) {
 		return $default;
 	}
 
-	/**
-	 * Φίλτρο ανά ρύθμιση.
-	 *
-	 * @param mixed  $value Η τιμή.
-	 * @param string $key   Το κλειδί.
-	 */
 	return apply_filters( 'kosmiteia_option', $settings[ $key ], $key );
 }
 
-/**
- * Ανάγνωση ρύθμισης χωρίς να «ξυπνήσει» ο μηχανισμός μεταφράσεων.
- *
- * Οι προεπιλογές των πεδίων περνούν από __(), οπότε δεν πρέπει να ζητούνται πριν
- * το init (το WordPress 6.7+ βγάζει ειδοποίηση «translation triggered too
- * early»). Όποιος χρειάζεται ρύθμιση πολύ νωρίς - π.χ. το φίλτρο γλώσσας -
- * χρησιμοποιεί αυτή τη συνάρτηση, που διαβάζει σκέτα την αποθηκευμένη τιμή.
- *
- * @param string $key     Κλειδί πεδίου.
- * @param mixed  $default Τιμή αν λείπει.
- * @return mixed
- */
 function kosmiteia_option_raw( $key, $default = '' ) {
 	$saved = get_option( KOSMITEIA_SETTINGS_OPTION, array() );
 
@@ -412,12 +342,6 @@ function kosmiteia_option_raw( $key, $default = '' ) {
 	return $saved[ $key ];
 }
 
-/**
- * Καθαρισμός των τιμών πριν την αποθήκευση.
- *
- * @param array $input Ό,τι ήρθε από τη φόρμα.
- * @return array
- */
 function kosmiteia_settings_sanitize( $input ) {
 	$clean = array();
 
@@ -448,8 +372,6 @@ function kosmiteia_settings_sanitize( $input ) {
 					break;
 
 				case 'richtext':
-					// Επιτρέπεται ό,τι και σε ένα άρθρο (σύνδεσμοι, έντονα,
-					// λίστες) - τίποτα εκτελέσιμο.
 					$clean[ $key ] = wp_kses_post( $value );
 					break;
 
@@ -474,9 +396,6 @@ function kosmiteia_settings_sanitize( $input ) {
 	return $clean;
 }
 
-/**
- * Καταχώριση της ρύθμισης (Settings API + REST, ώστε να διαβάζεται και από τον editor).
- */
 function kosmiteia_settings_register() {
 	register_setting(
 		KOSMITEIA_SETTINGS_GROUP,
@@ -491,9 +410,6 @@ function kosmiteia_settings_register() {
 }
 add_action( 'admin_init', 'kosmiteia_settings_register' );
 
-/**
- * Μενού «Κοσμητεία» με τις σελίδες Ρυθμίσεων και Εργαλείων.
- */
 function kosmiteia_settings_menu() {
 	add_menu_page(
 		__( 'Κοσμητεία', 'kosmiteia' ),
@@ -516,19 +432,11 @@ function kosmiteia_settings_menu() {
 }
 add_action( 'admin_menu', 'kosmiteia_settings_menu' );
 
-/**
- * Ένα πεδίο της φόρμας.
- *
- * @param string $key   Κλειδί.
- * @param array  $field Ορισμός πεδίου.
- * @param mixed  $value Τρέχουσα τιμή.
- */
 function kosmiteia_settings_field( $key, $field, $value ) {
 	$name = KOSMITEIA_SETTINGS_OPTION . '[' . $key . ']';
 	$id   = 'kosmiteia-' . str_replace( '_', '-', $key );
 	$type = isset( $field['type'] ) ? $field['type'] : 'text';
 
-	// Ο editor του WordPress δέχεται id μόνο με πεζά και κάτω παύλες.
 	$label_for = ( 'richtext' === $type ) ? str_replace( '-', '_', $id ) : $id;
 
 	echo '<tr><th scope="row"><label for="' . esc_attr( $label_for ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
@@ -569,7 +477,7 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 			'<select id="%1$s" name="%2$s">%3$s</select>',
 			esc_attr( $id ),
 			esc_attr( $name ),
-			$options // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Τα μέρη του έχουν ήδη περάσει από esc_attr()/esc_html().
+			$options // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		);
 	} elseif ( 'page' === $type ) {
 		wp_dropdown_pages(
@@ -604,7 +512,7 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 			esc_attr( $id ),
 			esc_attr( $name ),
 			esc_attr( (string) $value ),
-			$extra // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Τα μέρη του έχουν ήδη περάσει από esc_attr().
+			$extra // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		);
 	}
 
@@ -615,16 +523,6 @@ function kosmiteia_settings_field( $key, $field, $value ) {
 	echo '</td></tr>';
 }
 
-/**
- * Πεδίο επιλογής εικόνας από τη Βιβλιοθήκη πολυμέσων.
- *
- * Χωρίς JavaScript παραμένει χρησιμοποιήσιμο: το ID της εικόνας φαίνεται και
- * γράφεται με το χέρι στο πεδίο κειμένου.
- *
- * @param string $id    HTML id.
- * @param string $name  Όνομα πεδίου.
- * @param int    $value Το ID της εικόνας.
- */
 function kosmiteia_settings_image_field( $id, $name, $value ) {
 	$image = $value ? wp_get_attachment_image( $value, 'medium', false, array( 'style' => 'max-width:180px;height:auto' ) ) : '';
 
@@ -633,7 +531,7 @@ function kosmiteia_settings_image_field( $id, $name, $value ) {
 		. '<p><button type="button" class="button" data-action="select">%2$s</button> '
 		. '<button type="button" class="button-link" data-action="remove"%3$s>%4$s</button></p>'
 		. '<p><label>%5$s <input type="number" min="0" step="1" id="%6$s" name="%7$s" value="%8$d" class="small-text" data-input></label></p></div>',
-		$image, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- έξοδος του wp_get_attachment_image().
+		$image, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		esc_html__( 'Επιλογή εικόνας', 'kosmiteia' ),
 		$value ? '' : ' hidden',
 		esc_html__( 'Αφαίρεση', 'kosmiteia' ),
@@ -644,11 +542,6 @@ function kosmiteia_settings_image_field( $id, $name, $value ) {
 	);
 }
 
-/**
- * Assets της σελίδας ρυθμίσεων: Βιβλιοθήκη πολυμέσων για το πεδίο εικόνας.
- *
- * @param string $hook Το τρέχον admin screen.
- */
 function kosmiteia_settings_admin_assets( $hook ) {
 	if ( 'toplevel_page_kosmiteia-settings' !== $hook ) {
 		return;
@@ -682,9 +575,6 @@ function kosmiteia_settings_admin_assets( $hook ) {
 }
 add_action( 'admin_enqueue_scripts', 'kosmiteia_settings_admin_assets' );
 
-/**
- * Η σελίδα ρυθμίσεων.
- */
 function kosmiteia_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
@@ -714,9 +604,6 @@ function kosmiteia_settings_page() {
 	echo '</form></div>';
 }
 
-/**
- * Καθάρισμα της στατικής cache όταν αποθηκεύονται οι ρυθμίσεις.
- */
 function kosmiteia_settings_flush_cache() {
 	wp_cache_delete( KOSMITEIA_SETTINGS_OPTION, 'options' );
 }

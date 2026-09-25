@@ -1,26 +1,6 @@
 <?php
-/**
- * Πεδίο «Φωτογραφίες (γκαλερί)» στη διαχείριση.
- *
- * Οι φωτογραφίες της γκαλερί επιλέγονται σε δικό τους πεδίο, έξω από το
- * κείμενο του άρθρου: έτσι δεν μπερδεύονται ποτέ με τις εικόνες που μπαίνουν
- * μέσα στο περιεχόμενο ούτε με την επιλεγμένη εικόνα (featured).
- *
- * Αποθηκεύονται στο meta `kosm_gallery` ως λίστα IDs χωρισμένη με κόμμα.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Οι τύποι περιεχομένου που έχουν το πεδίο γκαλερί.
- *
- * Προσθήκη/αφαίρεση από ένα child ή plugin:
- *   add_filter( 'kosmiteia_gallery_post_types', function ( $types ) { ... } );
- *
- * @return string[]
- */
 function kosmiteia_gallery_post_types() {
 	return (array) apply_filters(
 		'kosmiteia_gallery_post_types',
@@ -28,12 +8,6 @@ function kosmiteia_gallery_post_types() {
 	);
 }
 
-/**
- * Καθαρίζει την τιμή του πεδίου: μόνο IDs εικόνων, χωρίς διπλά, με κόμμα.
- *
- * @param string $value Η τιμή όπως ήρθε από τη φόρμα ή το REST API.
- * @return string
- */
 function kosmiteia_sanitize_gallery_ids( $value ) {
 	$ids = array_filter( array_map( 'absint', explode( ',', (string) $value ) ) );
 	$ids = array_values( array_unique( $ids ) );
@@ -48,9 +22,6 @@ function kosmiteia_sanitize_gallery_ids( $value ) {
 	return implode( ',', $ids );
 }
 
-/**
- * Καταχώριση του meta, ώστε να είναι διαθέσιμο και μέσω REST API.
- */
 function kosmiteia_register_gallery_meta() {
 	foreach ( kosmiteia_gallery_post_types() as $post_type ) {
 		register_post_meta(
@@ -72,12 +43,6 @@ function kosmiteia_register_gallery_meta() {
 }
 add_action( 'init', 'kosmiteia_register_gallery_meta' );
 
-/**
- * Τα IDs των φωτογραφιών μιας σελίδας, με τη σειρά που τα όρισε ο συντάκτης.
- *
- * @param int $post_id ID σελίδας.
- * @return int[]
- */
 function kosmiteia_gallery_field_ids( $post_id ) {
 	$value = (string) get_post_meta( (int) $post_id, 'kosm_gallery', true );
 
@@ -97,9 +62,6 @@ function kosmiteia_gallery_field_ids( $post_id ) {
 	);
 }
 
-/**
- * Το meta box στην οθόνη επεξεργασίας.
- */
 function kosmiteia_add_gallery_meta_box() {
 	foreach ( kosmiteia_gallery_post_types() as $post_type ) {
 		add_meta_box(
@@ -114,12 +76,6 @@ function kosmiteia_add_gallery_meta_box() {
 }
 add_action( 'add_meta_boxes', 'kosmiteia_add_gallery_meta_box' );
 
-/**
- * Μία μικρογραφία μέσα στο πεδίο.
- *
- * @param int $id ID συνημμένου.
- * @return string
- */
 function kosmiteia_gallery_field_item( $id ) {
 	$thumb = wp_get_attachment_image(
 		$id,
@@ -146,11 +102,6 @@ function kosmiteia_gallery_field_item( $id ) {
 	);
 }
 
-/**
- * Το περιεχόμενο του meta box.
- *
- * @param WP_Post $post Η σελίδα που επεξεργαζόμαστε.
- */
 function kosmiteia_render_gallery_meta_box( $post ) {
 	wp_nonce_field( 'kosmiteia_gallery_save', 'kosmiteia_gallery_nonce' );
 
@@ -186,11 +137,6 @@ function kosmiteia_render_gallery_meta_box( $post ) {
 	<?php
 }
 
-/**
- * Αποθήκευση του πεδίου.
- *
- * @param int $post_id ID σελίδας.
- */
 function kosmiteia_save_gallery_meta( $post_id ) {
 	if ( ! isset( $_POST['kosmiteia_gallery_nonce'] ) ) {
 		return;
@@ -223,11 +169,6 @@ function kosmiteia_save_gallery_meta( $post_id ) {
 }
 add_action( 'save_post', 'kosmiteia_save_gallery_meta' );
 
-/**
- * Assets του πεδίου (media modal + το δικό μας script/στυλ).
- *
- * @param string $hook Το τρέχον admin screen.
- */
 function kosmiteia_gallery_admin_assets( $hook ) {
 	if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
 		return;

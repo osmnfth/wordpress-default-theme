@@ -1,29 +1,6 @@
 <?php
-/**
- * Οθόνη φόρτωσης (loader) για αργές συνδέσεις.
- *
- * Λευκή οθόνη σε όλο το παράθυρο, με το λογότυπο στο κέντρο και διακριτική
- * κίνηση, όσο φορτώνει η σελίδα. Εμφανίζεται μόνο όταν η φόρτωση αργεί
- * περισσότερο από το όριο των Ρυθμίσεων (προεπιλογή 350 ms), ώστε σε γρήγορη
- * σύνδεση να μη «αναβοσβήνει», και - στην προεπιλογή - μόνο σε κινητά.
- *
- * Το CSS και το JavaScript μπαίνουν inline: σε αργή σύνδεση ένα επιπλέον
- * αρχείο θα έφτανε αργότερα από τη σελίδα που θέλει να καλύψει.
- *
- * Χωρίς JavaScript δεν εμφανίζεται τίποτα - η οθόνη ξεκινά κρυφή και μόνο το
- * script τη δείχνει, οπότε δεν υπάρχει περίπτωση να «κολλήσει» πάνω από το
- * περιεχόμενο.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Τα στοιχεία της οθόνης φόρτωσης, ή κενός πίνακας όταν δεν πρέπει να μπει.
- *
- * @return array
- */
 function kosmiteia_page_loader() {
 	static $config = null;
 
@@ -53,21 +30,11 @@ function kosmiteia_page_loader() {
 		'delay' => min( 3000, max( 0, (int) kosmiteia_option( 'loader_delay', 350 ) ) ),
 	);
 
-	/**
-	 * Φίλτρο για αλλαγή ή απενεργοποίηση της οθόνης φόρτωσης από κώδικα.
-	 *
-	 * Επιστρέφοντας κενό πίνακα, η οθόνη δεν εμφανίζεται.
-	 *
-	 * @param array $config Τα στοιχεία της οθόνης.
-	 */
 	$config = (array) apply_filters( 'kosmiteia_page_loader', $config );
 
 	return $config;
 }
 
-/**
- * Το στυλ της οθόνης, inline στο <head>.
- */
 function kosmiteia_page_loader_styles() {
 	$config = kosmiteia_page_loader();
 
@@ -93,16 +60,10 @@ function kosmiteia_page_loader_styles() {
 @media (min-width:782px){.kosmiteia-loader{display:none}}';
 	}
 
-	printf( "<style id=\"kosmiteia-loader-css\">%s</style>\n", $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Σταθερό CSS, χωρίς δεδομένα χρήστη.
+	printf( "<style id=\"kosmiteia-loader-css\">%s</style>\n", $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_head', 'kosmiteia_page_loader_styles' );
 
-/**
- * Η οθόνη και το script της, αμέσως μετά το άνοιγμα του <body>.
- *
- * Το markup μπαίνει πρώτο ώστε να καλύπτει τη σελίδα από την αρχή της
- * φόρτωσης· το script είναι σύγχρονο (χωρίς defer) για τον ίδιο λόγο.
- */
 function kosmiteia_page_loader_render() {
 	$config = kosmiteia_page_loader();
 
@@ -128,7 +89,7 @@ function kosmiteia_page_loader_render() {
 	<div class="kosmiteia-loader" id="kosmiteia-loader" aria-hidden="true">
 		<div class="kosmiteia-loader__inner">
 			<?php if ( $logo ) : ?>
-				<?php echo $logo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- έξοδος του wp_get_attachment_image(). ?>
+				<?php echo $logo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>
 			<?php else : ?>
 				<span class="kosmiteia-loader__mark">
 					<svg viewBox="0 0 24 24" width="56" height="56" focusable="false" aria-hidden="true"><path fill="currentColor" d="M12 3 2 8l10 5 8-4v6h2V8L12 3ZM6 13.2V17c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.8l-6 3-6-3Z"/></svg>
@@ -154,7 +115,6 @@ function kosmiteia_page_loader_render() {
 		function show() {
 			el.classList.add( 'is-visible' );
 
-			// Ασφαλιστική δικλίδα: ό,τι κι αν συμβεί, η οθόνη φεύγει.
 			window.clearTimeout( safety );
 			safety = window.setTimeout( hide, maxWait );
 		}
@@ -172,8 +132,6 @@ function kosmiteia_page_loader_render() {
 
 		arm();
 
-		// Μόλις το HTML της νέας σελίδας είναι έτοιμο, η οθόνη φεύγει - δεν
-		// περιμένουμε τις εικόνες, το περιεχόμενο φαίνεται ήδη.
 		if ( 'loading' === document.readyState ) {
 			document.addEventListener( 'DOMContentLoaded', hide );
 		} else {
@@ -182,14 +140,12 @@ function kosmiteia_page_loader_render() {
 
 		window.addEventListener( 'load', hide );
 
-		// Επιστροφή με το «πίσω» (bfcache): η σελίδα είναι ήδη εκεί.
 		window.addEventListener( 'pageshow', function ( event ) {
 			if ( event.persisted ) {
 				hide();
 			}
 		} );
 
-		// Φόρτωση επόμενης σελίδας: σύνδεσμοι και φόρμες του ίδιου ιστότοπου.
 		document.addEventListener( 'click', function ( event ) {
 			if ( event.defaultPrevented || 0 !== event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
 				return;
@@ -211,7 +167,6 @@ function kosmiteia_page_loader_render() {
 				return;
 			}
 
-			// Σύνδεσμος προς την ίδια σελίδα (π.χ. μόνο με #anchor).
 			if ( link.href.split( '#' )[ 0 ] === window.location.href.split( '#' )[ 0 ] ) {
 				return;
 			}

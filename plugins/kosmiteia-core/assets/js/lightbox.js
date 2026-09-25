@@ -1,17 +1,3 @@
-/**
- * Kosmiteia - lightbox για τις μικρογραφίες της γκαλερί.
- *
- * Λειτουργεί σαν το γνωστό Colorbox, αλλά χωρίς jQuery και χωρίς εξωτερικές
- * βιβλιοθήκες: ένα μόνο overlay φτιάχνεται με το πρώτο άνοιγμα και
- * επαναχρησιμοποιείται.
- *
- * Προσβασιμότητα:
- *   - role="dialog" aria-modal, focus παγιδευμένο μέσα στο παράθυρο
- *   - Escape κλείνει, βελάκια αλλάζουν εικόνα, το focus επιστρέφει στη
- *     μικρογραφία από την οποία ξεκίνησε
- *   - χωρίς JavaScript οι μικρογραφίες παραμένουν απλοί σύνδεσμοι προς το
- *     αρχείο της εικόνας
- */
 ( function () {
 	'use strict';
 
@@ -32,25 +18,10 @@
 	var index = 0;
 	var lastFocused = null;
 
-	/**
-	 * Μετάφραση με fallback στο ελληνικό κείμενο.
-	 *
-	 * @param {string} key      Κλειδί του localize.
-	 * @param {string} fallback Κείμενο αν λείπει το κλειδί.
-	 * @return {string} Το κείμενο.
-	 */
 	function text( key, fallback ) {
 		return l10n[ key ] ? l10n[ key ] : fallback;
 	}
 
-	/**
-	 * Δημιουργεί στοιχείο με κλάση και προαιρετικά attributes.
-	 *
-	 * @param {string} tag        Ετικέτα HTML.
-	 * @param {string} className  Κλάση.
-	 * @param {Object} attributes Ζεύγη attribute/τιμής.
-	 * @return {HTMLElement} Το στοιχείο.
-	 */
 	function create( tag, className, attributes ) {
 		var node = document.createElement( tag );
 
@@ -67,12 +38,6 @@
 		return node;
 	}
 
-	/**
-	 * Εικονίδιο (βελάκι ή «Χ») ως inline SVG.
-	 *
-	 * @param {string} path Το path του σχήματος.
-	 * @return {SVGElement} Το εικονίδιο.
-	 */
 	function icon( path ) {
 		var svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 		var shape = document.createElementNS( 'http://www.w3.org/2000/svg', 'path' );
@@ -86,9 +51,6 @@
 		return svg;
 	}
 
-	/**
-	 * Φτιάχνει το overlay την πρώτη φορά που χρειάζεται.
-	 */
 	function build() {
 		if ( overlay ) {
 			return;
@@ -146,7 +108,6 @@
 			show( index + 1 );
 		} );
 
-		// Κλικ έξω από την εικόνα κλείνει, όπως στο Colorbox.
 		overlay.addEventListener( 'click', function ( event ) {
 			if ( event.target === overlay || event.target === dialog || event.target === figure ) {
 				close();
@@ -156,9 +117,6 @@
 		bindSwipe();
 	}
 
-	/**
-	 * Σύρσιμο με το δάχτυλο: αριστερά/δεξιά αλλάζει φωτογραφία.
-	 */
 	function bindSwipe() {
 		var startX = null;
 		var startY = null;
@@ -197,24 +155,12 @@
 		);
 	}
 
-	/**
-	 * Οι σύνδεσμοι της ίδιας ομάδας, με τη σειρά που εμφανίζονται στη σελίδα.
-	 *
-	 * @param {string} name Η τιμή του data-kosmiteia-lightbox.
-	 * @return {Array} Οι σύνδεσμοι.
-	 */
 	function group( name ) {
 		var selector = '[data-kosmiteia-lightbox="' + String( name ).replace( /"/g, '\\"' ) + '"]';
 
 		return Array.prototype.slice.call( document.querySelectorAll( selector ) );
 	}
 
-	/**
-	 * Φορτώνει εκ των προτέρων μια εικόνα, ώστε η επόμενη/προηγούμενη να
-	 * εμφανίζεται ακαριαία.
-	 *
-	 * @param {number} position Θέση στη λίστα.
-	 */
 	function preload( position ) {
 		var link = items[ position ];
 
@@ -226,11 +172,6 @@
 		preloader.src = link.getAttribute( 'href' );
 	}
 
-	/**
-	 * Δείχνει τη φωτογραφία μιας θέσης (κυκλικά).
-	 *
-	 * @param {number} position Θέση στη λίστα.
-	 */
 	function show( position ) {
 		if ( ! items.length ) {
 			return;
@@ -283,11 +224,6 @@
 		preload( index - 1 >= 0 ? index - 1 : items.length - 1 );
 	}
 
-	/**
-	 * Ανοίγει το lightbox από μια μικρογραφία.
-	 *
-	 * @param {HTMLElement} link Ο σύνδεσμος που πατήθηκε.
-	 */
 	function open( link ) {
 		build();
 
@@ -305,14 +241,9 @@
 
 		show( items.indexOf( link ) );
 
-		// Το παράθυρο παίρνει το focus, ώστε τα βελάκια και το Escape να
-		// δουλεύουν αμέσως και για τους αναγνώστες οθόνης.
 		dialog.focus();
 	}
 
-	/**
-	 * Κλείνει το lightbox και επιστρέφει το focus.
-	 */
 	function close() {
 		if ( ! overlay || overlay.hidden ) {
 			return;
@@ -331,11 +262,6 @@
 		lastFocused = null;
 	}
 
-	/**
-	 * Πληκτρολόγιο: Escape, βελάκια, παγίδευση του Tab μέσα στο παράθυρο.
-	 *
-	 * @param {KeyboardEvent} event Το συμβάν.
-	 */
 	function onKeydown( event ) {
 		if ( ! overlay || overlay.hidden ) {
 			return;
@@ -390,8 +316,6 @@
 		}
 	}
 
-	// Ένας μόνο listener για όλη τη σελίδα: δουλεύει και για γκαλερί που
-	// προστίθενται δυναμικά (π.χ. μετά από φίλτρα).
 	document.addEventListener( 'click', function ( event ) {
 		if ( event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
 			return;

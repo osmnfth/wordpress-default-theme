@@ -1,11 +1,3 @@
-/**
- * Μπλοκ "Slider (Κοσμητεία)".
- *
- * Γραμμένο χωρίς JSX ώστε το theme να μη χρειάζεται build step.
- * Κάθε διαφάνεια είναι κανονικό μπλοκ (Cover / Group / Media & Text),
- * άρα ο διαχειριστής αλλάζει φωτογραφία, βίντεο, κείμενα και κουμπιά
- * απευθείας από τον editor.
- */
 ( function ( blocks, blockEditor, components, element, i18n ) {
 	'use strict';
 

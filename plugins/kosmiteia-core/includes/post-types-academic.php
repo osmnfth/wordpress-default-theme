@@ -1,26 +1,8 @@
 <?php
-/**
- * Οι υπόλοιποι τύποι περιεχομένου ενός ακαδημαϊκού ιστότοπου:
- * Εκδηλώσεις, Προσωπικό / Όργανα και Έγγραφα - Κανονισμοί.
- *
- * Ό,τι σε ένα πανεπιστημιακό site μπαίνει συνήθως «με το χέρι» σε σελίδες
- * (ημερολόγιο εκδηλώσεων, κατάλογος μελών, αρχείο κανονισμών και εντύπων)
- * γίνεται εδώ κανονικό περιεχόμενο με πεδία, ταξινομίες και αρχεία, ώστε να
- * φιλτράρεται, να αναζητείται και να εμφανίζεται με Query Loop.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Εκδηλώσεις, Προσωπικό, Έγγραφα.
- */
 function kosmiteia_register_academic_post_types() {
 
-	/* --------------------------------------------------------------------
-	 * Εκδηλώσεις / Events
-	 * ----------------------------------------------------------------- */
 	register_post_type(
 		'kosm_event',
 		array(
@@ -59,9 +41,6 @@ function kosmiteia_register_academic_post_types() {
 		)
 	);
 
-	/* --------------------------------------------------------------------
-	 * Προσωπικό & όργανα / People
-	 * ----------------------------------------------------------------- */
 	register_post_type(
 		'kosm_person',
 		array(
@@ -99,9 +78,6 @@ function kosmiteia_register_academic_post_types() {
 		)
 	);
 
-	/* --------------------------------------------------------------------
-	 * Έγγραφα & κανονισμοί / Documents
-	 * ----------------------------------------------------------------- */
 	register_post_type(
 		'kosm_document',
 		array(
@@ -139,9 +115,6 @@ function kosmiteia_register_academic_post_types() {
 }
 add_action( 'init', 'kosmiteia_register_academic_post_types' );
 
-/**
- * Ταξινομίες για τους παραπάνω τύπους.
- */
 function kosmiteia_register_academic_taxonomies() {
 	register_taxonomy(
 		'kosm_event_type',
@@ -208,10 +181,6 @@ function kosmiteia_register_academic_taxonomies() {
 }
 add_action( 'init', 'kosmiteia_register_academic_taxonomies' );
 
-/**
- * Πεδία (post meta) των νέων τύπων, με Block Bindings ώστε να μπαίνουν
- * σε παραγράφους/κουμπιά μέσα από τον editor.
- */
 function kosmiteia_register_academic_meta() {
 	$fields = array(
 		'kosm_event'    => array(
@@ -262,12 +231,6 @@ function kosmiteia_register_academic_meta() {
 }
 add_action( 'init', 'kosmiteia_register_academic_meta' );
 
-/**
- * Το αρχείο Εκδηλώσεων ταξινομείται με βάση την ημερομηνία έναρξης και
- * (προαιρετικά) κρύβει όσες έχουν περάσει.
- *
- * @param WP_Query $query Το query.
- */
 function kosmiteia_events_archive_query( $query ) {
 	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'kosm_event' ) ) {
 		return;
@@ -298,12 +261,6 @@ function kosmiteia_events_archive_query( $query ) {
 }
 add_action( 'pre_get_posts', 'kosmiteia_events_archive_query' );
 
-/**
- * Το προσωπικό εμφανίζεται με τη σειρά που ορίζει ο διαχειριστής
- * (Χαρακτηριστικά σελίδας → Σειρά) και μετά αλφαβητικά.
- *
- * @param WP_Query $query Το query.
- */
 function kosmiteia_people_archive_query( $query ) {
 	if ( is_admin() || ! $query->is_main_query() ) {
 		return;
@@ -320,14 +277,6 @@ function kosmiteia_people_archive_query( $query ) {
 }
 add_action( 'pre_get_posts', 'kosmiteia_people_archive_query' );
 
-/**
- * Στήλες στη λίστα διαχείρισης: ημερομηνία εκδήλωσης, ιδιότητα μέλους,
- * αρχείο εγγράφου.
- *
- * @param array  $columns   Οι στήλες.
- * @param string $post_type Ο τύπος περιεχομένου.
- * @return array
- */
 function kosmiteia_academic_admin_columns( $columns, $post_type = '' ) {
 	if ( 'kosm_event' === $post_type ) {
 		$columns['kosm_event_start'] = __( 'Ημερομηνία', 'kosmiteia' );
@@ -345,12 +294,6 @@ function kosmiteia_academic_admin_columns( $columns, $post_type = '' ) {
 }
 add_filter( 'manage_posts_columns', 'kosmiteia_academic_admin_columns', 10, 2 );
 
-/**
- * Το περιεχόμενο των παραπάνω στηλών.
- *
- * @param string $column  Το κλειδί της στήλης.
- * @param int    $post_id Το ID του άρθρου.
- */
 function kosmiteia_academic_admin_column_content( $column, $post_id ) {
 	$keys = array( 'kosm_event_start', 'kosm_person_role', 'kosm_document_file' );
 

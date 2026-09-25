@@ -1,24 +1,8 @@
 <?php
-/**
- * Custom post types, taxonomies και meta fields.
- *
- * Όλο το περιεχόμενο των ενοτήτων της αρχικής (Σχολές, Ανακοινώσεις,
- * Μεταπτυχιακά) προέρχεται από εδώ - τίποτα δεν είναι γραμμένο στατικά
- * μέσα στα templates.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Καταχώριση των custom post types.
- */
 function kosmiteia_register_post_types() {
 
-	/* --------------------------------------------------------------------
-	 * Σχολές / Schools
-	 * ----------------------------------------------------------------- */
 	register_post_type(
 		'kosm_school',
 		array(
@@ -63,9 +47,6 @@ function kosmiteia_register_post_types() {
 		)
 	);
 
-	/* --------------------------------------------------------------------
-	 * Ανακοινώσεις / Announcements
-	 * ----------------------------------------------------------------- */
 	register_post_type(
 		'kosm_announcement',
 		array(
@@ -92,8 +73,6 @@ function kosmiteia_register_post_types() {
 			'rest_base'     => 'announcements',
 			'menu_icon'     => 'dashicons-megaphone',
 			'menu_position' => 21,
-			// Ξεχωριστά δικαιώματα: επιτρέπουν τον ρόλο «Συντάκτης Ανακοινώσεων»
-			// που δημοσιεύει μόνο ανακοινώσεις (δείτε includes/roles.php).
 			'capability_type' => array( 'kosm_announcement', 'kosm_announcements' ),
 			'map_meta_cap'    => true,
 			'supports'      => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'custom-fields', 'comments' ),
@@ -105,9 +84,6 @@ function kosmiteia_register_post_types() {
 		)
 	);
 
-	/* --------------------------------------------------------------------
-	 * Μεταπτυχιακά Προγράμματα / Postgraduate programmes
-	 * ----------------------------------------------------------------- */
 	register_post_type(
 		'kosm_program',
 		array(
@@ -145,12 +121,8 @@ function kosmiteia_register_post_types() {
 }
 add_action( 'init', 'kosmiteia_register_post_types' );
 
-/**
- * Καταχώριση taxonomies.
- */
 function kosmiteia_register_taxonomies() {
 
-	// Σχολή: κοινή ταξινομία για φιλτράρισμα ανακοινώσεων και προγραμμάτων.
 	register_taxonomy(
 		'kosm_faculty',
 		array( 'kosm_school', 'kosm_announcement', 'kosm_program' ),
@@ -180,7 +152,6 @@ function kosmiteia_register_taxonomies() {
 		)
 	);
 
-	// Κατηγορίες ανακοινώσεων.
 	register_taxonomy(
 		'kosm_ann_category',
 		array( 'kosm_announcement' ),
@@ -208,7 +179,6 @@ function kosmiteia_register_taxonomies() {
 		)
 	);
 
-	// Τύπος προγράμματος (Π.Μ.Σ., Διιδρυματικό, Διδακτορικό).
 	register_taxonomy(
 		'kosm_program_type',
 		array( 'kosm_program' ),
@@ -232,10 +202,6 @@ function kosmiteia_register_taxonomies() {
 }
 add_action( 'init', 'kosmiteia_register_taxonomies' );
 
-/**
- * Πεδία (post meta) που συνδέονται με μπλοκ μέσω Block Bindings,
- * ώστε να συμπληρώνονται απευθείας μέσα από τον editor.
- */
 function kosmiteia_register_meta() {
 	$fields = array(
 		'kosm_program'      => array(
@@ -285,18 +251,6 @@ function kosmiteia_register_meta() {
 }
 add_action( 'init', 'kosmiteia_register_meta' );
 
-/**
- * Query Loop με κλάση CSS "is-related-to-school" μέσα σε σελίδα Σχολής:
- * φιλτράρεται αυτόματα ώστε να δείχνει μόνο περιεχόμενο της Σχολής αυτής.
- *
- * Η κλάση προστίθεται από το UI: Ρυθμίσεις μπλοκ → Για προχωρημένους →
- * Πρόσθετες κλάσεις CSS. Αν η Σχολή δεν έχει όρο «Σχολή (φίλτρο)», το
- * query μένει ως έχει.
- *
- * @param string|null $pre_render   Προ-αποδοθέν περιεχόμενο (δεν το αλλάζουμε).
- * @param array       $parsed_block Το μπλοκ πριν το render.
- * @return string|null
- */
 function kosmiteia_track_query_block( $pre_render, $parsed_block ) {
 	if ( isset( $parsed_block['blockName'] ) && 'core/query' === $parsed_block['blockName'] ) {
 		$GLOBALS['kosmiteia_query_class'] = isset( $parsed_block['attrs']['className'] )
@@ -308,12 +262,6 @@ function kosmiteia_track_query_block( $pre_render, $parsed_block ) {
 }
 add_filter( 'pre_render_block', 'kosmiteia_track_query_block', 10, 2 );
 
-/**
- * Προσθέτει το φίλτρο Σχολής στο query του σημειωμένου Query Loop.
- *
- * @param array $query Παράμετροι WP_Query.
- * @return array
- */
 function kosmiteia_related_to_school_query( $query ) {
 	$classes = isset( $GLOBALS['kosmiteia_query_class'] ) ? $GLOBALS['kosmiteia_query_class'] : '';
 
@@ -342,10 +290,6 @@ function kosmiteia_related_to_school_query( $query ) {
 }
 add_filter( 'query_loop_block_query_vars', 'kosmiteia_related_to_school_query' );
 
-/**
- * Flush rewrite rules μία φορά ανά έκδοση, ώστε να δουλέψουν
- * αμέσως τα permalinks των custom post types.
- */
 function kosmiteia_flush_rewrites() {
 	if ( get_option( 'kosmiteia_rewrites_version' ) === KOSMITEIA_CORE_VERSION ) {
 		return;

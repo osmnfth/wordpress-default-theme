@@ -1,50 +1,14 @@
 <?php
-/**
- * Πολυμέσα: όλες οι εικόνες σε WebP, όλα τα βίντεο σε WebM.
- *
- * - Κάθε JPEG/PNG που ανεβαίνει μετατρέπεται σε WebP (και το πρωτότυπο και
- *   όλα τα μεγέθη), εφόσον ο server το υποστηρίζει.
- * - Τα βίντεο γίνονται δεκτά μόνο σε WebM (η μετατροπή βίντεο θέλει ffmpeg,
- *   δεν γίνεται μέσα στο WordPress).
- * - Για τα αρχεία που υπάρχουν ήδη, υπάρχει μαζική ενέργεια «Μετατροπή σε
- *   WebP» στη Βιβλιοθήκη πολυμέσων (Πολυμέσα → λίστα → Μαζικές ενέργειες).
- *
- * Απενεργοποίηση από child theme ή plugin:
- *   add_filter( 'kosmiteia_convert_uploads_to_webp', '__return_false' );
- *   add_filter( 'kosmiteia_require_webm_video', '__return_false' );
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Οι τύποι εικόνας που μετατρέπονται.
- *
- * Τα GIF μένουν ως έχουν: η μετατροπή τους χάνει το animation.
- *
- * @return string[]
- */
 function kosmiteia_webp_source_types() {
 	return (array) apply_filters( 'kosmiteia_webp_source_types', array( 'image/jpeg', 'image/png' ) );
 }
 
-/**
- * Μπορεί ο server να γράψει WebP;
- *
- * @return bool
- */
 function kosmiteia_supports_webp() {
 	return (bool) wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) );
 }
 
-/**
- * Ποιότητα συμπίεσης για τα WebP.
- *
- * @param int    $quality Η προεπιλογή του WordPress.
- * @param string $mime    Ο τύπος αρχείου.
- * @return int
- */
 function kosmiteia_webp_quality( $quality, $mime ) {
 	if ( 'image/webp' !== $mime ) {
 		return $quality;
@@ -54,12 +18,6 @@ function kosmiteia_webp_quality( $quality, $mime ) {
 }
 add_filter( 'wp_editor_set_quality', 'kosmiteia_webp_quality', 10, 2 );
 
-/**
- * Τα παραγόμενα μεγέθη (thumbnails) γράφονται σε WebP.
- *
- * @param array $formats Αντιστοίχιση τύπου εισόδου → τύπου εξόδου.
- * @return array
- */
 function kosmiteia_image_output_format( $formats ) {
 	if ( ! kosmiteia_supports_webp() ) {
 		return $formats;
@@ -73,12 +31,6 @@ function kosmiteia_image_output_format( $formats ) {
 }
 add_filter( 'image_editor_output_format', 'kosmiteia_image_output_format' );
 
-/**
- * Σιγουρεύει ότι επιτρέπονται τα .webp και .webm.
- *
- * @param array $mimes Επιτρεπόμενοι τύποι.
- * @return array
- */
 function kosmiteia_allowed_mime_types( $mimes ) {
 	$mimes['webp'] = 'image/webp';
 	$mimes['webm'] = 'video/webm';
@@ -87,12 +39,6 @@ function kosmiteia_allowed_mime_types( $mimes ) {
 }
 add_filter( 'upload_mimes', 'kosmiteia_allowed_mime_types' );
 
-/**
- * Διαδρομή αρχείου .webp δίπλα στο πρωτότυπο, χωρίς να πατήσει υπάρχον αρχείο.
- *
- * @param string $file Πλήρης διαδρομή αρχείου εικόνας.
- * @return string
- */
 function kosmiteia_webp_target_path( $file ) {
 	$dir  = dirname( $file );
 	$name = wp_basename( $file );
@@ -105,16 +51,6 @@ function kosmiteia_webp_target_path( $file ) {
 	return trailingslashit( $dir ) . wp_unique_filename( $dir, $name . '.webp' );
 }
 
-/**
- * PNG με παλέτα χρωμάτων → προσωρινό truecolor αντίγραφο.
- *
- * Η GD δεν γράφει WebP από indexed PNG (imagewebp: «Palette image not
- * supported by webp») και αποτυγχάνει αφήνοντας άδειο αρχείο.
- *
- * @param string $file Πλήρης διαδρομή αρχείου.
- * @param string $mime Τύπος αρχείου.
- * @return string Διαδρομή προσωρινού αρχείου, ή κενό αν δεν χρειάζεται.
- */
 function kosmiteia_truecolor_source( $file, $mime ) {
 	if ( 'image/png' !== $mime || ! function_exists( 'imagecreatefrompng' ) ) {
 		return '';
@@ -148,16 +84,6 @@ function kosmiteia_truecolor_source( $file, $mime ) {
 	return $temp;
 }
 
-/**
- * Γράφει ένα αρχείο εικόνας ως WebP, δίπλα στο πρωτότυπο.
- *
- * Επιβεβαιώνει ότι το αποτέλεσμα είναι πραγματική εικόνα: κάποιες εκδόσεις
- * της GD αποτυγχάνουν σιωπηλά και αφήνουν αρχείο 0 bytes.
- *
- * @param string $file Πλήρης διαδρομή αρχείου εικόνας.
- * @param string $mime Τύπος του αρχείου.
- * @return array|WP_Error Τα στοιχεία του αρχείου που γράφτηκε.
- */
 function kosmiteia_save_as_webp( $file, $mime ) {
 	$source = kosmiteia_truecolor_source( $file, $mime );
 	$editor = wp_get_image_editor( $source ? $source : $file );
@@ -193,15 +119,6 @@ function kosmiteia_save_as_webp( $file, $mime ) {
 	return $saved;
 }
 
-/**
- * Μετατροπή του αρχείου που μόλις ανέβηκε σε WebP.
- *
- * Γίνεται πριν παραχθούν τα μεγέθη, οπότε όλη η αλυσίδα (και το -scaled)
- * βγαίνει σε WebP.
- *
- * @param array $upload Στοιχεία μεταφόρτωσης (file, url, type).
- * @return array
- */
 function kosmiteia_convert_upload_to_webp( $upload ) {
 	if ( ! apply_filters( 'kosmiteia_convert_uploads_to_webp', true ) ) {
 		return $upload;
@@ -221,7 +138,6 @@ function kosmiteia_convert_upload_to_webp( $upload ) {
 		return $upload;
 	}
 
-	// Το πρωτότυπο JPEG/PNG δεν χρειάζεται πια - τη θέση του παίρνει το WebP.
 	wp_delete_file( $upload['file'] );
 
 	$upload['url']  = str_replace( wp_basename( $upload['file'] ), $saved['file'], $upload['url'] );
@@ -231,15 +147,8 @@ function kosmiteia_convert_upload_to_webp( $upload ) {
 	return $upload;
 }
 add_filter( 'wp_handle_upload', 'kosmiteia_convert_upload_to_webp' );
-// Και για τα αρχεία που μπαίνουν προγραμματιστικά (import, sideload).
 add_filter( 'wp_handle_sideload', 'kosmiteia_convert_upload_to_webp' );
 
-/**
- * Τα βίντεο γίνονται δεκτά μόνο σε WebM.
- *
- * @param array $file Στοιχεία του αρχείου που ανεβαίνει.
- * @return array
- */
 function kosmiteia_require_webm_video( $file ) {
 	if ( ! apply_filters( 'kosmiteia_require_webm_video', true ) ) {
 		return $file;
@@ -263,14 +172,6 @@ function kosmiteia_require_webm_video( $file ) {
 add_filter( 'wp_handle_upload_prefilter', 'kosmiteia_require_webm_video' );
 add_filter( 'wp_handle_sideload_prefilter', 'kosmiteia_require_webm_video' );
 
-/**
- * Αντιστοίχιση παλιών URL εικόνας με τα νέα (πρωτότυπο και κάθε μέγεθος).
- *
- * @param array  $old_meta Metadata πριν τη μετατροπή.
- * @param array  $new_meta Metadata μετά τη μετατροπή.
- * @param string $base_url URL του φακέλου των αρχείων, με κάθετο στο τέλος.
- * @return array Παλιό URL => νέο URL.
- */
 function kosmiteia_media_url_map( $old_meta, $new_meta, $base_url ) {
 	$map = array();
 
@@ -292,14 +193,6 @@ function kosmiteia_media_url_map( $old_meta, $new_meta, $base_url ) {
 	return $map;
 }
 
-/**
- * Αντικαθιστά τα παλιά URL μέσα στο περιεχόμενο των άρθρων.
- *
- * Έτσι όσες εικόνες είναι ήδη γραμμένες σε σελίδες δεν σπάνε μετά τη μετατροπή.
- *
- * @param array $map Παλιό URL => νέο URL.
- * @return int Πλήθος άρθρων που ενημερώθηκαν.
- */
 function kosmiteia_replace_media_urls( $map ) {
 	global $wpdb;
 
@@ -339,15 +232,6 @@ function kosmiteia_replace_media_urls( $map ) {
 	return $updated;
 }
 
-/**
- * Μετατρέπει ένα υπάρχον συνημμένο σε WebP.
- *
- * Τα παλιά αρχεία μένουν στον δίσκο: αν κάπου έχει γραφτεί χειροκίνητα το URL
- * τους, δεν σπάει τίποτα.
- *
- * @param int $attachment_id ID συνημμένου.
- * @return true|WP_Error
- */
 function kosmiteia_convert_attachment_to_webp( $attachment_id ) {
 	$attachment_id = (int) $attachment_id;
 	$mime          = get_post_mime_type( $attachment_id );
@@ -366,8 +250,6 @@ function kosmiteia_convert_attachment_to_webp( $attachment_id ) {
 		return new WP_Error( 'kosmiteia_missing', __( 'Το αρχείο δεν βρέθηκε.', 'kosmiteia' ) );
 	}
 
-	// Ο τύπος του ίδιου του αρχείου, όχι μόνο ό,τι λέει η βάση: αν το αρχείο
-	// είναι κατεστραμμένο ή δεν ταιριάζει, η μετατροπή σταματά εδώ.
 	$actual = @getimagesize( $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 	if ( ! $actual || empty( $actual['mime'] ) ) {
@@ -407,12 +289,6 @@ function kosmiteia_convert_attachment_to_webp( $attachment_id ) {
 	return true;
 }
 
-/**
- * Μαζική ενέργεια στη Βιβλιοθήκη πολυμέσων.
- *
- * @param array $actions Οι διαθέσιμες ενέργειες.
- * @return array
- */
 function kosmiteia_media_bulk_actions( $actions ) {
 	$actions['kosmiteia_webp'] = __( 'Μετατροπή σε WebP', 'kosmiteia' );
 
@@ -420,14 +296,6 @@ function kosmiteia_media_bulk_actions( $actions ) {
 }
 add_filter( 'bulk_actions-upload', 'kosmiteia_media_bulk_actions' );
 
-/**
- * Εκτέλεση της μαζικής μετατροπής.
- *
- * @param string $redirect URL επιστροφής.
- * @param string $action   Η ενέργεια που επιλέχθηκε.
- * @param array  $ids      Τα επιλεγμένα συνημμένα.
- * @return string
- */
 function kosmiteia_handle_media_bulk_actions( $redirect, $action, $ids ) {
 	if ( 'kosmiteia_webp' !== $action ) {
 		return $redirect;
@@ -460,9 +328,6 @@ function kosmiteia_handle_media_bulk_actions( $redirect, $action, $ids ) {
 }
 add_filter( 'handle_bulk_actions-upload', 'kosmiteia_handle_media_bulk_actions', 10, 3 );
 
-/**
- * Μήνυμα μετά τη μαζική μετατροπή.
- */
 function kosmiteia_media_bulk_notice() {
 	if ( ! isset( $_GET['kosmiteia_webp_done'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;

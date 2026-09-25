@@ -1,22 +1,8 @@
-/**
- * Kosmiteia - το πεδίο «Φωτογραφίες (γκαλερί)» στη διαχείριση.
- *
- * Ανοίγει τη Βιβλιοθήκη πολυμέσων, κρατά τη σειρά των φωτογραφιών και γράφει
- * τα IDs σε κρυφό πεδίο. Η αποθήκευση γίνεται με το κανονικό κουμπί
- * «Ενημέρωση» της σελίδας.
- */
 ( function ( $ ) {
 	'use strict';
 
 	var l10n = window.kosmiteiaGalleryFieldL10n || {};
 
-	/**
-	 * Μετάφραση με fallback.
-	 *
-	 * @param {string} key      Κλειδί.
-	 * @param {string} fallback Κείμενο αν λείπει.
-	 * @return {string} Το κείμενο.
-	 */
 	function text( key, fallback ) {
 		return l10n[ key ] ? l10n[ key ] : fallback;
 	}
@@ -30,11 +16,6 @@
 			var clear = field.find( '[data-action="clear"]' );
 			var frame = null;
 
-			/**
-			 * Τα IDs με τη σειρά που εμφανίζονται.
-			 *
-			 * @return {number[]} Λίστα IDs.
-			 */
 			function ids() {
 				return list
 					.find( '.kosmiteia-gallery-field__item' )
@@ -44,9 +25,6 @@
 					.get();
 			}
 
-			/**
-			 * Ενημερώνει το κρυφό πεδίο και την κατάσταση των κουμπιών.
-			 */
 			function sync() {
 				var current = ids();
 
@@ -55,12 +33,6 @@
 				clear.prop( 'disabled', 0 === current.length );
 			}
 
-			/**
-			 * Φτιάχνει το στοιχείο μιας φωτογραφίας.
-			 *
-			 * @param {Object} attachment Το συνημμένο από τη Βιβλιοθήκη.
-			 * @return {jQuery} Το <li>.
-			 */
 			function item( attachment ) {
 				var sizes = attachment.sizes || {};
 				var preview = sizes.thumbnail || sizes.medium || sizes.full || attachment;
@@ -118,8 +90,6 @@
 					} );
 				}
 
-				// Η τρέχουσα επιλογή προεπιλέγεται, ώστε το modal να ανοίγει
-				// με ό,τι υπάρχει ήδη στη γκαλερί.
 				frame.on( 'open', function () {
 					var selection = frame.state().get( 'selection' );
 

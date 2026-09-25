@@ -1,35 +1,9 @@
 <?php
-/**
- * Αρχικό / δοκιμαστικό περιεχόμενο του ιστότοπου της Κοσμητείας.
- *
- * Στήνει έναν πλήρη ιστότοπο με ένα κλικ: εικόνες, όρους ταξινομιών, Τμήματα,
- * Ανακοινώσεις, Μεταπτυχιακά, σελίδες, μενού (EL/EN) και τα template parts
- * της αρχικής (hero, μήνυμα Κοσμήτορα, Τμήματα, ανακοινώσεις, μεταπτυχιακά)
- * από τα patterns του ενεργού θέματος.
- *
- * Εκτέλεση:
- *   - Διαχείριση:  Κοσμητεία → Εργαλεία → «Δημιουργία αρχικού περιεχομένου»
- *   - Γραμμή εντολών:  wp kosmiteia seed [--force]
- *
- * Το περιεχόμενο είναι αντλημένο από τον ιστότοπο της Κοσμητείας της Σχολής
- * Επιστημών Υγείας του Δ.Π.Θ. (health.duth.gr).
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
 define( 'KOSM_ASSETS', KOSMITEIA_CORE_DIR . 'assets/demo' );
 define( 'KOSM_DEMO_VERSION', '3.1.0' );
 
-/**
- * Καταγραφή προόδου: στη γραμμή εντολών πάει στο WP-CLI, στη διαχείριση
- * μαζεύεται και εμφανίζεται στη σελίδα Εργαλείων.
- *
- * @param string $message Το μήνυμα.
- * @param string $type    log | warning | success.
- * @return array Όλα τα μηνύματα μέχρι τώρα.
- */
 function kosmiteia_demo_log( $message = null, $type = 'log' ) {
 	static $messages = array();
 
@@ -55,31 +29,14 @@ function kosmiteia_demo_log( $message = null, $type = 'log' ) {
 	return $messages;
 }
 
-/**
- * Προειδοποίηση.
- *
- * @param string $message Το μήνυμα.
- */
 function kosmiteia_demo_warn( $message ) {
 	kosmiteia_demo_log( $message, 'warning' );
 }
 
-/**
- * Επιτυχία.
- *
- * @param string $message Το μήνυμα.
- */
 function kosmiteia_demo_success( $message ) {
 	kosmiteia_demo_log( $message, 'success' );
 }
 
-/* =========================================================================
- * Βοηθητικές συναρτήσεις
- * ====================================================================== */
-
-/**
- * Εισάγει εικόνα από τον φάκελο assets στη Βιβλιοθήκη πολυμέσων (μία φορά).
- */
 function kosm_image( $filename, $title, $alt ) {
 	$existing = get_posts(
 		array(
@@ -126,9 +83,6 @@ function kosm_image( $filename, $title, $alt ) {
 	return (int) $attachment_id;
 }
 
-/**
- * Δημιουργεί ή ενημερώνει άρθρο/σελίδα με βάση το slug.
- */
 function kosm_post( $post_type, $slug, $args ) {
 	$existing = get_posts(
 		array(
@@ -151,9 +105,6 @@ function kosm_post( $post_type, $slug, $args ) {
 	if ( $existing ) {
 		$post_id = (int) $existing[0]->ID;
 
-		// Κρατάμε αποτύπωμα (hash) αυτού που γράψαμε εμείς. Αν το τρέχον
-		// περιεχόμενο δεν ταιριάζει - είτε γιατί το επεξεργάστηκε κάποιος,
-		// είτε γιατί το άρθρο δεν το έφτιαξε το seed - δεν το ακουμπάμε.
 		$seeded = get_post_meta( $post_id, '_kosmiteia_seeded_hash', true );
 
 		if ( ! $seeded || md5( (string) $existing[0]->post_content ) !== $seeded ) {
@@ -182,10 +133,6 @@ function kosm_post( $post_type, $slug, $args ) {
 	return $post_id;
 }
 
-/**
- * Γράφει μία ρύθμιση Κοσμητείας (χρήσιμο όταν η τιμή γίνεται γνωστή αργότερα,
- * π.χ. το ID μιας σελίδας που μόλις δημιουργήθηκε).
- */
 function kosm_setting( $key, $value ) {
 	$settings = get_option( KOSMITEIA_SETTINGS_OPTION, array() );
 
@@ -198,10 +145,6 @@ function kosm_setting( $key, $value ) {
 	update_option( KOSMITEIA_SETTINGS_OPTION, $settings );
 }
 
-/**
- * Δημιουργεί (ή βρίσκει) template part στη βάση - ό,τι θα έφτιαχνε ο
- * χρήστης από τον Site Editor.
- */
 function kosm_template_part( $slug, $title, $area, $content ) {
 	$existing = get_posts(
 		array(
@@ -212,9 +155,6 @@ function kosm_template_part( $slug, $title, $area, $content ) {
 		)
 	);
 
-	// Αν ο χρήστης έχει επεξεργαστεί το part από τον Site Editor, το reseed δεν
-	// το πατάει από πάνω: κρατάμε αποτύπωμα (hash) αυτού που γράψαμε εμείς και
-	// το συγκρίνουμε με το τρέχον περιεχόμενο.
 	if ( $existing ) {
 		$seeded = get_post_meta( $existing[0]->ID, '_kosmiteia_seeded_hash', true );
 
@@ -253,14 +193,6 @@ function kosm_template_part( $slug, $title, $area, $content ) {
 	return (int) $part_id;
 }
 
-/**
- * Αν η αρχική έχει αποθηκευμένο (προσαρμοσμένο) πρότυπο στη βάση, προσθέτει
- * σε αυτό την ενότητα «Μήνυμα Κοσμήτορα» αμέσως μετά το hero.
- *
- * Χωρίς αυτό, μια αρχική που έχει ανοιχτεί έστω μία φορά στον Site Editor
- * θα αγνοούσε το νέο part του θέματος. Ό,τι άλλο έχει προσθέσει ο χρήστης
- * μένει ανέπαφο.
- */
 function kosm_front_page_add_dean() {
 	$existing = get_posts(
 		array(
@@ -303,9 +235,6 @@ function kosm_front_page_add_dean() {
 	kosmiteia_demo_log( '    Η ενότητα «Μήνυμα Κοσμήτορα» προστέθηκε στο αποθηκευμένο πρότυπο της αρχικής.' );
 }
 
-/**
- * Δημιουργεί μενού πλοήγησης (wp_navigation) από λίστα συνδέσμων.
- */
 function kosm_navigation( $slug, $title, $links ) {
 	$blocks = '';
 
@@ -322,8 +251,6 @@ function kosm_navigation( $slug, $title, $links ) {
 		)
 	);
 
-	// Τα μενού σχεδόν πάντα προσαρμόζονται (υπομενού, σειρά, νέοι σύνδεσμοι).
-	// Αν υπάρχει ήδη μενού με αυτό το slug, το αφήνουμε ως έχει.
 	if ( $existing ) {
 		kosmiteia_demo_log( sprintf( '    Το μενού «%s» υπάρχει - παραλείπεται.', $slug ) );
 
@@ -349,10 +276,6 @@ function kosm_navigation( $slug, $title, $links ) {
 	return is_wp_error( $menu_id ) ? 0 : (int) $menu_id;
 }
 
-/**
- * Ένα στοιχείο μενού. Με «children» γίνεται υπομενού - π.χ. «Η Κοσμητεία»
- * με υποσέλιδα το «Μήνυμα Κοσμήτορα».
- */
 function kosm_navigation_item( $link ) {
 	$children = isset( $link['children'] ) ? (array) $link['children'] : array();
 
@@ -381,9 +304,6 @@ function kosm_navigation_item( $link ) {
 	return $html . '<!-- /wp:navigation-submenu -->' . "\n";
 }
 
-/**
- * Αποδίδει ένα pattern του theme σε συγκεκριμένη γλώσσα.
- */
 function kosm_pattern( $file, $locale = null ) {
 	$path = get_stylesheet_directory() . '/patterns/' . $file;
 
@@ -409,16 +329,6 @@ function kosm_pattern( $file, $locale = null ) {
 	return trim( $html );
 }
 
-/**
- * Βάζει φωτογραφίες φόντου σε μπλοκ Cover (διαφάνειες hero, φωτογραφία
- * Κοσμήτορα) - με τη σειρά που εμφανίζονται στο markup.
- *
- * @param string $markup    Το HTML του template part ή του pattern.
- * @param int[]  $image_ids Τα IDs των εικόνων, με τη σειρά.
- * @param int    $dim       Σκοτείνιασμα 10-100. Το core δεν βγάζει κλάση για
- *                          τα 0 και τα 50, οπότε τα αποφεύγουμε.
- * @return string
- */
 function kosm_hero_with_images( $markup, $image_ids, $dim = 60 ) {
 	$dim = max( 10, min( 100, 10 * (int) round( $dim / 10 ) ) );
 
@@ -428,9 +338,6 @@ function kosm_hero_with_images( $markup, $image_ids, $dim = 60 ) {
 
 	$index = 0;
 
-	// 1. Attributes του μπλοκ Cover. Το dimRatio πρέπει να είναι πολλαπλάσιο
-	// του 10: το core παράγει την κλάση has-background-dim-<10*round(r/10)>
-	// και οποιαδήποτε άλλη τιμή σπάει την επικύρωση του μπλοκ στον editor.
 	$markup = preg_replace_callback(
 		'/<!-- wp:cover \{"overlayColor":"([a-z0-9-]+)","dimRatio":100,/',
 		function ( $matches ) use ( $image_ids, $dim, &$index ) {
@@ -453,7 +360,6 @@ function kosm_hero_with_images( $markup, $image_ids, $dim = 60 ) {
 		$markup
 	);
 
-	// 2. Markup: overlay + <img> φόντου.
 	$index  = 0;
 	$markup = preg_replace_callback(
 		'/<span aria-hidden="true" class="wp-block-cover__background has-([a-z0-9-]+)-background-color has-background-dim-100 has-background-dim"><\/span>/',
@@ -480,9 +386,6 @@ function kosm_hero_with_images( $markup, $image_ids, $dim = 60 ) {
 	return $markup;
 }
 
-/**
- * Συνδέει το μπλοκ πλοήγησης της κεφαλίδας με συγκεκριμένο μενού.
- */
 function kosm_navigation_ref( $markup, $menu_id ) {
 	if ( ! $menu_id ) {
 		return $markup;
@@ -496,7 +399,6 @@ function kosm_navigation_ref( $markup, $menu_id ) {
 	);
 }
 
-/** Σύντομη βοήθεια για μπλοκ κειμένου. */
 function kosm_p( $text ) {
 	return "<!-- wp:paragraph -->\n<p>" . $text . "</p>\n<!-- /wp:paragraph -->\n\n";
 }
@@ -509,7 +411,6 @@ function kosm_h( $text, $level = 2 ) {
 	);
 }
 
-/** Μπλοκ χάρτη (kosmiteia/map) με πινέζα στη δοσμένη θέση. */
 function kosm_map( $lat, $lng, $title, $address, $zoom = 16 ) {
 	$attrs = wp_json_encode(
 		array(
@@ -538,15 +439,6 @@ function kosm_list( $items ) {
 	return $html . "</ul>\n<!-- /wp:list -->\n\n";
 }
 
-/**
- * Δημιουργεί το αρχικό περιεχόμενο.
- *
- * Είναι idempotent: αν έχει ήδη τρέξει για την ίδια έκδοση δεν ξαναγράφει
- * τίποτα, εκτός αν ζητηθεί ρητά με $force.
- *
- * @param bool $force Ξαναχτίσιμο ακόμη κι αν υπάρχει ήδη.
- * @return array Τα μηνύματα προόδου.
- */
 function kosmiteia_install_demo_content( $force = false ) {
 	if ( get_option( 'kosmiteia_demo_version' ) === KOSM_DEMO_VERSION && ! $force ) {
 		kosmiteia_demo_log( __( 'Το αρχικό περιεχόμενο υπάρχει ήδη - δεν έγινε καμία αλλαγή.', 'kosmiteia' ) );
@@ -563,10 +455,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		wp_set_current_user( 1 );
 	}
 
-	/* =========================================================================
-	 * 1. Ρυθμίσεις ιστότοπου
-	 * ====================================================================== */
-
 	update_option( 'blogname', 'Κοσμητεία Σχολής Επιστημών Υγείας' );
 	update_option( 'blogdescription', 'Δημοκρίτειο Πανεπιστήμιο Θράκης' );
 	update_option( 'timezone_string', 'Europe/Athens' );
@@ -576,7 +464,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	update_option( 'posts_per_page', 10 );
 	update_option( 'show_on_front', 'posts' );
 
-	// Ρυθμίσεις Κοσμητείας: τροφοδοτούν υποσέλιδο, επικοινωνία, χάρτη και schema.
 	update_option(
 		KOSMITEIA_SETTINGS_OPTION,
 		array_merge(
@@ -603,10 +490,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 
 	kosmiteia_demo_log( '  Ρυθμίσεις ιστότοπου: ok' );
 
-	/* =========================================================================
-	 * 2. Εικόνες
-	 * ====================================================================== */
-
 	$images = array(
 		'hero1'    => kosm_image( 'hero-1.png', 'Πανεπιστημιούπολη', 'Άποψη της πανεπιστημιούπολης' ),
 		'hero2'    => kosm_image( 'hero-2.png', 'Ερευνητικά εργαστήρια', 'Ερευνητικά εργαστήρια' ),
@@ -624,9 +507,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		'logo'     => kosm_image( 'logo.png', 'Λογότυπο Κοσμητείας', 'Λογότυπο Κοσμητείας Σχολών' ),
 	);
 
-	// Το λογότυπο μπαίνει ΜΟΝΟ αν δεν έχει ήδη οριστεί: το δείγμα δεν πρέπει
-	// ποτέ να αντικαταστήσει το πραγματικό λογότυπο του ιδρύματος - ούτε καν
-	// με --force, που αφορά το δοκιμαστικό περιεχόμενο και όχι την ταυτότητα.
 	$current_logo = (int) get_theme_mod( 'custom_logo' );
 
 	if ( $images['logo'] && ( ! $current_logo || ! wp_attachment_is_image( $current_logo ) ) ) {
@@ -637,10 +517,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	}
 
 	kosmiteia_demo_log( '  Εικόνες: ' . count( array_filter( $images ) ) );
-
-	/* =========================================================================
-	 * 3. Σχολές
-	 * ====================================================================== */
 
 	$schools = array(
 		array(
@@ -739,10 +615,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	}
 
 	kosmiteia_demo_log( '  Τμήματα: ' . count( $school_ids ) );
-
-	/* =========================================================================
-	 * 4. Ανακοινώσεις
-	 * ====================================================================== */
 
 	$announcements = array(
 		array(
@@ -853,10 +725,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	}
 
 	kosmiteia_demo_log( '  Ανακοινώσεις: ' . $announcement_count );
-
-	/* =========================================================================
-	 * 5. Μεταπτυχιακά προγράμματα
-	 * ====================================================================== */
 
 	$programs = array(
 		array(
@@ -971,10 +839,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	}
 
 	kosmiteia_demo_log( '  Μεταπτυχιακά: ' . $program_count );
-
-	/* =========================================================================
-	 * 6. Σελίδες
-	 * ====================================================================== */
 
 	$about  = kosm_p( 'Η Σχολή Επιστημών Υγείας (Σ.Ε.Υ.) ιδρύθηκε στο Δημοκρίτειο Πανεπιστήμιο Θράκης τον Ιούνιο του 2013 και απαρτίζεται από το Τμήμα Ιατρικής, το Τμήμα Μοριακής Βιολογίας και Γενετικής και το Τμήμα Νοσηλευτικής.' );
 	$about .= kosm_h( 'Ιστορικό', 2 );
@@ -1117,7 +981,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		)
 	);
 
-	// Οι επιλεγμένες εικόνες γίνονται φόντο στην κεφαλίδα των σελίδων (page.html).
 	foreach ( array(
 		$about_id   => $images['hero3'],
 		$dean_id    => $images['hero2'],
@@ -1131,8 +994,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		}
 	}
 
-	// Η σελίδα του Κοσμήτορα τροφοδοτεί το κουμπί της αρχικής και το
-	// {{url_dean}}, ενώ το πλωτό κουμπί οδηγεί στην Επικοινωνία.
 	if ( $dean_id ) {
 		kosm_setting( 'dean_page', $dean_id );
 	}
@@ -1143,10 +1004,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	}
 
 	kosmiteia_demo_log( '  Σελίδες: 4' );
-
-	/* =========================================================================
-	 * 7. Μενού πλοήγησης (EL + EN)
-	 * ====================================================================== */
 
 	$home       = home_url( '/' );
 	$url_school = get_post_type_archive_link( 'kosm_school' );
@@ -1199,24 +1056,11 @@ function kosmiteia_install_demo_content( $force = false ) {
 
 	kosmiteia_demo_log( '  Μενού: 2 (main, main-en)' );
 
-	/* =========================================================================
-	 * 8. Template parts: κεφαλίδα με μενού + αγγλικές εκδόσεις
-	 * ====================================================================== */
-
 	$theme_dir = get_stylesheet_directory();
 
-	// Κεφαλίδα EL: ίδια με του theme, με σύνδεση στο ελληνικό μενού.
 	$header_el = kosm_navigation_ref( file_get_contents( $theme_dir . '/parts/header.html' ), $menu_el );
 	kosm_template_part( 'header', 'Κεφαλίδα (EL)', 'header', $header_el );
 
-	/**
-	 * Το theme είναι γενικό («Κοσμητεία Σχολών»). Το δοκιμαστικό περιεχόμενο αφορά
-	 * την Κοσμητεία μίας Σχολής με Τμήματα, οπότε τα κείμενα των ενοτήτων της
-	 * αρχικής προσαρμόζονται εδώ - χωρίς να αλλάξουν τα αρχεία του theme.
-	 *
-	 * @param string $markup Το HTML του template part.
-	 * @return string
-	 */
 	$to_departments = static function ( $markup ) {
 		return str_replace(
 			array(
@@ -1251,12 +1095,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		);
 	};
 
-	/**
-	 * Το ίδιο για τα αγγλικά patterns.
-	 *
-	 * @param string $markup Το HTML του pattern.
-	 * @return string
-	 */
 	$to_departments_en = static function ( $markup ) {
 		return str_replace(
 			array(
@@ -1277,15 +1115,12 @@ function kosmiteia_install_demo_content( $force = false ) {
 		);
 	};
 
-	// Hero EL: με φωτογραφίες φόντου.
 	$hero_el = kosm_hero_with_images(
 		$to_departments( file_get_contents( $theme_dir . '/parts/home-hero.html' ) ),
 		array( $images['hero1'], $images['hero2'], $images['hero3'] )
 	);
 	kosm_template_part( 'home-hero', 'Αρχική: Hero slider', 'uncategorized', $hero_el );
 
-	// Μήνυμα Κοσμήτορα: η φωτογραφία μπαίνει με ελαφρύ σκοτείνιασμα, ώστε το
-	// πορτρέτο να μένει ευανάγνωστο.
 	kosm_template_part(
 		'home-dean',
 		'Αρχική: Μήνυμα Κοσμήτορα',
@@ -1297,7 +1132,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		)
 	);
 
-	// Ενότητα «Τα Τμήματα της Σχολής» στην αρχική.
 	kosm_template_part(
 		'home-schools',
 		'Αρχική: Σχολές',
@@ -1305,7 +1139,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		$to_departments( file_get_contents( $theme_dir . '/parts/home-schools.html' ) )
 	);
 
-	// Υποσέλιδο EL: ίδιο με του theme, με τα στοιχεία της Κοσμητείας.
 	kosm_template_part(
 		'footer',
 		'Υποσέλιδο (EL)',
@@ -1313,7 +1146,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 		$to_departments( file_get_contents( $theme_dir . '/parts/footer.html' ) )
 	);
 
-	// Αγγλικές εκδόσεις από τα patterns.
 	$header_en = kosm_navigation_ref( kosm_pattern( 'header-main.php', 'en_US' ), $menu_en );
 	kosm_template_part( 'header-en', 'Header (EN)', 'header', $header_en );
 
@@ -1339,10 +1171,6 @@ function kosmiteia_install_demo_content( $force = false ) {
 	kosm_front_page_add_dean();
 
 	kosmiteia_demo_log( '  Template parts: header, footer, home-hero, home-dean, home-schools + 7 αγγλικά' );
-
-	/* =========================================================================
-	 * 9. Τελείωμα
-	 * ====================================================================== */
 
 	flush_rewrite_rules( false );
 	update_option( 'kosmiteia_demo_version', KOSM_DEMO_VERSION );

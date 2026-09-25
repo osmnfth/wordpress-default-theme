@@ -1,13 +1,3 @@
-/**
- * Kosmiteia - προσβάσιμο slider.
- *
- * Progressive enhancement: χωρίς JavaScript οι διαφάνειες εμφανίζονται
- * απλώς η μία κάτω από την άλλη και όλο το περιεχόμενο παραμένει προσβάσιμο.
- *
- * Υλοποιεί το APG carousel pattern: role="region" + aria-roledescription,
- * κουμπιά με ετικέτες, παύση αυτόματης εναλλαγής σε hover/focus, σεβασμό
- * στο prefers-reduced-motion και πλοήγηση με πληκτρολόγιο.
- */
 ( function () {
 	'use strict';
 
@@ -74,9 +64,6 @@
 			);
 		} );
 
-		/* ------------------------------------------------------------------
-		 * Χειριστήρια
-		 * --------------------------------------------------------------- */
 		var controls = document.createElement( 'div' );
 		controls.className = 'kosmiteia-slider__controls';
 
@@ -158,9 +145,6 @@
 			} );
 		}
 
-		/* ------------------------------------------------------------------
-		 * Λογική εναλλαγής
-		 * --------------------------------------------------------------- */
 		function goTo( next, focusSlide ) {
 			var total = slides.length;
 
@@ -211,9 +195,6 @@
 			timer = null;
 		}
 
-		/* ------------------------------------------------------------------
-		 * Αλληλεπίδραση
-		 * --------------------------------------------------------------- */
 		root.addEventListener( 'keydown', function ( event ) {
 			if ( event.key === 'ArrowLeft' ) {
 				stop();
@@ -240,7 +221,6 @@
 			} );
 		}
 
-		// Swipe σε κινητά.
 		var startX = null;
 
 		root.addEventListener( 'touchstart', function ( event ) {

@@ -1,16 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Δημιουργεί τα αρχεία μετάφρασης του theme:
-
-    languages/kosmiteia.pot   - πρότυπο για μεταφραστές
-    languages/en_US.po        - αγγλική μετάφραση (πηγή: ελληνικά)
-    languages/en_US.mo        - μεταγλωττισμένη μορφή που διαβάζει το WP
-
-Σημείωση: τα themes φορτώνουν τα αρχεία με όνομα locale (en_US.mo), σε αντίθεση
-με τα plugins που χρησιμοποιούν <domain>-<locale>.mo.
-
-Εκτέλεση:  python build-translations.py
-"""
 
 import io
 import json
@@ -22,10 +10,6 @@ import glob
 TEXTDOMAIN = 'kosmiteia'
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-# Οι μεταφράσιμες συμβολοσειρές ζουν πλέον σε δύο σημεία: στο theme (patterns,
-# templates helpers) και στο πρόσθετο «Κοσμητεία Core» (τύποι περιεχομένου,
-# μπλοκ, ρυθμίσεις). Και τα δύο χρησιμοποιούν το ίδιο textdomain, οπότε
-# παράγουμε ένα κοινό κατάλογο και τον γράφουμε και στους δύο φακέλους.
 PLUGIN = os.path.join(os.path.dirname(HERE), 'plugins', 'kosmiteia-core')
 
 SOURCES = (
@@ -35,7 +19,6 @@ SOURCES = (
 
 
 def source_files():
-    """Όλα τα αρχεία που περιέχουν μεταφράσιμα strings."""
     files = []
     for base, patterns in SOURCES:
         if not os.path.isdir(base):
@@ -44,7 +27,6 @@ def source_files():
             files.extend(sorted(glob.glob(os.path.join(base, pattern))))
     return files
 
-# Ελληνικό πρωτότυπο -> Αγγλική μετάφραση.
 EN = {
     u'Εμφάνιση': u'Display',
     u'Ετικέτες γλωσσών': u'Language labels',
@@ -74,7 +56,6 @@ EN = {
     u'Δεν βρέθηκαν γλώσσες προς εμφάνιση.': u'No languages available to display.',
     u'Επιλογή γλώσσας': u'Language selection',
 
-    # Σχολές / Schools.
     u'Σχολές': u'Schools',
     u'Σχολή': u'School',
     u'Προσθήκη νέας': u'Add New',
@@ -96,7 +77,6 @@ EN = {
     u'Σύντομη περιγραφή της Σχολής...': u'A short description of the school...',
     u'Τμήματα': u'Departments',
 
-    # Ανακοινώσεις / Announcements.
     u'Ανακοινώσεις': u'Announcements',
     u'Ανακοίνωση': u'Announcement',
     u'Προσθήκη νέας Ανακοίνωσης': u'Add New Announcement',
@@ -112,7 +92,6 @@ EN = {
     u'Ανακοινώσεις, νέα και προκηρύξεις της Κοσμητείας.':
         u'Announcements, news and calls from the Deanery.',
 
-    # Μεταπτυχιακά / Programmes.
     u'Μεταπτυχιακά': u'Postgraduate',
     u'Μεταπτυχιακό Πρόγραμμα': u'Postgraduate Programme',
     u'Προσθήκη νέου': u'Add New',
@@ -159,7 +138,6 @@ EN = {
     u'Προθεσμία': u'Deadline',
     u'Συνημμένο αρχείο (URL)': u'Attached file (URL)',
 
-    # SEO / γενικά.
     u'Αποτελέσματα αναζήτησης για: %s': u'Search results for: %s',
     u'Αρχική': u'Home',
     u'Card (3:2)': u'Card (3:2)',
@@ -185,7 +163,6 @@ EN = {
     u'Με υπογράμμιση': u'With underline',
     u'Περισσότερα για: %s': u'Read more about: %s',
 
-    # Περιεχόμενο patterns.
     u'Πρόσφατες ανακοινώσεις': u'Latest announcements',
     u'Προκηρύξεις, προθεσμίες και νέα της ακαδημαϊκής κοινότητας.':
         u'Calls, deadlines and news from the academic community.',
@@ -242,7 +219,6 @@ EN = {
     u'Δήλωση προσβασιμότητας': u'Accessibility statement',
     u'Χάρτης ιστότοπου': u'Sitemap',
 
-    # Ενότητα «Μήνυμα Κοσμήτορα».
     u'Μήνυμα Κοσμήτορα': u'Message from the Dean',
     u'Καλώς ήρθατε στην Κοσμητεία': u'Welcome to the Deanery',
     u'Σύντομο απόσπασμα από τον χαιρετισμό του Κοσμήτορα προς τη φοιτητική και την ακαδημαϊκή κοινότητα. Το πλήρες κείμενο βρίσκεται στη σελίδα «Μήνυμα Κοσμήτορα».':
@@ -253,7 +229,6 @@ EN = {
     u'Εκεί οδηγεί το κουμπί «Διαβάστε περισσότερα» της ενότητας στην αρχική, καθώς και το token {{url_dean}}.':
         u'Where the "Read more" button on the home page - and the {{url_dean}} token - point to.',
 
-    # Πλωτό κουμπί με μήνυμα.
     u'Πλωτό κουμπί': u'Floating button',
     u'Εμφάνιση πλωτού κουμπιού': u'Show the floating button',
     u'Στρογγυλό κουμπί κάτω δεξιά. Φαίνεται στην κορυφή της σελίδας, κρύβεται με το σκρολάρισμα και επανεμφανίζεται στο τέλος της σελίδας.':
@@ -274,13 +249,11 @@ EN = {
     u'Περισσότερα': u'More',
     u'Κλείσιμο': u'Close',
 
-    # Πεδίο εικόνας στις Ρυθμίσεις.
     u'Επιλογή εικόνας': u'Select image',
     u'Χρήση αυτής της εικόνας': u'Use this image',
     u'Αφαίρεση': u'Remove',
     u'ID εικόνας': u'Image ID',
 
-    # Φίλτρα, αναζήτηση και ταξινόμηση Μεταπτυχιακών.
     u'Μεταπτυχιακά ανά σελίδα': u'Postgraduate programmes per page',
     u'Ισχύει στο αρχείο Μεταπτυχιακών και στα φίλτρα του.':
         u'Applies to the postgraduate archive and its filters.',
@@ -304,7 +277,6 @@ EN = {
     u'Φίλτρο τύπου': u'Type filter',
     u'Επιλογή ταξινόμησης': u'Sort control',
 
-    # Οθόνη φόρτωσης.
     u'Οθόνη φόρτωσης': u'Loading screen',
     u'Εμφάνιση οθόνης φόρτωσης': u'Show the loading screen',
     u'Λευκή οθόνη με το λογότυπο στο κέντρο, όσο φορτώνει η επόμενη σελίδα σε αργή σύνδεση.':
@@ -319,14 +291,12 @@ EN = {
     u'Σε γρήγορη σύνδεση η σελίδα προλαβαίνει να φορτώσει και η οθόνη δεν εμφανίζεται καθόλου.':
         u'On a fast connection the page arrives first and the screen never appears.',
 
-    # URL slugs (ίδια σε EL/EN, ώστε τα permalinks να μένουν σταθερά).
     u'schools': u'schools',
     u'announcements': u'announcements',
     u'programs': u'programs',
     u'faculty': u'faculty',
     u'announcement-category': u'announcement-category',
     u'program-type': u'program-type',
-    # Φίλτρα ανακοινώσεων / Announcement filters.
     u'Αναζήτηση': u'Search',
     u'Λέξη-κλειδί, π.χ. υποτροφίες': u'Keyword, e.g. scholarships',
     u'Κατηγορία': u'Category',
@@ -350,7 +320,6 @@ EN = {
     u'Φίλτρο έτους': u'Year filter',
     u'Αριθμός αποτελεσμάτων': u'Result count',
 
-    # Χάρτης / Map.
     u'Χάρτης (Leaflet)': u'Map (Leaflet)',
     u'Θέση στον χάρτη': u'Map position',
     u'Γεωγραφικό πλάτος (latitude)': u'Latitude',
@@ -379,7 +348,6 @@ EN = {
     u'Άνοιγμα στον χάρτη (OpenStreetMap)': u'Open in OpenStreetMap',
     u'Οδηγίες πρόσβασης': u'Directions',
 
-    # Pattern "Επικοινωνία: στοιχεία και χάρτης".
     u'Πού θα μας βρείτε': u'Where to find us',
     u'Η Γραμματεία της Κοσμητείας στεγάζεται στο Κτίριο Διοίκησης της Πανεπιστημιούπολης. Η είσοδος είναι προσβάσιμη σε άτομα με αναπηρία.':
         u'The Deanery office is located in the Administration Building on campus. The entrance is wheelchair accessible.',
@@ -398,7 +366,6 @@ EN = {
         u'The breadcrumb trail appears on inner pages.',
     u'Σύνδεσμος Αρχικής': u'Home link',
     u'Τρέχουσα σελίδα': u'Current page',
-    # Γκαλερί εικόνων & lightbox.
     u'Γκαλερί εικόνων': u'Image gallery',
     u'Εικόνες': u'Images',
     u'Πηγή εικόνων': u'Image source',
@@ -437,7 +404,6 @@ EN = {
         u'Shows the images uploaded from this page as thumbnails that open in a lightbox. The result appears on the front end.',
     u'Στήλες: %1$s — αναλογίες: %2$s': u'Columns: %1$s — aspect ratio: %2$s',
     u'Δεν βρέθηκαν εικόνες για τη γκαλερί.': u'No images found for this gallery.',
-    # Πεδίο «Φωτογραφίες (γκαλερί)» στη διαχείριση.
     u'Φωτογραφίες (γκαλερί)': u'Photos (gallery)',
     u'Επιλογή φωτογραφιών': u'Select photos',
     u'Χρήση αυτών των φωτογραφιών': u'Use these photos',
@@ -453,7 +419,6 @@ EN = {
     u'Δεν έχουν επιλεγεί φωτογραφίες στο πεδίο «Φωτογραφίες (γκαλερί)» της σελίδας.':
         u'No photos selected in the page field "Photos (gallery)".',
     u'Ενότητα': u'Section',
-    # Πολυμέσα: WebP / WebM.
     u'Τα βίντεο ανεβαίνουν μόνο σε μορφή WebM. Μετατρέψτε το αρχείο σε .webm και δοκιμάστε ξανά.':
         u'Videos can only be uploaded as WebM. Convert the file to .webm and try again.',
     u'Μετατροπή σε WebP': u'Convert to WebP',
@@ -624,7 +589,6 @@ STRING_PATTERN = re.compile(r"(?:esc_html_e|esc_attr_e|esc_html__|esc_attr__|_e|
 
 
 def collect_strings():
-    """Μαζεύει τα μεταφράσιμα strings από PHP και JS."""
     files = source_files()
 
     found = []
@@ -641,7 +605,6 @@ PLURAL_PATTERN = re.compile(r"_n\(\s*'([^']*)'\s*,\s*'([^']*)'")
 
 
 def collect_plurals():
-    """Μαζεύει τα ζεύγη ενικού/πληθυντικού από τις κλήσεις _n()."""
     files = source_files()
 
     found = []
@@ -674,7 +637,6 @@ def write_po(path, entries, header, plurals=()):
 
 
 def write_mo(path, catalog):
-    """Γράφει αρχείο .mo (little endian) - χωρίς εξαρτήσεις από msgfmt."""
     items = sorted((k.encode('utf-8'), v.encode('utf-8')) for k, v in catalog.items())
     count = len(items)
     key_start = 7 * 4 + 16 * count
@@ -741,7 +703,6 @@ def main():
         if target:
             catalog[source] = target
 
-    # Πληθυντικοί: στο .mo το κλειδί είναι "ενικός\0πληθυντικός".
     plural_entries = []
     for single, plural in plurals:
         one = EN.get(single, u'')
@@ -759,8 +720,6 @@ def main():
     write_po(os.path.join(languages_dir, 'en_US.po'), entries, en_header, plural_entries)
     write_mo(os.path.join(languages_dir, 'en_US.mo'), catalog)
 
-    # Το ίδιο κατάλογο και στο πρόσθετο, ώστε να μεταφράζονται και τα δικά του
-    # strings όταν το WordPress φορτώσει το textdomain του.
     plugin_languages = os.path.join(PLUGIN, 'languages')
     if os.path.isdir(PLUGIN):
         if not os.path.isdir(plugin_languages):
@@ -768,9 +727,6 @@ def main():
         write_po(os.path.join(plugin_languages, '%s.pot' % TEXTDOMAIN),
                  [(s, u'') for s in strings], pot_header,
                  [(single, plural, u'', u'') for single, plural in plurals])
-        # Τα plugins ονομάζουν τα αρχεία «<textdomain>-<locale>.mo»· τα themes
-        # μόνο «<locale>.mo». Χωρίς τη σωστή ονομασία το WordPress δεν φορτώνει
-        # τις μεταφράσεις του προσθέτου.
         write_po(os.path.join(plugin_languages, '%s-en_US.po' % TEXTDOMAIN), entries, en_header, plural_entries)
         write_mo(os.path.join(plugin_languages, '%s-en_US.mo' % TEXTDOMAIN), catalog)
 

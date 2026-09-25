@@ -1,6 +1,3 @@
-/**
- * Μπλοκ «Διαδρομή πλοήγησης» (δυναμικό - render από PHP).
- */
 ( function ( blocks, blockEditor, components, element, i18n, serverSideRender ) {
 	'use strict';
 

@@ -1,35 +1,6 @@
 <?php
-/**
- * Block Bindings: δυναμικά κείμενα από τις Ρυθμίσεις Κοσμητείας.
- *
- * Οποιοδήποτε μπλοκ παραγράφου, επικεφαλίδας, κουμπιού ή εικόνας μπορεί να
- * «δείχνει» σε μια ρύθμιση αντί να έχει σταθερό κείμενο:
- *
- *   <!-- wp:paragraph {"metadata":{"bindings":{"content":{
- *          "source":"kosmiteia/option","args":{"key":"contact_phone"}}}}} -->
- *   <p>Τηλέφωνο</p>
- *   <!-- /wp:paragraph -->
- *
- * Έτσι η αλλαγή γίνεται μία φορά στις Ρυθμίσεις και ενημερώνονται όλα τα
- * σημεία του ιστότοπου - χωρίς επεξεργασία templates ή patterns.
- *
- * Πέρα από τα κλειδιά των ρυθμίσεων υποστηρίζονται και υπολογιζόμενες τιμές:
- *
- *   year        Τρέχον έτος
- *   site_name   Όνομα ιστότοπου
- *   copyright   «© έτος - όνομα» (ή το κείμενο των ρυθμίσεων)
- *   contact_*   Τα στοιχεία επικοινωνίας με ετικέτα, π.χ. «Τηλ. 25510 30953»
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Οι υπολογιζόμενες τιμές που δεν αποθηκεύονται ως ρυθμίσεις.
- *
- * @return array
- */
 function kosmiteia_binding_computed() {
 	$copyright = kosmiteia_option( 'copyright' );
 
@@ -62,14 +33,6 @@ function kosmiteia_binding_computed() {
 	);
 }
 
-/**
- * Η τιμή που θα μπει στο μπλοκ.
- *
- * @param array $source_args    Τα args του binding (περιμένουμε «key»).
- * @param mixed $block_instance Το μπλοκ (δεν χρησιμοποιείται).
- * @param string $attribute     Το attribute που δένεται (δεν χρησιμοποιείται).
- * @return string|null
- */
 function kosmiteia_binding_value( $source_args, $block_instance = null, $attribute = '' ) {
 	if ( empty( $source_args['key'] ) ) {
 		return null;
@@ -85,17 +48,12 @@ function kosmiteia_binding_value( $source_args, $block_instance = null, $attribu
 	}
 
 	if ( '' === $value || null === $value ) {
-		// Κενή ρύθμιση: επιστρέφουμε το fallback του binding, αλλιώς κενό
-		// κείμενο, ώστε να μη φαίνεται το placeholder του pattern.
 		return isset( $source_args['fallback'] ) ? (string) $source_args['fallback'] : '';
 	}
 
 	return (string) $value;
 }
 
-/**
- * Καταχώριση της πηγής.
- */
 function kosmiteia_register_bindings() {
 	if ( ! function_exists( 'register_block_bindings_source' ) ) {
 		return;
@@ -111,14 +69,6 @@ function kosmiteia_register_bindings() {
 }
 add_action( 'init', 'kosmiteia_register_bindings' );
 
-/**
- * Η διεύθυνση της σελίδας «Μήνυμα Κοσμήτορα».
- *
- * Ορίζεται στις Ρυθμίσεις Κοσμητείας. Αν δεν έχει επιλεγεί σελίδα (ή έχει
- * διαγραφεί), επιστρέφουμε την αρχική, ώστε ο σύνδεσμος να μη «σπάει».
- *
- * @return string
- */
 function kosmiteia_dean_page_url() {
 	$page_id = (int) kosmiteia_option( 'dean_page', 0 );
 
@@ -129,24 +79,6 @@ function kosmiteia_dean_page_url() {
 	return home_url( '/' );
 }
 
-/**
- * Δυναμικά tokens σε κείμενα και συνδέσμους.
- *
- * Γράψτε το token μέσα σε οποιοδήποτε μπλοκ κειμένου ή στο πεδίο URL ενός
- * κουμπιού / στοιχείου μενού:
- *
- *   {{year}} {{site}} {{institution}} {{phone}} {{email}} {{address}} {{hours}}
- *   {{url_home}} {{url_schools}} {{url_dean}} {{url_announcements}} {{url_programs}}
- *   {{url_events}} {{url_people}} {{url_documents}}
- *
- * Το {{url_dean}} δείχνει στη σελίδα που έχει οριστεί στις Ρυθμίσεις ως
- * «Σελίδα μηνύματος Κοσμήτορα».
- *
- * Έτσι οι σύνδεσμοι παραμένουν σωστοί ακόμη κι αν αλλάξουν τα permalinks.
- *
- * @param string $block_content Το HTML του μπλοκ.
- * @return string
- */
 function kosmiteia_render_dynamic_tokens( $block_content ) {
 	if ( false === strpos( $block_content, '{{' ) ) {
 		return $block_content;
@@ -181,12 +113,6 @@ function kosmiteia_render_dynamic_tokens( $block_content ) {
 }
 add_filter( 'render_block', 'kosmiteia_render_dynamic_tokens' );
 
-/**
- * Μήκος περίληψης από τις ρυθμίσεις.
- *
- * @param int $length Προεπιλογή του WordPress.
- * @return int
- */
 function kosmiteia_excerpt_length( $length ) {
 	return (int) kosmiteia_option( 'excerpt_length', 24 );
 }

@@ -1,36 +1,6 @@
 <?php
-/**
- * Εισαγωγή ανακοινώσεων από τον παλιό ιστότοπο (RSS feed).
- *
- * Ο παλιός ιστότοπος (π.χ. health.duth.gr) είναι classic WordPress: οι
- * ανακοινώσεις είναι κανονικά posts (permalink /YYYY/MM/DD/slug/). Το REST API
- * συνήθως είναι κλειστό από το firewall, οπότε η πηγή είναι το RSS feed με
- * σελιδοποίηση:  https://.../feed/?paged=1 ... ?paged=N
- *
- * Κάθε <item> δίνει τίτλο, μόνιμο σύνδεσμο, ημερομηνία, κατηγορίες και
- * ολόκληρο το περιεχόμενο (content:encoded).
- *
- * Εκτέλεση:
- *   - Διαχείριση:  Κοσμητεία → Εργαλεία → «Εισαγωγή από παλιό ιστότοπο»
- *   - Γραμμή εντολών:
- *       wp kosmiteia import-announcements --dry-run
- *       wp kosmiteia import-announcements --faculty="Σχολή Επιστημών Υγείας"
- *
- * Η αντιστοίχιση με το παλιό post γίνεται με το meta «kosm_source_url», ώστε
- * η εισαγωγή να είναι idempotent: ξανατρέξιμο δεν δημιουργεί διπλότυπα.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Καταγραφή προόδου (WP-CLI ή σελίδα Εργαλείων).
- *
- * @param string $message Το μήνυμα.
- * @param string $type    log | warning | success.
- * @return array Όλα τα μηνύματα.
- */
 function kosmiteia_import_log( $message = null, $type = 'log' ) {
 	static $messages = array();
 
@@ -56,20 +26,10 @@ function kosmiteia_import_log( $message = null, $type = 'log' ) {
 	return $messages;
 }
 
-/**
- * Προειδοποίηση.
- *
- * @param string $message Το μήνυμα.
- */
 function kosmiteia_import_warn( $message ) {
 	kosmiteia_import_log( $message, 'warning' );
 }
 
-/**
- * Οι προεπιλεγμένες παράμετροι της εισαγωγής.
- *
- * @return array
- */
 function kosmiteia_import_defaults() {
 	return array(
 		'feed'    => 'https://health.duth.gr/feed/',
@@ -84,19 +44,9 @@ function kosmiteia_import_defaults() {
 	);
 }
 
-/* =========================================================================
- * Βοηθητικές συναρτήσεις
- * ====================================================================== */
-
-/**
- * Κατεβάζει μία σελίδα του feed και επιστρέφει τα items ως πίνακες.
- */
 function kosm_feed_items( $feed_url, $page ) {
 	$url = add_query_arg( 'paged', $page, $feed_url );
 
-	// wp_safe_remote_get(): περνά από wp_http_validate_url(), δηλαδή μπλοκάρει
-	// loopback/ιδιωτικές διευθύνσεις και μη http(s) πρωτόκολλα. Το ίδιο κάνει
-	// ήδη ο πυρήνας στο download_url() για τα συνημμένα.
 	$response = wp_safe_remote_get(
 		$url,
 		array(
@@ -156,9 +106,6 @@ function kosm_feed_items( $feed_url, $page ) {
 	return $items;
 }
 
-/**
- * Το slug του παλιού permalink (/2025/10/08/slug/) σε μορφή για post_name.
- */
 function kosm_slug_from_link( $link, $fallback ) {
 	$path  = wp_parse_url( $link, PHP_URL_PATH );
 	$parts = array_values( array_filter( explode( '/', (string) $path ) ) );
@@ -171,9 +118,6 @@ function kosm_slug_from_link( $link, $fallback ) {
 	return sanitize_title( $slug );
 }
 
-/**
- * Βρίσκει το περιεχόμενο που προήλθε από το συγκεκριμένο παλιό URL.
- */
 function kosm_existing_by_source( $source_url, $post_type = 'kosm_announcement' ) {
 	$found = get_posts(
 		array(
@@ -193,9 +137,6 @@ function kosm_existing_by_source( $source_url, $post_type = 'kosm_announcement' 
 	return $found ? (int) $found[0] : 0;
 }
 
-/**
- * Κωδικοποιεί το path ενός URL (τα PDF του παλιού site έχουν ελληνικά ονόματα).
- */
 function kosm_encode_url( $url ) {
 	$parts = wp_parse_url( $url );
 
@@ -222,11 +163,6 @@ function kosm_encode_url( $url ) {
 	return $rebuilt;
 }
 
-/**
- * Κατεβάζει ένα αρχείο του παλιού site στη Βιβλιοθήκη πολυμέσων και
- * επιστρέφει το attachment ID (0 σε αποτυχία). Αρχείο που έχει ήδη
- * εισαχθεί δεν ξανακατεβαίνει.
- */
 function kosm_sideload( $url, $post_id = 0 ) {
 	static $cache = array();
 
@@ -276,9 +212,6 @@ function kosm_sideload( $url, $post_id = 0 ) {
 	return (int) $attachment_id;
 }
 
-/**
- * Το εσωτερικό HTML ενός κόμβου.
- */
 function kosm_inner_html( DOMNode $node ) {
 	$html = '';
 
@@ -289,9 +222,6 @@ function kosm_inner_html( DOMNode $node ) {
 	return trim( $html );
 }
 
-/**
- * Μπλοκ εικόνας, με το ID της νέας εικόνας όταν αυτή έχει εισαχθεί.
- */
 function kosm_image_block( DOMElement $img, $images ) {
 	$src = $img->getAttribute( 'src' );
 	$alt = $img->getAttribute( 'alt' );
@@ -313,17 +243,6 @@ function kosm_image_block( DOMElement $img, $images ) {
 	);
 }
 
-/**
- * Καθαρίζει το φορτωμένο DOM πριν από οποιαδήποτε μετατροπή.
- *
- * Το περιεχόμενο έρχεται από ξένο ιστότοπο: ακόμη κι αν είναι «γνωστός»,
- * μπορεί να έχει παραβιαστεί ή να έχει συντάκτες που δεν ελέγχουμε. Εδώ
- * αφαιρούνται ολόκληροι οι επικίνδυνοι κόμβοι - σε οποιοδήποτε βάθος, όχι μόνο
- * στο επίπεδο που διατρέχει ο μετατροπέας - και κάθε attribute που εκτελεί
- * κώδικα (on*, javascript:, data: κ.λπ.).
- *
- * @param DOMDocument $dom Το έγγραφο.
- */
 function kosm_import_clean_dom( DOMDocument $dom ) {
 	$xpath = new DOMXPath( $dom );
 
@@ -354,23 +273,10 @@ function kosm_import_clean_dom( DOMDocument $dom ) {
 	}
 }
 
-/**
- * Δεύτερη γραμμή άμυνας για κάθε κομμάτι HTML που κρατάμε αυτούσιο.
- *
- * Δεν βασιζόμαστε στο ότι θα φιλτράρει το WordPress: ο χρήστης που τρέχει την
- * εισαγωγή είναι συνήθως διαχειριστής, άρα έχει «unfiltered_html» και το
- * wp_insert_post() δεν καθαρίζει τίποτα. Φιλτράρουμε ρητά εμείς.
- *
- * @param string $html Το HTML.
- * @return string
- */
 function kosm_import_safe_html( $html ) {
 	return wp_kses_post( (string) $html );
 }
 
-/**
- * Διατρέχει τα παιδιά ενός κόμβου και τα μεταφράζει σε blocks.
- */
 function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 	$blocks = '';
 
@@ -465,9 +371,6 @@ function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 				break;
 
 			default:
-				// Δομικά στοιχεία (πίνακες, παραθέσεις) τα κρατάμε, αλλά μόνο
-				// φιλτραρισμένα. Οτιδήποτε άλλο το ανοίγουμε και συνεχίζουμε στα
-				// παιδιά του, ώστε να μη μένει ποτέ ξένο raw HTML στο άρθρο.
 				$keep = array( 'table', 'blockquote', 'pre', 'dl', 'hr' );
 
 				if ( in_array( $tag, $keep, true ) ) {
@@ -498,10 +401,6 @@ function kosm_nodes_to_blocks( DOMNode $parent, $images = array() ) {
 	return $blocks;
 }
 
-/**
- * Μετατρέπει το HTML του παλιού site σε block markup του editor.
- * Ό,τι δεν αναγνωρίζεται μπαίνει σε core/html, ώστε να μη χαθεί τίποτα.
- */
 function kosm_html_to_blocks( $html, $images = array() ) {
 	$html = preg_replace( '/\[\/?vc_[^\]]*\]/u', '', (string) $html );
 	$html = trim( (string) $html );
@@ -524,8 +423,6 @@ function kosm_html_to_blocks( $html, $images = array() ) {
 	$root = $dom->getElementById( 'kosm-root' );
 
 	if ( ! $root ) {
-		// Αν το DOM δεν φορτώθηκε, κρατάμε μόνο κείμενο: σε καμία
-		// περίπτωση δεν καταλήγει ξένο έγγραφο ως raw HTML στο άρθρο.
 		$text = trim( wp_strip_all_tags( $html ) );
 
 		return ( '' === $text ) ? '' : "<!-- wp:paragraph -->\n<p>" . esc_html( $text ) . "</p>\n<!-- /wp:paragraph -->\n\n";
@@ -534,12 +431,6 @@ function kosm_html_to_blocks( $html, $images = array() ) {
 	return kosm_nodes_to_blocks( $root, $images );
 }
 
-/**
- * Εκτελεί την εισαγωγή.
- *
- * @param array $args feed, pages, limit, dry_run, media, force, status, cats, faculty.
- * @return array Σύνοψη: total, created, updated, skipped, files, messages.
- */
 function kosmiteia_import_announcements( $args = array() ) {
 	$args = wp_parse_args( $args, kosmiteia_import_defaults() );
 
@@ -566,10 +457,6 @@ function kosmiteia_import_announcements( $args = array() ) {
 	if ( $dry_run ) {
 		kosmiteia_import_log( __( 'ΔΟΚΙΜΗ (dry run): δεν γράφεται τίποτα στη βάση.', 'kosmiteia' ) );
 	}
-
-	/* =========================================================================
-	 * 1. Κατέβασμα του feed
-	 * ====================================================================== */
 
 	kosmiteia_import_log( sprintf( '  Πηγή: %s', $feed_url ) );
 
@@ -617,10 +504,6 @@ function kosmiteia_import_announcements( $args = array() ) {
 		);
 	}
 
-	/* =========================================================================
-	 * 2. Εισαγωγή
-	 * ====================================================================== */
-
 	$created  = 0;
 	$updated  = 0;
 	$skipped  = 0;
@@ -652,7 +535,6 @@ function kosmiteia_import_announcements( $args = array() ) {
 		$slug      = kosm_slug_from_link( $item['link'], sanitize_title( $item['title'] ) );
 		$content   = $item['content'];
 
-		/* Συνημμένα: PDF και εικόνες του παλιού site. */
 		preg_match_all( '#https?://[^"\'\s<>]+#u', $content, $matches );
 
 		$uploads = array_values(
@@ -701,8 +583,6 @@ function kosmiteia_import_announcements( $args = array() ) {
 
 		$blocks = kosm_html_to_blocks( $content, $images );
 
-	// Τελευταία δικλείδα: αν παρ' ελπίδα έχει μείνει εκτελέσιμο HTML,
-	// φιλτράρεται και καταγράφεται.
 	if ( false !== stripos( $blocks, '<script' ) || preg_match( '/\\son[a-z]+\\s*=/i', $blocks ) ) {
 		kosmiteia_import_warn(
 			sprintf(

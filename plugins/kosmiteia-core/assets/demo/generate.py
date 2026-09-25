@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Παράγει τις εικόνες-δείγματα του demo (χωρίς εξωτερικές βιβλιοθήκες).
-
-    python generate.py
-
-Δημιουργεί: hero-1..3, school-1..3, program-1..3, announcement-1..2, dean, logo.
-Οι εικόνες είναι αφηρημένα ακαδημαϊκά μοτίβα - αντικαταστήστε τις με
-πραγματικές φωτογραφίες από τη Βιβλιοθήκη πολυμέσων.
-"""
 
 import math
 import os
@@ -26,7 +17,6 @@ PLUM = (63, 36, 92)
 
 
 def write_png(path, width, height, pixels, alpha=False):
-    """pixels: bytearray με RGB ή RGBA ανά pixel."""
     channels = 4 if alpha else 3
     raw = bytearray()
     stride = width * channels
@@ -53,13 +43,11 @@ def mix(a, b, t):
 
 
 def scene(width, height, top, bottom, accent, seed):
-    """Αφηρημένο μοτίβο: βαθμίδα + διαγώνιες λωρίδες + «κτίρια»/κύκλοι."""
     pixels = bytearray(width * height * 3)
     skyline = []
     rnd = seed
 
     def rand():
-        # Απλή αναπαραγώγιμη γεννήτρια, ίδια σε κάθε εκτέλεση.
         nonlocal rnd
         rnd = (rnd * 1103515245 + 12345) % 2147483648
         return rnd / 2147483648.0
@@ -76,19 +64,16 @@ def scene(width, height, top, bottom, accent, seed):
             tx = x / float(width - 1)
             r, g, b = base
 
-            # Διαγώνια φωτεινή λωρίδα.
             diag = math.sin((tx * 2.4 + ty * 1.6) * math.pi)
             if diag > 0.82:
                 r, g, b = mix((r, g, b), accent, 0.28)
 
-            # Σιλουέτα «κτιρίων» στο κάτω μέρος.
             column = min(columns - 1, int(tx * columns))
             if ty > 1.0 - skyline[column] * 0.42:
                 r, g, b = mix((r, g, b), NAVY, 0.45)
                 if abs(tx * columns - column - 0.5) > 0.46:
                     r, g, b = mix((r, g, b), (255, 255, 255), 0.08)
 
-            # Κύκλος «ήλιος/σφραγίδα».
             dx = (tx - 0.72) * width
             dy = (ty - 0.3) * height
             dist = math.sqrt(dx * dx + dy * dy) / (width * 0.18)
@@ -104,7 +89,6 @@ def scene(width, height, top, bottom, accent, seed):
 
 
 def portrait(width, height, top, bottom, accent):
-    """Αφηρημένο πορτρέτο: βαθμίδα και σιλουέτα κεφαλιού/ώμων."""
     pixels = bytearray(width * height * 3)
     head_x, head_y = 0.5, 0.38
     head_r = 0.17
@@ -117,14 +101,12 @@ def portrait(width, height, top, bottom, accent):
             tx = x / float(width - 1)
             r, g, b = base
 
-            # Απαλός φωτισμός από πάνω αριστερά.
             r, g, b = mix((r, g, b), accent, max(0.0, 0.35 - (tx + ty) * 0.16))
 
             dx = (tx - head_x) * width
             dy = (ty - head_y) * height
             head = math.sqrt(dx * dx + dy * dy) <= head_r * height
 
-            # Ώμοι: ημι-έλλειψη που ξεκινά κάτω από το κεφάλι.
             sx = (tx - 0.5) / 0.34
             sy = (ty - 1.05) / 0.42
             shoulders = ty > 0.6 and (sx * sx + sy * sy) <= 1.0
@@ -141,7 +123,6 @@ def portrait(width, height, top, bottom, accent):
 
 
 def logo(width, height):
-    """Απλό έμβλημα: κύκλος με στήλες, σε διαφανές φόντο."""
     pixels = bytearray(width * height * 4)
     cx, cy = height * 0.5, height * 0.5
     radius = height * 0.42
@@ -155,7 +136,6 @@ def logo(width, height):
 
             if dist <= radius:
                 r, g, b, a = BLUE[0], BLUE[1], BLUE[2], 255
-                # Τρεις κάθετες στήλες + βάση (κιονοστοιχία).
                 inner = (x - (cx - radius * 0.55)) / (radius * 1.1)
                 if 0 <= inner <= 1:
                     column = inner * 3.0
@@ -166,7 +146,6 @@ def logo(width, height):
                 if cy - radius * 0.55 < y < cy - radius * 0.42 and abs(dx) < radius * 0.7:
                     r, g, b = 255, 255, 255
 
-            # Λεκτικό μπλοκ δίπλα στο έμβλημα (αφηρημένες γραμμές).
             bar_x = height * 1.15
             if x > bar_x:
                 if height * 0.28 < y < height * 0.46 and x < bar_x + (width - bar_x) * 0.92:

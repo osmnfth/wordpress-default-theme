@@ -1,16 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Φτιάχνει τα αρχεία εγκατάστασης (.zip) για WordPress.
-
-    python tools/build-zips.py
-
-Παράγει στο dist/:
-
-    kosmiteia-core-<έκδοση>.zip   -> Πρόσθετα → Προσθήκη → Ανέβασμα αρχείου
-    kosmiteia-<έκδοση>.zip        -> Εμφάνιση → Θέματα → Προσθήκη → Ανέβασμα
-
-Δηλαδή ακριβώς ό,τι θα κατεβάζατε από το wordpress.org: ένα zip με έναν
-φάκελο μέσα, χωρίς αρχεία ανάπτυξης (.git, __pycache__, .DS_Store κ.λπ.).
-"""
 
 import io
 import os
@@ -18,7 +6,6 @@ import re
 import sys
 import zipfile
 
-# Η κονσόλα των Windows είναι συχνά cp1252: χωρίς αυτό «σκάει» στα ελληνικά.
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
@@ -31,14 +18,12 @@ SKIP_SUFFIXES = ('.pyc', '.map.orig', '.orig', '.rej')
 
 
 def version_from(path, pattern):
-    """Διαβάζει την έκδοση από την επικεφαλίδα ενός αρχείου."""
     source = io.open(path, encoding='utf-8', errors='replace').read(4000)
     match = re.search(pattern, source, re.MULTILINE)
     return match.group(1).strip() if match else '0.0.0'
 
 
 def build(source_dir, slug, version):
-    """Συμπιέζει έναν φάκελο σε <slug>-<version>.zip με σωστή ρίζα."""
     if not os.path.isdir(DIST):
         os.makedirs(DIST)
 
