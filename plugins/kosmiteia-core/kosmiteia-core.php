@@ -51,6 +51,7 @@ require_once KOSMITEIA_CORE_DIR . 'includes/programs.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/breadcrumbs.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/blocks.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/gallery.php';
+require_once KOSMITEIA_CORE_DIR . 'includes/attachment-field.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/floating-button.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/page-loader.php';
 require_once KOSMITEIA_CORE_DIR . 'includes/media.php';
