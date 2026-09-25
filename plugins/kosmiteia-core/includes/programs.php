@@ -1,46 +1,10 @@
 <?php
-/**
- * Αναζήτηση, φίλτρα και ταξινόμηση Μεταπτυχιακών.
- *
- * Ό,τι ισχύει στο αρχείο Ανακοινώσεων ισχύει και εδώ: απλές GET παράμετροι,
- * ώστε κάθε συνδυασμός να έχει δικό του URL που μοιράζεται και μπαίνει στους
- * σελιδοδείκτες:
- *
- *   ?kosm_q=βιοηθική          - ελεύθερη αναζήτηση κειμένου
- *   ?kosm_fac=tmima-iatrikis  - Τμήμα (slug του kosm_faculty)
- *   ?kosm_ptype=pms           - τύπος προγράμματος (slug του kosm_program_type)
- *   ?kosm_sort=title          - ταξινόμηση αποτελεσμάτων
- *
- * Χωρίς παράμετρο ταξινόμησης τα προγράμματα εμφανίζονται με τη σειρά που
- * ορίζει ο διαχειριστής (Χαρακτηριστικά σελίδας → Σειρά) και μετά αλφαβητικά.
- *
- * Τα φίλτρα εφαρμόζονται στο κύριο query (pre_get_posts), οπότε το Query Loop
- * του template δουλεύει με «Κληρονομιά ερωτήματος» και η σελιδοποίηση κρατά
- * αυτόματα τις παραμέτρους.
- *
- * @package Kosmiteia_Core
- */
-
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Μεταπτυχιακά ανά σελίδα στο αρχείο.
- *
- * Ορίζεται από τις Ρυθμίσεις Κοσμητείας (Περιεχόμενο → Μεταπτυχιακά ανά
- * σελίδα). Προγραμματιστικά:
- *   add_filter( 'kosmiteia_programs_per_page', function () { return 9; } );
- *
- * @return int
- */
 function kosmiteia_programs_per_page() {
 	return (int) apply_filters( 'kosmiteia_programs_per_page', (int) kosmiteia_option( 'programs_per_page', 12 ) );
 }
 
-/**
- * Οι διαθέσιμες ταξινομήσεις: κλειδί URL => ετικέτα.
- *
- * @return array
- */
 function kosmiteia_program_sort_options() {
 	return array(
 		''           => __( 'Προεπιλεγμένη σειρά', 'kosmiteia' ),
@@ -51,13 +15,8 @@ function kosmiteia_program_sort_options() {
 	);
 }
 
-/**
- * Οι τιμές των φίλτρων όπως ήρθαν από το URL, καθαρισμένες.
- *
- * @return array Πίνακας με κλειδιά q, school, type, sort.
- */
 function kosmiteia_program_filters_state() {
-	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Δημόσια φόρμα φίλτρων (GET): δεν αλλάζει δεδομένα.
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	$read = function ( $key ) {
 		return isset( $_GET[ $key ] ) && is_scalar( $_GET[ $key ] ) ? (string) wp_unslash( $_GET[ $key ] ) : '';
 	};
@@ -66,28 +25,17 @@ function kosmiteia_program_filters_state() {
 
 	return array(
 		'q'      => sanitize_text_field( $read( 'kosm_q' ) ),
-		'school' => sanitize_title( $read( 'kosm_fac' ) ),
-		'type'   => sanitize_title( $read( 'kosm_ptype' ) ),
+		'school' => sanitize_title_for_query( $read( 'kosm_fac' ) ),
+		'type'   => sanitize_title_for_query( $read( 'kosm_ptype' ) ),
 		'sort'   => isset( kosmiteia_program_sort_options()[ $sort ] ) ? $sort : '',
 	);
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 }
 
-/**
- * Υπάρχει έστω ένα ενεργό φίλτρο;
- *
- * @param array $state Κατάσταση φίλτρων.
- * @return bool
- */
 function kosmiteia_program_filters_active( $state ) {
 	return ( '' !== $state['q'] || '' !== $state['school'] || '' !== $state['type'] || '' !== $state['sort'] );
 }
 
-/**
- * Εφαρμογή φίλτρων και ταξινόμησης στο κύριο query του αρχείου Μεταπτυχιακών.
- *
- * @param WP_Query $query Το query.
- */
 function kosmiteia_filter_program_archive( $query ) {
 	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'kosm_program' ) ) {
 		return;
@@ -98,8 +46,6 @@ function kosmiteia_filter_program_archive( $query ) {
 	$state = kosmiteia_program_filters_state();
 
 	if ( '' !== $state['q'] ) {
-		// Δεν αγγίζουμε τα is_search()/is_archive() flags: το template παραμένει
-		// το αρχείο των Μεταπτυχιακών, απλώς με φιλτραρισμένα αποτελέσματα.
 		$query->set( 's', $state['q'] );
 	}
 
@@ -147,19 +93,12 @@ function kosmiteia_filter_program_archive( $query ) {
 			break;
 
 		default:
-			// Η σειρά που ορίζει ο διαχειριστής στα Χαρακτηριστικά σελίδας.
 			$query->set( 'orderby', array( 'menu_order' => 'ASC', 'title' => 'ASC' ) );
 			break;
 	}
 }
 add_action( 'pre_get_posts', 'kosmiteia_filter_program_archive' );
 
-/**
- * Η φόρμα φίλτρων σε HTML.
- *
- * @param array $attributes Attributes του μπλοκ.
- * @return string
- */
 function kosmiteia_program_filters_html( $attributes = array() ) {
 	static $instance = 0;
 	++$instance;
@@ -259,12 +198,6 @@ function kosmiteia_program_filters_html( $attributes = array() ) {
 	);
 }
 
-/**
- * Το κείμενο του μετρητή αποτελεσμάτων.
- *
- * @param array $state Κατάσταση φίλτρων.
- * @return string
- */
 function kosmiteia_program_filters_count_text( $state ) {
 	if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ! is_post_type_archive( 'kosm_program' ) ) {
 		return __( 'Ο αριθμός αποτελεσμάτων εμφανίζεται στο front-end.', 'kosmiteia' );
@@ -297,12 +230,6 @@ function kosmiteia_program_filters_count_text( $state ) {
 	);
 }
 
-/**
- * Render callback του μπλοκ «Φίλτρα μεταπτυχιακών».
- *
- * @param array $attributes Attributes του μπλοκ.
- * @return string
- */
 function kosmiteia_render_program_filters_block( $attributes ) {
 	$html = kosmiteia_program_filters_html( $attributes );
 
