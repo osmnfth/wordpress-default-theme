@@ -1,9 +1,9 @@
 /**
- * Πλωτό κουμπί (κάτω δεξιά) και το παράθυρο μηνύματος.
+ * Floating button (bottom right) and its message dialog.
  *
- * Το κουμπί μένει κρυφό μέχρι να τρέξει το JavaScript (χωρίς αυτό δεν θα
- * άνοιγε τίποτα). Τα χρώματα έρχονται από την παλέτα του θέματος όταν υπάρχει,
- * αλλιώς από τις εφεδρικές τιμές - έτσι το πρόσθετο δουλεύει και σε άλλο θέμα.
+ * The button stays hidden until the JavaScript runs (without it, nothing
+ * would open). Colors come from the theme palette when available, otherwise
+ * from the fallback values - so the plugin also works with another theme.
  */
 
 .kosmiteia-fab,
@@ -15,7 +15,7 @@
 }
 
 /* -------------------------------------------------------------------------
- * Το κουμπί
+ * The button
  * ---------------------------------------------------------------------- */
 
 .kosmiteia-fab {
@@ -38,7 +38,7 @@
 	z-index: 999;
 }
 
-/* Με ενεργό JavaScript το κουμπί υπάρχει, αλλά φαίνεται μόνο όταν πρέπει. */
+/* With JavaScript enabled the button exists, but is only shown when needed. */
 .kosmiteia-fab.is-ready {
 	display: flex;
 	opacity: 0;
@@ -76,7 +76,7 @@
 }
 
 /* -------------------------------------------------------------------------
- * Το παράθυρο
+ * The dialog
  * ---------------------------------------------------------------------- */
 
 .kosmiteia-fab-modal {
@@ -175,12 +175,12 @@
 	text-decoration: underline;
 }
 
-/* Όσο το παράθυρο είναι ανοιχτό, η σελίδα από κάτω δεν κυλάει. */
+/* While the dialog is open, the page underneath does not scroll. */
 .kosmiteia-has-modal {
 	overflow: hidden;
 }
 
-/* Κείμενο μόνο για αναγνώστες οθόνης (δεν εξαρτόμαστε από το θέμα). */
+/* Screen-reader-only text (not relying on the theme). */
 .kosmiteia-fab .screen-reader-text,
 .kosmiteia-fab-modal .screen-reader-text {
 	border: 0;

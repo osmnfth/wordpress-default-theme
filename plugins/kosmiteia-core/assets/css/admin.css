@@ -1,7 +1,7 @@
 /**
- * Kosmiteia - στυλ διαχείρισης.
+ * Kosmiteia - admin styles.
  *
- * Μόνο για το πεδίο «Φωτογραφίες (γκαλερί)» στην οθόνη επεξεργασίας.
+ * Only for the "Photos (gallery)" field on the edit screen.
  */
 
 .kosmiteia-gallery-field__list {
@@ -76,7 +76,7 @@
 }
 
 /* -------------------------------------------------------------------------
- * Πεδίο «Εικόνα» στις Ρυθμίσεις
+ * "Image" field on the Settings page
  * ---------------------------------------------------------------------- */
 
 .kosmiteia-image-field__preview:not(:empty) {

@@ -15,5 +15,5 @@ Text Domain: kosmiteia
 Tags: education, block-patterns, full-site-editing, translation-ready, accessibility-ready, block-styles, custom-logo, custom-menu, featured-images, rtl-language-support, threaded-comments, wide-blocks
 */
 
-/* Τα στυλ του theme βρίσκονται στο assets/css/theme.css (φορτώνεται από το inc/setup.php)
-   και στο theme.json. Μην προσθέτετε CSS εδώ — δεν φορτώνεται στον editor. */
+/* The theme styles live in assets/css/theme.css (loaded by inc/setup.php)
+   and in theme.json. Do not add CSS here - it is not loaded in the editor. */

@@ -93,7 +93,7 @@ html {
 	max-width: var(--kosmiteia-content-width);
 }
 
-/* Λίστες & επικεφαλίδες απλώνονται σε όλο το πλάτος του post content. */
+/* Lists & headings span the full width of the post content. */
 .entry-content.wp-block-post-content.is-layout-constrained > .wp-block-list,
 .entry-content.wp-block-post-content.is-layout-constrained > .wp-block-heading,
 .editor-styles-wrapper .wp-block-post-content.is-layout-constrained > .wp-block-list,
@@ -325,7 +325,7 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	min-width: 0;
 }
 
-/* Εφέ fade: οι διαφάνειες στοιβάζονται στο ίδιο κελί grid. */
+/* Fade effect: slides are stacked in the same grid cell. */
 .kosmiteia-slider.is-initialized.has-effect-fade .kosmiteia-slider__track {
 	display: grid;
 	transform: none !important;
@@ -581,7 +581,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 }
 
 /* -------------------------------------------------------------------------
- * 4β. Message from the Dean
+ * 4b. Message from the Dean
  * ---------------------------------------------------------------------- */
 
 /* Full-width card: photo on the left, greeting on the right. */
@@ -642,7 +642,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	transform: translateX(-50%);
 }
 
-/* Reveal on scroll - ενεργοποιείται μόνο όταν τρέχει το JS. */
+/* Reveal on scroll - only enabled when the JS is running. */
 .js-kosmiteia .kosmiteia-reveal {
 	opacity: 0;
 	transform: translateY(24px);
@@ -654,7 +654,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	transform: none;
 }
 
-/* Κλιμακωτή εμφάνιση για τα cards μιας ενότητας. */
+/* Staggered reveal for the cards of a section. */
 .js-kosmiteia .kosmiteia-reveal .wp-block-post-template > li {
 	opacity: 0;
 	transform: translateY(20px);
