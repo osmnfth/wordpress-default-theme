@@ -540,6 +540,16 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	text-decoration: none;
 }
 
+/* Home page cards: equal excerpt height, so the "More" links line up. */
+.home .wp-block-post-template .wp-block-post-excerpt__excerpt {
+	min-height: 4lh;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 4;
+	line-clamp: 4;
+	overflow: hidden;
+}
+
 .wp-block-post-template .wp-block-read-more::after {
 	content: " →";
 }
