@@ -287,6 +287,37 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	min-width: var(--kosmiteia-target-size, 44px);
 }
 
+/* Copy of the language switcher, placed by interactions.js in the overlay menu. */
+.kosmiteia-overlay-language {
+	display: none;
+}
+
+.is-menu-open .kosmiteia-overlay-language {
+	display: block;
+	margin-top: 1.5rem;
+}
+
+.is-menu-open .kosmiteia-overlay-language .kosmiteia-language-switcher__list {
+	justify-content: center;
+}
+
+/* Mobile header (the core shows the hamburger below 600px):
+   one row with the logo on the left and the hamburger on the right. */
+@media (max-width: 599px) {
+	.kosmiteia-header .wp-block-group.alignwide {
+		flex-wrap: nowrap;
+	}
+
+	/* With a logo, the site title and tagline are hidden. */
+	.kosmiteia-header .wp-block-site-logo + .wp-block-group {
+		display: none;
+	}
+
+	.has-kosmiteia-overlay-language .kosmiteia-header .wp-block-kosmiteia-language-switcher:not(.kosmiteia-overlay-language) {
+		display: none;
+	}
+}
+
 /* -------------------------------------------------------------------------
  * 3. Hero slider
  * ---------------------------------------------------------------------- */

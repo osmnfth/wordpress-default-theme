@@ -232,12 +232,42 @@
 		} );
 	}
 
+	/* ---------------------------------------------------------------------
+	 * Language switcher inside the mobile menu
+	 *
+	 * On mobile the header shows only the logo and the hamburger; a copy of
+	 * the language switcher is placed at the bottom of the overlay menu.
+	 * CSS shows the copy only while the overlay is open.
+	 * ------------------------------------------------------------------ */
+	function initOverlayLanguage() {
+		var header = document.querySelector( '.kosmiteia-header' );
+
+		if ( ! header ) {
+			return;
+		}
+
+		var switcher = header.querySelector( '.wp-block-kosmiteia-language-switcher' );
+		var content = header.querySelector( '.wp-block-navigation__responsive-container-content' );
+
+		if ( ! switcher || ! content || content.querySelector( '.kosmiteia-overlay-language' ) ) {
+			return;
+		}
+
+		var copy = switcher.cloneNode( true );
+
+		copy.removeAttribute( 'id' );
+		copy.classList.add( 'kosmiteia-overlay-language' );
+		content.appendChild( copy );
+		root.classList.add( 'has-kosmiteia-overlay-language' );
+	}
+
 	function init() {
 		initHeader();
 		initReveal();
 		initSmoothScroll();
 		initFilters();
 		initOverlaySubmenus();
+		initOverlayLanguage();
 	}
 
 	if ( document.readyState !== 'loading' ) {
