@@ -1,7 +1,7 @@
 name: kosmiteia
 
 # Πλήρες περιβάλλον ανάπτυξης για το theme "Κοσμητεία":
-#   docker compose up -d      -> WordPress στο http://localhost:${KOSMITEIA_PORT:-8090}
+#   docker compose up -d      -> WordPress στο ${KOSMITEIA_URL:-http://localhost:8090}
 #                                (στοιχεία διαχειριστή: δείτε το .env)
 #   docker compose down       -> σταματά (κρατά τη βάση)
 #   docker compose down -v    -> σβήνει τα πάντα και ξαναστήνει από την αρχή
@@ -45,8 +45,8 @@ services:
         define( 'WP_DEBUG_LOG', true );
         define( 'WP_DEBUG_DISPLAY', false );
         define( 'FS_METHOD', 'direct' );
-        define( 'WP_HOME', 'http://localhost:${KOSMITEIA_PORT:-8090}' );
-        define( 'WP_SITEURL', 'http://localhost:${KOSMITEIA_PORT:-8090}' );
+        define( 'WP_HOME', '${KOSMITEIA_URL:-http://localhost:8090}' );
+        define( 'WP_SITEURL', '${KOSMITEIA_URL:-http://localhost:8090}' );
     volumes:
       - wp-data:/var/www/html
       - ./kosmiteia:/var/www/html/wp-content/themes/kosmiteia
@@ -69,7 +69,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-      KOSMITEIA_URL: "http://localhost:${KOSMITEIA_PORT:-8090}"
+      KOSMITEIA_URL: "${KOSMITEIA_URL:-http://localhost:8090}"
       KOSMITEIA_ADMIN_USER: "${KOSMITEIA_ADMIN_USER:-admin}"
       KOSMITEIA_ADMIN_PASSWORD: "${KOSMITEIA_ADMIN_PASSWORD:-admin}"
       KOSMITEIA_ADMIN_EMAIL: "${KOSMITEIA_ADMIN_EMAIL:-admin@example.edu}"

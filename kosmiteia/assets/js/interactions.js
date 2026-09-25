@@ -1,12 +1,12 @@
 /**
- * Kosmiteia - μικρές βελτιώσεις διεπαφής.
+ * Kosmiteia - small interface improvements.
  *
- * - sticky header που "μαζεύεται" στο scroll
- * - εμφάνιση ενοτήτων με IntersectionObserver (reveal on scroll)
- * - ομαλή κύλιση με σωστή μεταφορά focus για πληκτρολόγιο/screen readers
+ * - sticky header that "shrinks" on scroll
+ * - reveal sections with IntersectionObserver (reveal on scroll)
+ * - smooth scrolling with proper focus management for keyboard/screen readers
  *
- * Όλα σέβονται το prefers-reduced-motion και δεν επηρεάζουν τη λειτουργία
- * της σελίδας αν δεν εκτελεστεί το script.
+ * Everything respects prefers-reduced-motion and does not affect the page's
+ * functionality if the script is not executed.
  */
 ( function () {
 	'use strict';
@@ -14,7 +14,7 @@
 	var root = document.documentElement;
 	var reduceMotion = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
-	// Σημαία ότι τρέχει JS - το CSS των animations κρέμεται από αυτήν.
+	// Flag indicating that JS is running - the CSS animations depend on this.
 	root.classList.add( 'js-kosmiteia' );
 
 	/* ---------------------------------------------------------------------
@@ -84,7 +84,7 @@
 	}
 
 	/* ---------------------------------------------------------------------
-	 * Ομαλή κύλιση + μεταφορά focus (π.χ. κουμπί "scroll" στο hero)
+	 * Smooth scrolling + focus management (e.g., "scroll" button in the hero)
 	 * ------------------------------------------------------------------ */
 	function initSmoothScroll() {
 		document.addEventListener( 'click', function ( event ) {
@@ -113,8 +113,8 @@
 				block: 'start'
 			} );
 
-			// Το focus ακολουθεί την κύλιση, ώστε η πλοήγηση με πληκτρολόγιο
-			// να συνεχίζει από τη σωστή θέση.
+			// The focus follows the scroll, so that keyboard/screen reader navigation
+			// continues from the correct position.
 			if ( ! target.hasAttribute( 'tabindex' ) ) {
 				target.setAttribute( 'tabindex', '-1' );
 			}
@@ -128,11 +128,11 @@
 	}
 
 	/* ---------------------------------------------------------------------
-	 * Φίλτρα ανακοινώσεων
+	 * Filters for announcements
 	 *
-	 * Χωρίς JavaScript η φόρμα δουλεύει κανονικά με το κουμπί "Φιλτράρισμα".
-	 * Με JavaScript: τα άδεια πεδία δεν μπαίνουν στο URL (μένει σύντομο και
-	 * κοινοποιήσιμο) και η αλλαγή σε ένα <select> υποβάλλει αμέσως τη φόρμα.
+	 * Without JavaScript, the form works normally with the "Filter" button.
+	 * With JavaScript: empty fields are not included in the URL (keeping it short and
+	 * shareable) and changing a <select> immediately submits the form.
 	 * ------------------------------------------------------------------ */
 	function initFilters() {
 		var forms = document.querySelectorAll( '.kosmiteia-filters' );
@@ -155,8 +155,8 @@
 					}
 				);
 
-				// Επαναφορά μόλις φύγει η υποβολή, ώστε η φόρμα να είναι
-				// λειτουργική αν ο επισκέπτης γυρίσει πίσω (bfcache).
+				// Reset the form fields once the submission is done, so the form is
+				// functional if the visitor goes back (bfcache).
 				window.setTimeout( function () {
 					emptied.forEach( function ( field ) {
 						field.disabled = false;
@@ -177,11 +177,11 @@
 	}
 
 	/* ---------------------------------------------------------------------
-	 * Υπομενού στο κινητό: βελάκι που ανοίγει/κλείνει με κλικ ή tap
+	 * Overlay submenus on mobile: toggle icons that open/close with click or tap
 	 *
-	 * Μέσα στο overlay ο πυρήνας δείχνει όλα τα υπομενού ανοιχτά. Εδώ τα
-	 * κλείνουμε και τα ανοίγουμε με το βελάκι - ο σύνδεσμος του γονέα
-	 * παραμένει σύνδεσμος, όπως στην επιφάνεια εργασίας.
+	 * Inside the overlay, the core displays all submenus open. Here we
+	 * close them and open them with the toggle icon - the parent link
+	 * remains a link, as in the desktop interface.
 	 * ------------------------------------------------------------------ */
 	function initOverlaySubmenus() {
 		var parents = document.querySelectorAll(
@@ -204,7 +204,7 @@
 			toggle.setAttribute( 'aria-expanded', 'false' );
 
 			toggle.addEventListener( 'click', function () {
-				// Στην επιφάνεια εργασίας το υπομενού το χειρίζεται ο πυρήνας.
+				// In the desktop interface, the core handles the submenu.
 				if ( ! item.closest( '.is-menu-open' ) ) {
 					return;
 				}
@@ -214,7 +214,7 @@
 			} );
 		} );
 
-		// Με το κλείσιμο του μενού όλα επιστρέφουν κλειστά.
+		// With the menu closing, all submenus return to their closed state.
 		document.addEventListener( 'click', function ( event ) {
 			if ( ! event.target.closest( '.wp-block-navigation__responsive-container-close' ) ) {
 				return;

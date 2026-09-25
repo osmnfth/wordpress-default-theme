@@ -1,24 +1,22 @@
 /**
- * Kosmiteia - στυλ theme (front-end & editor).
+ * Kosmiteia - style theme (front-end & editor).
  *
- * Χρησιμοποιεί αποκλειστικά τα CSS variables του theme.json, ώστε κάθε
- * αλλαγή χρώματος/τυπογραφίας από το UI (Styles) να περνά αυτόματα εδώ.
  *
- * Περιεχόμενα:
- *   1. Βάση & προσβασιμότητα
+ * Contents:
+ *   1. Base & accessibility
  *   2. Header / language switcher
  *   3. Hero slider
- *   4. Κάρτες (Σχολές, Ανακοινώσεις, Μεταπτυχιακά)
- *   5. Ενότητες & εφέ κύλισης
+ *   4. Cards (Schools, Announcements, Postgraduate Programs)
+ *   5. Sections & scroll effects
  *   6. Subfooter
- *   7. Αναζήτηση & φίλτρα ανακοινώσεων
- *   8. Χάρτης (Leaflet)
- *   9. Γκαλερί εικόνων & lightbox
- *  10. Responsive & προτιμήσεις χρήστη (mobile menu, κεντραρισμένο υποσέλιδο)
+ *   7. Search & announcement filters
+ *   8. Map (Leaflet)
+ *   9. Image gallery & lightbox
+ *  10. Responsive & user preferences (mobile menu, centered footer)
  */
 
 /* -------------------------------------------------------------------------
- * 1. Βάση & προσβασιμότητα
+ * 1. Base & accessibility
  * ---------------------------------------------------------------------- */
 
 .screen-reader-text {
@@ -49,7 +47,6 @@
 	z-index: 100000;
 }
 
-/* Ορατό focus παντού - κρίσιμο για πλοήγηση με πληκτρολόγιο. */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
 	outline: 2px solid var(--wp--preset--color--accent-1);
 	outline-offset: 2px;
@@ -61,26 +58,14 @@ html {
 	scroll-padding-top: 6rem;
 }
 
-/* Μεγάλες λέξεις χωρίς κενά (email, URL, τηλέφωνα) σπάνε αντί να πλαταίνουν
-   τη σελίδα - βασικό για τις στενές οθόνες. */
 :where(p, li, dd, dt, h1, h2, h3, h4, h5, h6, .wp-block-site-title, figcaption) {
 	overflow-wrap: break-word;
 }
 
-/* Στοιχεία flex δεν έχουν ελάχιστο πλάτος το περιεχόμενό τους. */
 :where(.kosmiteia-footer-bottom, .kosmiteia-header) > * {
 	min-width: 0;
 }
 
-/* Ελάχιστο μέγεθος στόχου για αφή.
- *
- * 44px = επίπεδο AAA (WCAG 2.5.5). Το ελάχιστο για AA (2.5.8) είναι 24px, οπότε
- * μη ρίξετε την τιμή κάτω από εκεί. Αλλάζει από ένα σημείο:
- *
- *   - παντού:            η τιμή του --kosmiteia-target-size παρακάτω
- *   - σε μία περιοχή:    ξαναορίστε τη μεταβλητή, π.χ.
- *                        .kosmiteia-subfooter { --kosmiteia-target-size: 32px; }
- */
 :root {
 	--kosmiteia-target-size: 44px;
 }
@@ -92,19 +77,10 @@ html {
 	align-items: center;
 }
 
-/**
- * Πλάτος περιεχομένου (post content, cover hero, constrained groups).
- *
- * Τα constrained layouts του WordPress περιορίζουν το περιεχόμενο στο
- * contentSize του theme.json (820px). Εδώ το όριο ανεβαίνει στη μεταβλητή
- * --kosmiteia-content-width· τα alignwide/alignfull/alignleft/alignright
- * παιδιά δεν επηρεάζονται. Αλλάξτε την τιμή μία φορά για να αλλάξει παντού.
- */
 :root {
 	--kosmiteia-content-width: 1400px;
 }
 
-/* Το post content δεν κληρονομεί πλέον το στενό όριο του γονέα. */
 .entry-content.wp-block-post-content,
 .editor-styles-wrapper .wp-block-post-content {
 	max-width: none;
@@ -125,7 +101,6 @@ html {
 	max-width: none;
 }
 
-/* Cover (hero εσωτερικής σελίδας): διαδρομή & τίτλος στο ίδιο πλάτος. */
 .wp-block-cover__inner-container.is-layout-constrained {
 	max-width: none;
 }
@@ -134,13 +109,10 @@ html {
 	max-width: var(--kosmiteia-content-width);
 }
 
-/* Constrained groups, π.χ. η κεφαλίδα αρχείου με φόντο accent-4. */
 .wp-block-group.is-layout-constrained > :where(:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.wp-block-post-content)) {
 	max-width: var(--kosmiteia-content-width);
 }
 
-/* Το <main> ακουμπά στην κεφαλίδα: χωρίς το κενό που βάζει το blockGap
-   στα άμεσα παιδιά του .wp-site-blocks. */
 .wp-site-blocks > main {
 	margin-block-start: 0;
 }
@@ -211,9 +183,6 @@ html {
 	font-weight: 700;
 }
 
-/* Μενού «χάμπουργκερ» όταν ανοίγει: πλήρης οθόνη με κεντραρισμένα, μεγάλα
-   στοιχεία. Χωρίς αυτό, το core κρατά τη στοίχιση της μπάρας (δεξιά) και τα
-   στοιχεία βγαίνουν εκτός οθόνης. */
 .wp-block-navigation__responsive-container.is-menu-open {
 	--navigation-layout-justification-setting: center;
 	padding: 1.25rem;
@@ -228,8 +197,6 @@ html {
 
 .is-menu-open .wp-block-navigation__container {
 	align-items: stretch;
-	/* Χωρίς αυτό, η μπάρα κρατά το flex-wrap: wrap και σε ψηλή οθόνη τα
-	   τελευταία στοιχεία «σπάνε» σε δεύτερη στήλη εκτός οθόνης. */
 	flex-wrap: nowrap;
 	gap: 0.25rem;
 	margin-inline: auto;
@@ -259,13 +226,8 @@ html {
 	color: var(--wp--preset--color--accent-1);
 }
 
-/* Στοιχείο με υπομενού: ο σύνδεσμος αριστερά, το βελάκι δεξιά, το υπομενού
-   από κάτω σε δική του γραμμή. */
-/* Ο πυρήνας κάνει κάθε <li> στήλη· εδώ το θέλουμε γραμμή (σύνδεσμος + βελάκι)
-   με το υπομενού να τυλίγεται από κάτω - γι' αυτό και το επιπλέον `body`. */
 body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.has-child {
 	align-items: center;
-	/* Ο διαχωριστής μπαίνει στη γραμμή, όχι μόνο κάτω από τον σύνδεσμο. */
 	border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 	display: flex;
 	flex-direction: row;
@@ -279,14 +241,10 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.has-child > .wp-block-navigation-item__content {
 	flex: 1;
 	justify-content: center;
-	/* Ισοφαρίζει το βελάκι στα δεξιά, ώστε η ετικέτα να μένει οπτικά στο κέντρο
-	   όπως και τα υπόλοιπα στοιχεία. */
 	margin-left: var(--kosmiteia-target-size, 44px);
 	width: auto;
 }
 
-/* Το core κρύβει το βελάκι μέσα στο overlay - εδώ το θέλουμε, ως κουμπί
-   ανοίγματος με στόχο αφής 44px. */
 body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wp-block-navigation__submenu-icon {
 	align-items: center;
 	background: transparent;
@@ -312,8 +270,6 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	transform: rotate(180deg);
 }
 
-/* Κλειστά υπομενού μέχρι να πατηθεί το βελάκι (χωρίς JavaScript μένουν
-   ανοιχτά, όπως τα αφήνει ο πυρήνας - καμία λειτουργία δεν χάνεται). */
 .js-kosmiteia .is-menu-open .wp-block-navigation-item.has-child > .wp-block-navigation__submenu-container {
 	display: none;
 }
@@ -322,9 +278,6 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	display: flex;
 }
 
-/* Υπομενού μέσα στο ανοιχτό overlay: το core τους δίνει min-width 200px και
-   πλάγιο padding, που σπάει τη στοίχιση. Τα ισιώνουμε σε πλήρες πλάτος, με
-   μικρότερη γραμματοσειρά ώστε να ξεχωρίζει η ιεραρχία. */
 body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .has-child .wp-block-navigation__submenu-container {
 	flex-basis: 100%;
 	gap: 0.25rem;
@@ -339,7 +292,6 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	opacity: 0.85;
 }
 
-/* Το «Χ» του κλεισίματος: αρκετά μεγάλο για δάχτυλο. */
 .wp-block-navigation__responsive-container-close {
 	min-height: var(--kosmiteia-target-size, 44px);
 	min-width: var(--kosmiteia-target-size, 44px);
@@ -353,7 +305,6 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	position: relative;
 }
 
-/* Χωρίς JavaScript οι διαφάνειες εμφανίζονται απλώς η μία κάτω από την άλλη. */
 .kosmiteia-slider__track > * {
 	margin-block: 0;
 }
@@ -398,7 +349,7 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	pointer-events: none;
 }
 
-/* Βέλη */
+/* Arrows */
 .kosmiteia-slider__arrow {
 	align-items: center;
 	background-color: rgba(255, 255, 255, 0.9);
@@ -435,7 +386,7 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	fill: currentColor;
 }
 
-/* Κουκκίδες + play/pause */
+/* Dots + play/pause */
 .kosmiteia-slider__controls {
 	align-items: center;
 	bottom: clamp(1rem, 3vh, 2.5rem);
@@ -461,11 +412,11 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	border: 2px solid rgba(255, 255, 255, 0.9);
 	border-radius: 50%;
 	cursor: pointer;
-	height: 14px;
+	height: 24px;
 	padding: 0;
 	transition: background-color var(--wp--custom--transition--base, 200ms ease),
 		transform var(--wp--custom--transition--base, 200ms ease);
-	width: 14px;
+	width: 24px;
 }
 
 .kosmiteia-slider__dot[aria-current="true"] {
@@ -491,7 +442,7 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	fill: currentColor;
 }
 
-/* Προεπισκόπηση στον editor */
+/* Editor preview */
 .kosmiteia-slider.is-editor-preview .kosmiteia-slider__editor-hint {
 	background-color: var(--wp--preset--color--accent-4);
 	border-radius: var(--wp--custom--radius--button, 6px);
@@ -510,7 +461,7 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	outline-offset: 4px;
 }
 
-/* Κουμπί κύλισης προς τα κάτω */
+/* Scroll down button */
 .wp-block-buttons.is-style-kosmiteia-scroll-down {
 	justify-content: center;
 }
@@ -541,8 +492,11 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 }
 
 /* -------------------------------------------------------------------------
- * 4. Κάρτες
+ * 4. Cards
  * ---------------------------------------------------------------------- */
+ #minyma-kosmitora {
+	padding: 0 !important;
+ }
 
 .wp-block-post-template.is-style-kosmiteia-cards {
 	list-style: none;
@@ -553,20 +507,10 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 .wp-block-group.is-style-kosmiteia-card {
 	background-color: var(--wp--preset--color--base);
 	border: 1px solid var(--wp--preset--color--accent-5);
-	border-radius: var(--wp--custom--radius--card, 12px);
-	box-shadow: var(--wp--custom--shadow--card, 0 8px 24px rgba(14, 26, 43, 0.08));
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	transition: box-shadow var(--wp--custom--transition--base, 200ms ease),
-		transform var(--wp--custom--transition--base, 200ms ease);
-}
-
-.wp-block-post-template.is-style-kosmiteia-cards > li:hover,
-.wp-block-post-template.is-style-kosmiteia-cards > li:focus-within,
-.wp-block-group.is-style-kosmiteia-card:hover {
-	box-shadow: var(--wp--custom--shadow--card-hover, 0 16px 40px rgba(14, 26, 43, 0.14));
-	transform: translateY(-4px);
+	max-width: 100%;
 }
 
 .wp-block-post-template.is-style-kosmiteia-cards > li > .wp-block-post-featured-image {
@@ -579,7 +523,7 @@ body .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigatio
 	width: 100%;
 }
 
-/* Το κείμενο της κάρτας γεμίζει το ύψος ώστε τα κουμπιά να ευθυγραμμίζονται. */
+/* The card text fills the height so that the buttons align. */
 .wp-block-post-template.is-style-kosmiteia-cards > li > .wp-block-group {
 	flex: 1;
 }
@@ -597,8 +541,8 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	transform: scale(1.05);
 }
 
-/* Ο σύνδεσμος «Περισσότερα» ευθυγραμμίζεται με το κείμενο της κάρτας
-   (το constrained layout θα τον κεντράριζε). */
+/* The "More" link is aligned with the card text
+   (the constrained layout would center it). */
 .wp-block-post-template .wp-block-read-more,
 .wp-block-post-template .wp-block-post-excerpt__more-link {
 	margin-inline: 0 auto;
@@ -614,7 +558,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	text-decoration: underline;
 }
 
-/* Ετικέτες κατηγοριών ανακοινώσεων */
+/* Category tags for announcements */
 .wp-block-post-terms a,
 .wp-block-post-terms .wp-block-post-terms__separator + a {
 	background-color: var(--wp--preset--color--accent-4);
@@ -637,10 +581,10 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 }
 
 /* -------------------------------------------------------------------------
- * 4β. Μήνυμα Κοσμήτορα
+ * 4β. Message from the Dean
  * ---------------------------------------------------------------------- */
 
-/* Κάρτα πλήρους πλάτους: φωτογραφία αριστερά, χαιρετισμός δεξιά. */
+/* Full-width card: photo on the left, greeting on the right. */
 .kosmiteia-dean .wp-block-columns {
 	margin-bottom: 0;
 }
@@ -664,9 +608,9 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 .kosmiteia-dean__signature {
 }
 
-/* Σε μικρές οθόνες οι στήλες στοιβάζονται: η φωτογραφία χαμηλώνει ώστε να
-   μη σπρώχνει το κείμενο εκτός οθόνης. Το ελάχιστο ύψος του μπλοκ Cover
-   γράφεται inline από τον πυρήνα, οπότε χρειάζεται !important. */
+/* On small screens, columns stack: the photo lowers so that
+   it doesn't push the text outside the screen. The minimum height of the Cover block
+   is written inline by the core, so we need !important. */
 @media (max-width: 781px) {
 	.kosmiteia-dean .kosmiteia-dean__photo {
 		min-height: 260px !important;
@@ -674,7 +618,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 }
 
 /* -------------------------------------------------------------------------
- * 5. Ενότητες & εφέ κύλισης
+ * 5. Sections & scroll effects
  * ---------------------------------------------------------------------- */
 
 .is-style-kosmiteia-underline {
@@ -727,7 +671,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 .js-kosmiteia .kosmiteia-reveal.is-revealed .wp-block-post-template > li:nth-child(4) { transition-delay: 300ms; }
 .js-kosmiteia .kosmiteia-reveal.is-revealed .wp-block-post-template > li:nth-child(n+5) { transition-delay: 400ms; }
 
-/* Μήνυμα "δεν υπάρχει περιεχόμενο" (query loop χωρίς αποτελέσματα). */
+/* Message "no content available" (query loop without results). */
 .wp-block-query-no-results {
 	background-color: var(--wp--preset--color--accent-4);
 	border-radius: var(--wp--custom--radius--card, 12px);
@@ -774,8 +718,8 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	font-size: var(--wp--preset--font-size--small);
 }
 
-/* Σύνδεσμοι μέσα στο σκούρο subfooter: κληρονομούν το χρώμα κειμένου
-   ώστε να παραμένει επαρκής η αντίθεση (WCAG AA). */
+/* Links inside the dark subfooter: they inherit the text color
+   to maintain sufficient contrast (WCAG AA). */
 .kosmiteia-subfooter a:where(:not(.wp-element-button)) {
 	color: inherit;
 	text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
@@ -805,7 +749,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 }
 
 /* -------------------------------------------------------------------------
- * 7. Αναζήτηση & φίλτρα ανακοινώσεων
+ * 7. Search & filters for announcements
  * ---------------------------------------------------------------------- */
 
 .kosmiteia-filters__fields {
@@ -817,8 +761,8 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 
 .kosmiteia-filters__field {
 	display: flex;
-	/* Τα πεδία μοιράζονται τη γραμμή αλλά δεν «τεντώνονται» άσχημα όταν
-	   περισσεύει χώρος (π.χ. το έτος σε μεγάλη οθόνη). */
+	/* The fields share the line but don't stretch awkwardly when
+	   there's extra space (e.g., the year on a large screen). */
 	flex: 1 1 12rem;
 	flex-direction: column;
 	gap: 0.35rem;
@@ -843,16 +787,16 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	border-radius: var(--wp--custom--radius--card, 12px);
 	color: var(--wp--preset--color--contrast);
 	font-family: inherit;
-	/* Μικρότερα από το κείμενο της σελίδας (τα πεδία είναι διεπαφή, όχι
-	   περιεχόμενο), αλλά ποτέ κάτω από 1rem: το iOS κάνει ζουμ σε μικρότερα. */
+	/* Smaller than the page text (the fields are interface elements, not
+	   content), but never below 1rem: iOS zooms in on smaller text. */
 	font-size: max(1rem, var(--wp--preset--font-size--small));
 	min-height: 44px;
 	padding: 0.5rem 0.75rem;
 	width: 100%;
 }
 
-/* Χώρος για το βελάκι του <select>, ώστε να μην κόβονται μεγάλες επιλογές
-   (π.χ. «Προεπιλογή (σειρά Κοσμητείας)»). */
+/* Space for the dropdown arrow of <select>, so that large options
+   (e.g., "Default (Cosmetics Series)") are not cut off. */
 .kosmiteia-filters__field select {
 	padding-right: 2rem;
 }
@@ -874,7 +818,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	font-size: var(--wp--preset--font-size--small);
 }
 
-/* Σελιδοποίηση αρχείων: ευανάγνωστοι αριθμοί με απόσταση μεταξύ τους. */
+/* Pagination: readable numbers with space between them. */
 .wp-block-query-pagination-numbers {
 	display: flex;
 	flex-wrap: wrap;
@@ -893,7 +837,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	margin: 0.75rem 0 0;
 }
 
-/* Διαδρομή πλοήγησης (breadcrumbs) */
+/* Breadcrumbs (navigation trail) */
 .kosmiteia-breadcrumbs__list {
 	display: flex;
 	flex-wrap: wrap;
@@ -928,8 +872,8 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	opacity: 0.85;
 }
 
-/* Κεφαλίδα εσωτερικής σελίδας: φωτογραφία της σελίδας (επιλεγμένη εικόνα)
-   με σκίαση, διαδρομή και τίτλο. */
+/* Page header: page image (selected image)
+   with overlay, breadcrumbs, and title. */
 .kosmiteia-page-hero {
 	min-height: clamp(180px, 26vw, 300px);
 }
@@ -939,22 +883,21 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	text-wrap: balance;
 }
 
-/* Χωρίς επιλεγμένη εικόνα η σκίαση γίνεται συμπαγές χρώμα, ώστε τα λευκά
-   γράμματα να έχουν πάντα επαρκή αντίθεση. */
+
 .kosmiteia-page-hero:not(:has(.wp-block-cover__image-background)) .wp-block-cover__background {
 	opacity: 1;
 }
 
 /* -------------------------------------------------------------------------
- * 8. Χάρτης (Leaflet)
+ * 8. Map (Leaflet)
  * ---------------------------------------------------------------------- */
 
 .kosmiteia-map {
 	background-color: var(--wp--preset--color--accent-4);
 	border: 1px solid var(--wp--preset--color--accent-5);
 	border-radius: var(--wp--custom--radius--card, 12px);
-	/* Κρατάει τα z-index της Leaflet μέσα στο μπλοκ, ώστε να μην περνούν πάνω
-	   από την κολλημένη κεφαλίδα. */
+	/* Keeps the Leaflet z-index within the block, so that it doesn't overflow
+	   above the sticky header. */
 	isolation: isolate;
 	overflow: hidden;
 	position: relative;
@@ -998,7 +941,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	display: block;
 }
 
-/* Προεπισκόπηση στον editor: σύνοψη αντί για ζωντανό χάρτη. */
+/* Preview in the editor: summary instead of a live map. */
 .kosmiteia-map-editor__summary {
 	font-weight: 600;
 	margin: 0;
@@ -1010,7 +953,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 }
 
 /* -------------------------------------------------------------------------
- * 9. Γκαλερί εικόνων & lightbox
+ * 9. Gallery & lightbox
  * ---------------------------------------------------------------------- */
 
 .kosmiteia-gallery__heading {
@@ -1018,8 +961,8 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	margin: 0 0 1.5rem;
 }
 
-/* Γραμμή μικρογραφιών: όσες στήλες ζητά το μπλοκ σε μεγάλες οθόνες, όσες
-   χωρούν με το ελάχιστο πλάτος σε μικρές - χωρίς media queries. */
+/* Thumbnail row: as many columns as the block requests on large screens, as many
+   as fit on small screens - without media queries. */
 .kosmiteia-gallery__list {
 	display: grid;
 	gap: var(--kosmiteia-gallery-gap, 16px);
@@ -1065,7 +1008,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	width: 100%;
 }
 
-/* Σκίαση που εμφανίζεται στο hover, ώστε να ξεχωρίζει το εικονίδιο. */
+/* Overlay that appears on hover, to highlight the image. */
 .kosmiteia-gallery__item::after {
 	background-image: linear-gradient(180deg, rgba(14, 26, 43, 0) 35%, rgba(14, 26, 43, 0.55) 100%);
 	content: "";
@@ -1094,7 +1037,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	z-index: 1;
 }
 
-/* Μεγεθυντικός φακός σχεδιασμένος με CSS (φακός + λαβή). */
+/* Magnifying glass designed with CSS (glass + handle). */
 .kosmiteia-gallery__zoom::before {
 	border: 2px solid currentColor;
 	border-radius: 50%;
@@ -1144,7 +1087,7 @@ li:hover > .wp-block-post-featured-image.is-style-kosmiteia-zoom img,
 	opacity: 0.85;
 }
 
-/* Προεπισκόπηση στον editor */
+/* Preview in the editor */
 .kosmiteia-gallery.is-editor-preview .kosmiteia-gallery__item {
 	cursor: default;
 }
@@ -1296,19 +1239,19 @@ html.is-kosmiteia-lightbox-open {
 }
 
 /* -------------------------------------------------------------------------
- * 10. Responsive & προτιμήσεις χρήστη
+ * 10. Responsive & User Preferences
  * ---------------------------------------------------------------------- */
 
 @media (max-width: 781px) {
-	/* Υποσέλιδο σε στενές οθόνες: όλα κεντραρισμένα (κείμενα, μενού, λογότυπο,
-	   κοινωνικά δίκτυα και η κάτω γραμμή). */
+	/* Subfooter on narrow screens: all centered (text, menu, logo,
+	   social networks and the bottom bar). */
 	.kosmiteia-subfooter,
 	.kosmiteia-footer-bottom {
 		text-align: center;
 	}
 
-	/* Το <ul> του μενού παίρνει πλάτος «όσο το περιεχόμενο», οπότε χωρίς
-	   width: 100% τα κεντραρισμένα στοιχεία μένουν στα αριστερά. */
+	/* The <ul> of the menu takes up width «as much as the content», so without
+	   width: 100% the centered elements remain on the left. */
 	.kosmiteia-subfooter .wp-block-navigation,
 	.kosmiteia-subfooter .wp-block-navigation__container {
 		width: 100%;
@@ -1375,8 +1318,8 @@ html.is-kosmiteia-lightbox-open {
 		display: none;
 	}
 
-	/* Στο κινητό η αλλαγή φωτογραφίας γίνεται με σύρσιμο· τα βέλη μικραίνουν
-	   και μένουν στις άκρες για όποιον τα χρειάζεται. */
+	/* On mobile, image switching is done by swiping; the arrows shrink
+	   and remain at the edges for anyone who needs them. */
 	.kosmiteia-lightbox__nav,
 	.kosmiteia-lightbox__close {
 		height: 2.5rem;
@@ -1390,7 +1333,7 @@ html.is-kosmiteia-lightbox-open {
 	}
 }
 
-/* Σεβασμός στην προτίμηση "μειωμένη κίνηση". */
+/* Respecting the "reduced motion" preference. */
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
@@ -1411,7 +1354,7 @@ html.is-kosmiteia-lightbox-open {
 	}
 }
 
-/* Υψηλή αντίθεση / forced colors. */
+/* High contrast / forced colors. */
 @media (forced-colors: active) {
 	.kosmiteia-slider__arrow,
 	.kosmiteia-slider__dot,

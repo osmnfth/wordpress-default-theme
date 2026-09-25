@@ -1,11 +1,11 @@
 <?php
 /**
- * Έλεγχος ότι το πρόσθετο «Κοσμητεία Core» είναι ενεργό.
+ * Check that the "Kosmiteia Core" plugin is active.
  *
- * Το θέμα δείχνει· το πρόσθετο παρέχει το περιεχόμενο (τύπους περιεχομένου,
- * μπλοκ, φίλτρα, χάρτη, γκαλερί). Χωρίς αυτό τα templates θα ζητούσαν μπλοκ
- * που δεν υπάρχουν, οπότε ενημερώνουμε τον διαχειριστή με σαφή οδηγία αντί να
- * τον αφήσουμε μπροστά σε κενές σελίδες.
+ * The theme handles the presentation; the plugin provides the content (content
+ * types, blocks, filters, map, gallery). Without it, the templates would request
+ * blocks that do not exist, so we provide the administrator with a clear
+ * instruction instead of leaving them with blank pages.
  *
  * @package Kosmiteia
  */
@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Είναι ενεργό το πρόσθετο;
+ * Is the "Kosmiteia Core" plugin active?
  *
  * @return bool
  */
@@ -22,7 +22,7 @@ function kosmiteia_core_is_active() {
 }
 
 /**
- * Ειδοποίηση στη διαχείριση όταν λείπει το πρόσθετο.
+ * Display a notice in the admin area when the plugin is missing.
  */
 function kosmiteia_core_missing_notice() {
 	if ( kosmiteia_core_is_active() || ! current_user_can( 'activate_plugins' ) ) {
@@ -33,10 +33,10 @@ function kosmiteia_core_missing_notice() {
 
 	printf(
 		'<div class="notice notice-warning"><p><strong>%1$s</strong> %2$s <a href="%3$s">%4$s</a></p></div>',
-		esc_html__( 'Κοσμητεία:', 'kosmiteia' ),
-		esc_html__( 'το θέμα χρειάζεται το πρόσθετο «Κοσμητεία Core» για τους τύπους περιεχομένου και τα μπλοκ του.', 'kosmiteia' ),
+		esc_html__( 'Kosmiteia:', 'kosmiteia' ),
+		esc_html__( 'The theme requires the "Kosmiteia Core" plugin for the content types and blocks.', 'kosmiteia' ),
 		esc_url( $plugins_url ),
-		esc_html__( 'Ενεργοποίηση από τα Πρόσθετα', 'kosmiteia' )
+		esc_html__( 'Activate from Plugins', 'kosmiteia' )
 	);
 }
 add_action( 'admin_notices', 'kosmiteia_core_missing_notice' );

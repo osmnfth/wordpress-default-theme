@@ -1,6 +1,6 @@
 <?php
 /**
- * Ρυθμίσεις theme, assets, pattern categories, block styles.
+ * Theme setup, assets, pattern categories, block styles.
  *
  * @package Kosmiteia
  */
@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Βασικές δυνατότητες του theme.
+ * Basic features of the theme.
  */
 function kosmiteia_setup() {
 	load_child_theme_textdomain( 'kosmiteia', KOSMITEIA_DIR . '/languages' );
@@ -24,19 +24,19 @@ function kosmiteia_setup() {
 		'flex-width'  => true,
 	) );
 
-	// Τα ίδια στυλ με το front-end μέσα στον editor, ώστε το preview να είναι πιστό.
+	// The same styles as the front-end inside the editor, so the preview is accurate.
 	add_editor_style( 'assets/css/theme.css' );
 
-	// Μεγέθη εικόνων για τα cards (σταθερή αναλογία 3:2 και 16:9 για το hero).
+	// Image sizes for the cards (fixed aspect ratio 3:2 and 16:9 for the hero).
 	add_image_size( 'kosmiteia-card', 800, 533, true );
 	add_image_size( 'kosmiteia-hero', 1920, 1080, true );
 }
 add_action( 'after_setup_theme', 'kosmiteia_setup' );
 
 /**
- * Ονόματα για τα custom image sizes στο UI (Media / block settings).
+ * Names for the custom image sizes in the UI (Media / block settings).
  *
- * @param array $sizes Υπάρχοντα μεγέθη.
+ * @param array $sizes Existing sizes.
  * @return array
  */
 function kosmiteia_image_size_names( $sizes ) {
@@ -51,13 +51,13 @@ function kosmiteia_image_size_names( $sizes ) {
 add_filter( 'image_size_names_choose', 'kosmiteia_image_size_names' );
 
 /**
- * Έκδοση αρχείου για cache busting.
+ * Asset version for cache busting.
  *
- * Σε περιβάλλον ανάπτυξης (WP_DEBUG) χρησιμοποιεί την ώρα τελευταίας
- * τροποποίησης, ώστε οι αλλαγές σε CSS/JS να φαίνονται αμέσως χωρίς
- * σκληρό refresh. Στην παραγωγή χρησιμοποιεί την έκδοση του theme.
+ * In a development environment (WP_DEBUG) this uses the last modified time,
+ * so changes to CSS/JS are visible immediately without a hard refresh.
+ * In production, it uses the theme version.
  *
- * @param string $relative Διαδρομή σχετική με τον φάκελο του theme.
+ * @param string $relative Relative path to the asset file.
  * @return string
  */
 function kosmiteia_asset_version( $relative ) {
