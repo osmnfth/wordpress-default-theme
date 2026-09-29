@@ -321,3 +321,101 @@ function kosmiteia_academic_admin_column_content( $column, $post_id ) {
 }
 add_action( 'manage_posts_custom_column', 'kosmiteia_academic_admin_column_content', 10, 2 );
 
+function kosmiteia_event_meta_box() {
+	add_meta_box(
+		'kosmiteia_event_details',
+		__( 'Ημερομηνία εκδήλωσης', 'kosmiteia' ),
+		'kosmiteia_event_meta_box_render',
+		'kosm_event',
+		'normal',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes', 'kosmiteia_event_meta_box' );
+
+function kosmiteia_event_meta_box_render( $post ) {
+	wp_nonce_field(
+		'kosmiteia_save_event_meta',
+		'kosmiteia_event_meta_nonce'
+	);
+
+	$date = get_post_meta(
+		$post->ID,
+		'kosm_event_start',
+		true
+	);
+	?>
+
+	<p>
+		<label for="kosm_event_start">
+			<strong>
+				<?php esc_html_e( 'Ημερομηνία', 'kosmiteia' ); ?>
+			</strong>
+		</label>
+	</p>
+
+	<p>
+		<input
+			type="date"
+			id="kosm_event_start"
+			name="kosm_event_start"
+			value="<?php echo esc_attr( $date ); ?>"
+		/>
+	</p>
+
+	<?php
+}
+
+function kosmiteia_save_event_meta( $post_id ) {
+	if (
+		! isset( $_POST['kosmiteia_event_meta_nonce'] ) ||
+		! wp_verify_nonce(
+			sanitize_text_field(
+				wp_unslash( $_POST['kosmiteia_event_meta_nonce'] )
+			),
+			'kosmiteia_save_event_meta'
+		)
+	) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	if ( wp_is_post_revision( $post_id ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	if ( isset( $_POST['kosm_event_start'] ) ) {
+		$date = sanitize_text_field(
+			wp_unslash( $_POST['kosm_event_start'] )
+		);
+
+		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) ) {
+			update_post_meta(
+				$post_id,
+				'kosm_event_start',
+				$date
+			);
+		} else {
+			delete_post_meta(
+				$post_id,
+				'kosm_event_start'
+			);
+		}
+	} else {
+		delete_post_meta(
+			$post_id,
+			'kosm_event_start'
+		);
+	}
+}
+add_action(
+	'save_post_kosm_event',
+	'kosmiteia_save_event_meta'
+);
