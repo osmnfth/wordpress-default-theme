@@ -1,0 +1,44 @@
+<!-- wp:group {"tagName":"section","anchor":"ekdiloseis","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|70"},"blockGap":"var:preset|spacing|50"}},"layout":{"type":"constrained"}} -->
+<section
+  class="wp-block-group alignfull"
+  id="ekdiloseis"
+  style="
+    padding-top: var(--wp--preset--spacing--70);
+    padding-bottom: var(--wp--preset--spacing--70);
+  "
+>
+  <!-- wp:heading {"level":2,"fontSize":"x-large"} -->
+  <h2 class="wp-block-heading has-x-large-font-size">Εκδηλώσεις</h2>
+  <!-- /wp:heading -->
+
+  <!-- wp:query {"query":{"perPage":4,"postType":"kosm_event","order":"asc","orderBy":"date","inherit":false},"align":"wide"} -->
+  <div class="wp-block-query alignwide">
+    <!-- wp:post-template {"layout":{"type":"grid","columnCount":2}} -->
+
+    <!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
+    <div
+      class="wp-block-group"
+      style="
+        padding-top: var(--wp--preset--spacing--40);
+        padding-right: var(--wp--preset--spacing--40);
+        padding-bottom: var(--wp--preset--spacing--40);
+        padding-left: var(--wp--preset--spacing--40);
+      "
+    >
+      <!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"core/post-meta","args":{"key":"kosm_event_start"}}}},"fontSize":"small"} -->
+      <p class="has-small-font-size">Ημερομηνία</p>
+      <!-- /wp:paragraph -->
+
+      <!-- wp:post-title {"level":3,"isLink":true,"fontSize":"large"} /-->
+
+      <!-- wp:post-excerpt {"excerptLength":20,"fontSize":"small"} /-->
+
+      <!-- wp:read-more {"content":"Δείτε την εκδήλωση","fontSize":"small"} /-->
+    </div>
+    <!-- /wp:group -->
+
+    <!-- /wp:post-template -->
+  </div>
+  <!-- /wp:query -->
+</section>
+<!-- /wp:group -->
