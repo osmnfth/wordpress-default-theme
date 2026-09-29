@@ -320,3 +320,88 @@ function kosmiteia_academic_admin_column_content( $column, $post_id ) {
 	echo esc_html( $value );
 }
 add_action( 'manage_posts_custom_column', 'kosmiteia_academic_admin_column_content', 10, 2 );
+
+function kosmiteia_add_event_meta_box() {
+	add_meta_box(
+		'kosmiteia_event_details',
+		__( 'Λεπτομέρειες Εκδήλωσης', 'kosmiteia' ),
+		'kosmiteia_render_event_meta_box',
+		'kosm_event',
+		'side',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes', 'kosmiteia_add_event_meta_box' );
+
+function kosmiteia_render_event_meta_box( $post ) {
+	wp_nonce_field( 'kosmiteia_event_meta_box', 'kosmiteia_event_meta_box_nonce' );
+
+	$start    = get_post_meta( $post->ID, 'kosm_event_start', true );
+	$end      = get_post_meta( $post->ID, 'kosm_event_end', true );
+	$location = get_post_meta( $post->ID, 'kosm_event_location', true );
+	$url      = get_post_meta( $post->ID, 'kosm_event_url', true );
+	$online   = get_post_meta( $post->ID, 'kosm_event_online', true );
+
+	?>
+	<table class="form-table">
+		<tr>
+			<th scope="row"><label for="kosm_event_start"><?php esc_html_e( 'Έναρξη', 'kosmiteia' ); ?></label></th>
+			<td><input type="datetime-local" name="kosm_event_start" id="kosm_event_start" value="<?php echo esc_attr( $start ); ?>" class="regular-text" /></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="kosm_event_end"><?php esc_html_e( 'Λήξη', 'kosmiteia' ); ?></label></th>
+			<td><input type="datetime-local" name="kosm_event_end" id="kosm_event_end" value="<?php echo esc_attr( $end ); ?>" class="regular-text" /></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="kosm_event_location"><?php esc_html_e( 'Τόπος', 'kosmiteia' ); ?></label></th>
+			<td><input type="text" name="kosm_event_location" id="kosm_event_location" value="<?php echo esc_attr( $location ); ?>" class="regular-text" /></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="kosm_event_url"><?php esc_html_e( 'Σύνδεσμος δήλωσης', 'kosmiteia' ); ?></label></th>
+			<td><input type="url" name="kosm_event_url" id="kosm_event_url" value="<?php echo esc_attr( $url ); ?>" class="regular-text" /></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="kosm_event_online"><?php esc_html_e( 'Διαδικτυακή', 'kosmiteia' ); ?></label></th>
+			<td>
+				<label>
+					<input type="checkbox" name="kosm_event_online" id="kosm_event_online" value="yes" <?php checked( $online, 'yes' ); ?> />
+					<?php esc_html_e( 'Ναι', 'kosmiteia' ); ?>
+				</label>
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+
+function kosmiteia_save_event_meta_box( $post_id ) {
+	if ( ! isset( $_POST['kosmiteia_event_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kosmiteia_event_meta_box_nonce'], 'kosmiteia_event_meta_box' ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	if ( 'kosm_event' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	$fields = array(
+		'kosm_event_start',
+		'kosm_event_end',
+		'kosm_event_location',
+		'kosm_event_url',
+		'kosm_event_online',
+	);
+
+	foreach ( $fields as $field ) {
+		if ( isset( $_POST[ $field ] ) ) {
+			update_post_meta( $post_id, $field, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
+		}
+	}
+}
+add_action( 'save_post', 'kosmiteia_save_event_meta_box' );
